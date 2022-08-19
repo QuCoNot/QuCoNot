@@ -1,14 +1,15 @@
-# from qumcat.mct_no_ancilla import MCTNoAncilla
 import numpy as np
 import pytest
-
-# from src.mct_vchain_dirty import MCTVChainDirty
-# from src.mct_n_qubit_decomposition import MCTNQubitDecomposition
-# from src.mct_parallel_decomposition import MCTParallelDecomposition
+from functions import check_all_zero, identity_matrix, load_matrix, zero_matrix
 from qiskit import Aer
 
-from functions import check_all_zero, identity_matrix, load_matrix, zero_matrix
+from qumcat.mct_n_qubit_decomposition import MCTNQubitDecomposition
+
+# from qumcat.mct_no_ancilla import MCTNoAncilla
+from qumcat.mct_parallel_decomposition import MCTParallelDecomposition
 from qumcat.mct_vchain import MCTVChain
+
+# from qumcat.mct_vchain_dirty import MCTVChainDirty
 
 absolute_error_tol = 1e-3
 relative_error_tol = 1e-3
@@ -17,9 +18,7 @@ usim = Aer.get_backend("unitary_simulator")
 
 @pytest.mark.clean_ancilla
 @pytest.mark.parametrize(
-    # "implementation", [MCTVChain, MCTNQubitDecomposition, MCTParallelDecomposition]
-    "implementation",
-    [MCTVChain],
+    "implementation", [MCTVChain, MCTNQubitDecomposition, MCTParallelDecomposition]
 )
 @pytest.mark.parametrize("controls_no", [5, 6])
 def test_generate_circuit_clean_ancilla(implementation, controls_no):
@@ -56,9 +55,7 @@ def test_generate_circuit_clean_ancilla(implementation, controls_no):
 
 @pytest.mark.clean_ancilla
 @pytest.mark.parametrize(
-    # "implementation", [MCTVChain, MCTNQubitDecomposition, MCTParallelDecomposition]
-    "implementation",
-    [MCTVChain],
+    "implementation", [MCTVChain, MCTNQubitDecomposition, MCTParallelDecomposition]
 )
 @pytest.mark.parametrize("controls_no", [5, 6])
 def test_generate_circuit_clean_ancilla_relative_phase(implementation, controls_no):
