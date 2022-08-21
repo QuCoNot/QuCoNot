@@ -11,7 +11,6 @@ relative_error_tol = 1e-3
 usim = Aer.get_backend("unitary_simulator")
 
 
-@pytest.mark.no_ancilla
 @pytest.mark.parametrize("implementation", [MCTNoAncilla])
 @pytest.mark.parametrize("controls_no", [2, 3, 4])
 def test_generate_circuit_no_ancilla(implementation, controls_no):
@@ -43,7 +42,6 @@ def test_generate_circuit_no_ancilla(implementation, controls_no):
     ), "Result should close to 0"
 
 
-@pytest.mark.no_ancilla
 @pytest.mark.parametrize("implementation", [MCTNoAncillaRelativePhase])
 @pytest.mark.parametrize(
     "controls_no", [2, 3, pytest.param(4, marks=pytest.mark.xfail, id="accepted-fail-example")]

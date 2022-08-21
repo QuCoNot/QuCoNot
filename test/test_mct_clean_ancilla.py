@@ -12,7 +12,6 @@ relative_error_tol = 1e-3
 usim = Aer.get_backend("unitary_simulator")
 
 
-@pytest.mark.clean_ancilla
 @pytest.mark.parametrize(
     "implementation", [MCTVChain, MCTNQubitDecomposition, MCTParallelDecomposition]
 )
@@ -49,7 +48,6 @@ def test_generate_circuit_clean_ancilla(implementation, controls_no):
     ), "Result should close to 0"
 
 
-@pytest.mark.clean_ancilla
 @pytest.mark.parametrize(
     "implementation", [MCTVChain, MCTNQubitDecomposition, MCTParallelDecomposition]
 )

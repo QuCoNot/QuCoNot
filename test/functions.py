@@ -11,6 +11,18 @@ def zero_matrix(qubits_no):
     return np.zeros((2**qubits_no, 2**qubits_no), dtype=complex)
 
 
+def ket_0_matrix(qubits_no):
+    ket_0 = np.array([1, 0])
+
+    res = ket_0
+
+    if qubits_no > 1:
+        for i in range(1, qubits_no):
+            res = np.kron(ket_0, res)
+
+    return res
+
+
 def mct_inverse(method, controls_no, ancillas_no):
     qc = QuantumCircuit(controls_no + ancillas_no + 1)
     qc.mct(
