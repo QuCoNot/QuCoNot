@@ -3,8 +3,8 @@ import pytest
 from functions import check_all_zero, identity_matrix, load_matrix, zero_matrix
 from qiskit import Aer
 
-from qumcat.mct_no_ancilla import MCTNoAncilla
-from qumcat.mct_no_ancilla_relative_phase import MCTNoAncillaRelativePhase
+from qumcat.implementations.mct_no_ancilla import MCTNoAncilla
+from qumcat.implementations.mct_no_ancilla_relative_phase import MCTNoAncillaRelativePhase
 
 absolute_error_tol = 1e-3
 relative_error_tol = 1e-3

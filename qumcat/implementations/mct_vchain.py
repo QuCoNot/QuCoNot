@@ -3,10 +3,10 @@ from typing import List
 
 from qiskit import QuantumCircuit, transpile
 
-from qumcat.mct_base import MCTBase
+from .mct_base import MCTBase
 
 
-class MCTVChainDirty(MCTBase):
+class MCTVChain(MCTBase):
     def __init__(self, controls_no: int, **kwargs) -> None:
         assert controls_no >= 2
         self._n = controls_no
@@ -23,7 +23,7 @@ class MCTVChainDirty(MCTBase):
         if max_ancilla < controls_no - 2:
             return []  # if max_ancilla allowed is to small - no representation given
         else:
-            return [MCTVChainDirty(controls_no)]  # only one available
+            return [MCTVChain(controls_no)]  # only one available
 
     def generate_circuit(self) -> QuantumCircuit:
         """Return a QuantumCircuit implementation
@@ -36,7 +36,7 @@ class MCTVChainDirty(MCTBase):
             list(range(self._n)),
             self._n,
             ancilla_qubits=list(range(self._n + 1, 2 * self._n - 1)),
-            mode="v-chain-dirty",
+            mode="v-chain",
         )
 
         # should be done for all implementations
@@ -49,9 +49,9 @@ class MCTVChainDirty(MCTBase):
 
 
 if __name__ == "__main__":
-    print(MCTVChainDirty.generate_mct_cases(5, 1))  # not enough ancilla - empty list
+    print(MCTVChain.generate_mct_cases(5, 1))  # not enough ancilla - empty list
 
-    cases = MCTVChainDirty.generate_mct_cases(5, 3)
+    cases = MCTVChain.generate_mct_cases(5, 3)
     assert len(cases) == 1  # here only one case
     case = cases[0]
 
@@ -63,12 +63,12 @@ if __name__ == "__main__":
     print(case.num_gates())
     print(case.depth())
 
-    cases = MCTVChainDirty.generate_mct_cases(5, 3)
+    cases = MCTVChain.generate_mct_cases(5, 3)
     assert len(cases) == 1  # here only one case
     case = cases[0]
 
     # if depth not previously known, generate circuit and compute (see base)
-    cases = MCTVChainDirty.generate_mct_cases(5, 3)
+    cases = MCTVChain.generate_mct_cases(5, 3)
     assert len(cases) == 1  # here only one case
     case = cases[0]
     print(case.depth())

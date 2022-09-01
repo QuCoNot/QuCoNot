@@ -3,9 +3,9 @@ import pytest
 from functions import check_all_zero, identity_matrix, load_matrix, zero_matrix
 from qiskit import Aer
 
-from qumcat.mct_n_qubit_decomposition import MCTNQubitDecomposition
-from qumcat.mct_parallel_decomposition import MCTParallelDecomposition
-from qumcat.mct_vchain import MCTVChain
+from qumcat.implementations.mct_n_qubit_decomposition import MCTNQubitDecomposition
+from qumcat.implementations.mct_parallel_decomposition import MCTParallelDecomposition
+from qumcat.implementations.mct_vchain import MCTVChain
 
 absolute_error_tol = 1e-3
 relative_error_tol = 1e-3

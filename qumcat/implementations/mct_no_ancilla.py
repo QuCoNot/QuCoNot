@@ -2,14 +2,12 @@ from copy import deepcopy
 
 from qiskit import QuantumCircuit, transpile
 
-from qumcat.mct_base import MCTBase
+from .mct_base import MCTBase
 
 
-class MCTNoAncillaRelativePhase(MCTBase):
+class MCTNoAncilla(MCTBase):
     def __init__(self, controls_no: int, **kwargs) -> None:
-        assert (
-            controls_no >= 2 and controls_no <= 3
-        ), "At the moment we cannot handle controls bigger than 3."
+        assert controls_no >= 2
         self._n = controls_no
         self._circuit: QuantumCircuit = None
         pass
@@ -21,12 +19,11 @@ class MCTNoAncillaRelativePhase(MCTBase):
         :rtype: QuantumCircuit
         """
         qc = QuantumCircuit(self._n + 1)
-        if self._n == 2:
-            qc.rccx(0, 1, 2)
-        elif self._n == 3:
-            qc.rcccx(0, 1, 2, 3)
-        else:
-            raise ValueError("At the moment we cannot handle controls bigger than 3.")
+        qc.mct(
+            list(range(self._n)),
+            self._n,
+            mode="noancilla",
+        )
 
         # should be done for all implementations
         # TODO: solve issue with reordered qubits
@@ -38,7 +35,7 @@ class MCTNoAncillaRelativePhase(MCTBase):
 
 
 if __name__ == "__main__":
-    mct = MCTNoAncillaRelativePhase(4)
+    mct = MCTNoAncilla(4)
 
     circ = mct.generate_circuit()
     # print(circ.draw())

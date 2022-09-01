@@ -3,7 +3,7 @@ from typing import List
 
 from qiskit import QuantumCircuit, transpile
 
-from qumcat.mct_base import MCTBase
+from .mct_base import MCTBase
 
 
 class MCTParallelDecomposition(MCTBase):

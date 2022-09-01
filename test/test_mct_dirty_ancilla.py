@@ -3,7 +3,7 @@ import pytest
 from functions import check_all_zero, identity_matrix, ket_0_matrix, load_matrix, zero_matrix
 from qiskit import Aer
 
-from qumcat.mct_vchain_dirty import MCTVChainDirty
+from qumcat.implementations.mct_vchain_dirty import MCTVChainDirty
 
 absolute_error_tol = 1e-3
 relative_error_tol = 1e-3
