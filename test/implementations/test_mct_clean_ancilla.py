@@ -15,7 +15,7 @@ usim = Aer.get_backend("unitary_simulator")
 @pytest.mark.parametrize(
     "implementation", [MCTVChain, MCTNQubitDecomposition, MCTParallelDecomposition]
 )
-@pytest.mark.parametrize("controls_no", [5, 6])
+@pytest.mark.parametrize("controls_no", [5])
 def test_generate_circuit_clean_ancilla(implementation, controls_no):
     mct = implementation(controls_no)
 
@@ -51,7 +51,7 @@ def test_generate_circuit_clean_ancilla(implementation, controls_no):
 @pytest.mark.parametrize(
     "implementation", [MCTVChain, MCTNQubitDecomposition, MCTParallelDecomposition]
 )
-@pytest.mark.parametrize("controls_no", [5, 6])
+@pytest.mark.parametrize("controls_no", [5])
 def test_generate_circuit_clean_ancilla_relative_phase(implementation, controls_no):
     mct = implementation(controls_no)
 

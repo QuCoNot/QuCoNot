@@ -52,6 +52,9 @@ def check_all_zero(matrix, rtol, atol):
     for i in matrix:
         for j in i:
             if np.absolute(j - 0) > (atol + rtol * np.absolute(0)):
+
+                # print("i :", i, ", j: ", j, ", val: ", np.absolute(j - 0))
+
                 return 0
 
     return 1
