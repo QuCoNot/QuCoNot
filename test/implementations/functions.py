@@ -42,7 +42,7 @@ def mct_inverse(method, controls_no, ancillas_no):
 
 def load_matrix(mode, controls_no):
 
-    container = np.load("./Test/mct_matrices/mct_" + mode + ".npz")
+    container = np.load("./test/mct_matrices/mct_" + mode + ".npz")
 
     return container["arr_" + str(controls_no - 1)]
 

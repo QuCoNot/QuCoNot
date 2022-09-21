@@ -1,7 +1,6 @@
-from typing import List
+from typing import Callable, List, Type
 
-from qiskit import QuantumCircuit
-
+from .implementations.mct_base import MCTBase
 from .implementations.mct_n_qubit_decomposition import MCTNQubitDecomposition
 from .implementations.mct_no_ancilla import MCTNoAncilla
 from .implementations.mct_no_ancilla_relative_phase import MCTNoAncillaRelativePhase
@@ -10,54 +9,34 @@ from .implementations.mct_vchain import MCTVChain
 
 
 class Qumcat:
+    def __init__(self):
+        self._registered_methods: List[Type[MCTBase]] = [
+            MCTNoAncilla,
+            MCTNQubitDecomposition,
+            MCTNoAncillaRelativePhase,
+            MCTParallelDecomposition,
+            MCTVChain,
+        ]
+        self._implementations: List[MCTBase] = []
 
-    circuits: List[QuantumCircuit] = []
+    def register_method(self, mct_method: Type[MCTBase]):
+        if mct_method not in self._registered_methods:
+            self._registered_methods.append(mct_method)
+        else:
+            raise Warning("Method already registered")
 
-    def __init__(self, controls_no: int, ancillas_no: int) -> None:
-        assert controls_no >= 2, "Need at least 2 controls qubit to process"
-
-        self.controls_no = controls_no
-        self.ancillas_no = ancillas_no
-
+    def unregister_method(self, mct_method: Type[MCTBase]):
+        # TODO remove all occurences:
         pass
 
-    @classmethod
-    def generate_mct_cases(cls, controls_no: int, max_ancilla: int, **kwargs):
-        """Generate all possible MCT implementation satisfying the requirements
+    # TODO replace kwargs below with the same arguments as the concrete implementations
+    def generate_mct_cases(self, controls_no: int, max_ancilla: int, **kwargs):
+        self._implementations = []
+        for cls in self._registered_methods:
+            self._implementations += cls.generate_mct_cases(controls_no, max_ancilla, **kwargs)
 
-        :return: Quantum circuits
-        :rtype: QuantumCircuit[]
-        """
-        res = cls(controls_no, max_ancilla)
+    def filter_mct_cases(self, filter_fun: Callable[[MCTBase], bool]):
+        self._implementations = list(filter(filter_fun, self._implementations))
 
-        # no_ancilla
-        no_ancilla = MCTNoAncilla(controls_no)
-        res.circuits.append(no_ancilla.generate_circuit())
-
-        if controls_no < 3:
-            no_ancilla_relative = MCTNoAncillaRelativePhase(controls_no)
-            res.circuits.append(no_ancilla_relative.generate_circuit())
-
-        if max_ancilla > 0:
-            # clean_ancilla
-            if controls_no > 4:
-                n_qubit = MCTNQubitDecomposition(controls_no)
-                res.circuits.append(n_qubit.generate_circuit())
-
-                parallel = MCTParallelDecomposition(controls_no)
-                res.circuits.append(parallel.generate_circuit())
-
-            vchain = MCTVChain(controls_no)
-            res.circuits.append(vchain.generate_circuit())
-
-        return res
-
-    @classmethod
-    def make_mct(
-        cls,
-        controls_no: int,
-        ancillas_no: int,
-        optimise: str = "cnot",
-    ) -> QuantumCircuit:
-
-        return QuantumCircuit(3)
+    def get_best(self, opt_fun: Callable[[MCTBase], int]) -> MCTBase:
+        return min(self._implementations, key=opt_fun)
