@@ -26,7 +26,7 @@ class MCTNQubitDecomposition(MCTBase):
         return ry_circuit, ry_circuit.inverse()
 
     def TofDecomp(self):
-        ry, ry_inv = self.RyDecomp(self)
+        ry, ry_inv = self.RyDecomp()
         qc = QuantumCircuit(3)
         qc.append(ry, [2])
         qc.cx(1, 2)
@@ -37,13 +37,13 @@ class MCTNQubitDecomposition(MCTBase):
         qc.append(ry_inv, [2])
         return qc
 
-    def k_gate(self, qc, c, t, a, k):
+    def k_gate(self, qc: QuantumCircuit, c: List[int], t: int, a: int, k: int):
         from qiskit.circuit.library import CCXGate
 
         k1 = int(np.ceil((len(c) + 1) / 2))
         k2 = len(c) - k1
 
-        tof = self.TofDecomp(self)
+        tof = self.TofDecomp()
         # tof = CCXGate()
 
         if k == 1:
@@ -86,9 +86,38 @@ class MCTNQubitDecomposition(MCTBase):
 
         return qc
 
+    def MCT(self, c_qubits: List[int], t_qubit: int, aux_qubit: int):
+        qc = QuantumCircuit(len(c_qubits) + 2)
+
+        qc.h(t_qubit)
+        qc = self.k_gate(qc, c_qubits, t_qubit, aux_qubit, 1)
+        qc.s(aux_qubit)
+        qc = self.k_gate(qc, c_qubits, t_qubit, aux_qubit, 2)
+        qc.sdg(aux_qubit)
+        qc = self.k_gate(qc, c_qubits, t_qubit, aux_qubit, 1)
+        qc.s(aux_qubit)
+        qc = self.k_gate(qc, c_qubits, t_qubit, aux_qubit, 2)
+        qc.sdg(aux_qubit)
+        qc.h(t_qubit)
+
+        return qc
+
     @classmethod
-    def generate_mct_cases(cls, controls_no: int, max_ancilla: int, **kwargs) -> List["MCTBase"]:
+    def generate_mct_cases(
+        self,
+        controls_no: int,
+        max_ancilla: int,
+        relative_phase: bool = False,
+        clean_acilla: bool = True,
+        wasted_ancilla: bool = False,
+        separable_wasted_ancilla: bool = False,
+    ) -> List["MCTBase"]:
         """Generate all possible MCT implementation satisfying the requirements
+
+        relative_phase: true / false (D)
+        clean_ancilla: true (D) / false
+        wasted_ancilla: true / false (D)
+        separable_wasted_ancilla: true / false (D)    # requires wasted_ancilla set to True
 
         :return: a quantum circuit
         :rtype: QuantumCircuit
@@ -97,23 +126,6 @@ class MCTNQubitDecomposition(MCTBase):
             return []  # if max_ancilla allowed is to small - no representation given
         else:
             return [MCTNQubitDecomposition(controls_no)]  # only one available
-
-    @classmethod
-    def MCT(self, c_qubits, t_qubit, aux_qubit):
-        qc = QuantumCircuit(len(c_qubits) + 2)
-
-        qc.h(t_qubit)
-        qc = self.k_gate(self, qc, c_qubits, t_qubit, aux_qubit, 1)
-        qc.s(aux_qubit)
-        qc = self.k_gate(self, qc, c_qubits, t_qubit, aux_qubit, 2)
-        qc.sdg(aux_qubit)
-        qc = self.k_gate(self, qc, c_qubits, t_qubit, aux_qubit, 1)
-        qc.s(aux_qubit)
-        qc = self.k_gate(self, qc, c_qubits, t_qubit, aux_qubit, 2)
-        qc.sdg(aux_qubit)
-        qc.h(t_qubit)
-
-        return qc
 
     def generate_circuit(self) -> QuantumCircuit:
         """Return a QuantumCircuit implementation
@@ -127,10 +139,10 @@ class MCTNQubitDecomposition(MCTBase):
         aux_qubit = self._n + 1
 
         circ = QuantumCircuit(self._n + 2, self._n + 1)
-        circ.append(
-            self.MCT(control_qubits, target_qubit, aux_qubit),
-            control_qubits + [target_qubit] + [aux_qubit],
-        )
+
+        mct = self.MCT(control_qubits, target_qubit, aux_qubit)
+
+        circ.append(mct, control_qubits + [target_qubit] + [aux_qubit])
 
         # should be done for all implementations
         # TODO: solve issue with reordered qubits

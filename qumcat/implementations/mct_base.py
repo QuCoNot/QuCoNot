@@ -11,8 +11,21 @@ class MCTBase:
         pass
 
     @classmethod
-    def generate_mct_cases(self, controls_no: int, max_ancilla: int, **kwargs) -> List["MCTBase"]:
+    def generate_mct_cases(
+        self,
+        controls_no: int,
+        max_ancilla: int,
+        relative_phase: bool = False,
+        clean_acilla: bool = True,
+        wasted_ancilla: bool = False,
+        separable_wasted_ancilla: bool = False,
+    ) -> List["MCTBase"]:
         """Generate all possible MCT implementation satisfying the requirements
+
+        relative_phase: true / false (D)
+        clean_ancilla: true (D) / false
+        wasted_ancilla: true / false (D)
+        separable_wasted_ancilla: true / false (D)    # requires wasted_ancilla set to True
 
         :return: a quantum circuit
         :rtype: QuantumCircuit

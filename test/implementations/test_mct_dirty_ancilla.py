@@ -12,7 +12,7 @@ usim = Aer.get_backend("unitary_simulator")
 
 
 @pytest.mark.parametrize("implementation", [MCTVChainDirty, MCTBarenco74Dirty])
-@pytest.mark.parametrize("controls_no", [3])
+@pytest.mark.parametrize("controls_no", [5])
 def test_generate_circuit_dirty_ancilla(implementation, controls_no):
     mct = implementation(controls_no)
 

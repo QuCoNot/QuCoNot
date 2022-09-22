@@ -13,12 +13,12 @@ class MCTParallelDecomposition(MCTBase):
         self._circuit: QuantumCircuit = None
         pass
 
-    def get_toffoli(self, qc, c1, c2, t):
+    def get_toffoli(self, qc: QuantumCircuit, c1: List[list], c2: List[list], t: int):
         qc.toffoli(c1, c2, t)
 
         return qc
 
-    def get_pairs(self, qubits, left):
+    def get_pairs(self, qubits: List[int], left: List[list]):
         if len(qubits) % 2 == 0:
             pairs = [[qubits[i], qubits[i + 1]] for i in range(0, len(qubits), 2)]
             return pairs, left
@@ -28,8 +28,21 @@ class MCTParallelDecomposition(MCTBase):
             return pairs, left
 
     @classmethod
-    def generate_mct_cases(cls, controls_no: int, max_ancilla: int, **kwargs) -> List["MCTBase"]:
+    def generate_mct_cases(
+        self,
+        controls_no: int,
+        max_ancilla: int,
+        relative_phase: bool = False,
+        clean_acilla: bool = True,
+        wasted_ancilla: bool = False,
+        separable_wasted_ancilla: bool = False,
+    ) -> List["MCTBase"]:
         """Generate all possible MCT implementation satisfying the requirements
+
+        relative_phase: true / false (D)
+        clean_ancilla: true (D) / false
+        wasted_ancilla: true / false (D)
+        separable_wasted_ancilla: true / false (D)    # requires wasted_ancilla set to True
 
         :return: a quantum circuit
         :rtype: QuantumCircuit
@@ -39,21 +52,20 @@ class MCTParallelDecomposition(MCTBase):
         else:
             return [MCTParallelDecomposition(controls_no)]  # only one available
 
-    @classmethod
-    def MCT(self, c_qubits, t_qubit, aux_qubits):
+    def MCT(self, c_qubits: List[int], t_qubit: int, aux_qubits: List[int]):
         qc = QuantumCircuit(len(c_qubits) + len(aux_qubits) + 1)
 
         ps, ls = [], []
         layers, uss = [], []
 
-        p, left = self.get_pairs(self, c_qubits, [])
+        p, left = self.get_pairs(c_qubits, [])
         ps.append(p)
         ls.append(left)
 
         layers.append([[p[i], aux_qubits[i]] for i in range(len(p))])
         uss.append([aux_qubits[i] for i in range(len(p))])
 
-        p, left = self.get_pairs(self, uss[-1], ls[-1])
+        p, left = self.get_pairs(uss[-1], ls[-1])
 
         while True:
             ps.append(p)
@@ -61,7 +73,7 @@ class MCTParallelDecomposition(MCTBase):
             left = sum(len(w) for w in uss)
             layers.append([[ps[-1][i], aux_qubits[i + left]] for i in range(len(ps[-1]))])
             uss.append([aux_qubits[i + left] for i in range(len(ps[-1]))])
-            p, left = self.get_pairs(self, uss[-1], ls[-1])
+            p, left = self.get_pairs(uss[-1], ls[-1])
             if len(p) == 0 and len(left) == 2:
                 break
             if len(p) == 1 and len(left) == 0:
@@ -69,16 +81,16 @@ class MCTParallelDecomposition(MCTBase):
 
         for l1 in layers:
             for c, t in l1:
-                qc = self.get_toffoli(self, qc, c[0], c[1], t)
+                qc = self.get_toffoli(qc, c[0], c[1], t)
 
         if left:
-            qc = self.get_toffoli(self, qc, left[0], left[1], t_qubit)
+            qc = self.get_toffoli(qc, left[0], left[1], t_qubit)
         if p:
-            qc = self.get_toffoli(self, qc, p[0][0], p[0][1], t_qubit)
+            qc = self.get_toffoli(qc, p[0][0], p[0][1], t_qubit)
 
         for l1 in layers[::-1]:
             for c, t in l1:
-                qc = self.get_toffoli(self, qc, c[0], c[1], t)
+                qc = self.get_toffoli(qc, c[0], c[1], t)
 
         return qc
 

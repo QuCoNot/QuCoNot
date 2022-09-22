@@ -16,21 +16,21 @@ class MCTBarenco75Dirty(MCTBase):
         self._circuit: QuantumCircuit = None
         pass
 
-    def get_V(self, root):
+    def get_V(self, root: int):
         circ = QuantumCircuit(2, name=f"CX^1/{root}")
         V = XGate().power(1 / root)
         V = V.control(1)
         circ.append(V, [0, 1])
         return circ
 
-    def get_Vdg(self, root):
+    def get_Vdg(self, root: int):
         circ = QuantumCircuit(2, name=f"CX^1/{root}dg")
         V = XGate().power(1 / root).adjoint()
         V = V.control(1)
         circ.append(V, [0, 1])
         return circ
 
-    def get_mct(self, controls, target):
+    def get_mct(self, controls: List[int], target: List[int]):
         if len(controls) == 1:
             return CXGate()
         if len(controls) == 2:
@@ -40,35 +40,48 @@ class MCTBarenco75Dirty(MCTBase):
         circ.mcx(controls, target)
         return circ
 
-    def recursive(self, qubitss):
+    def recursive(self, qubitss: list[int]):
         circ = QuantumCircuit(len(qubitss))
 
-        def make_mct(self, circ, qubits, root=1):
+        def make_mct(circ: QuantumCircuit, qubits: List[int], root: int = 1):
             if len(qubits) == 2:
-                circ.append(self.get_V(self, root), qubits)
+                circ.append(self.get_V(root), qubits)
                 return circ
 
-            CV = self.get_V(self, root * 2)
-            CVdg = self.get_Vdg(self, root * 2)
+            CV = self.get_V(root * 2)
+            CVdg = self.get_Vdg(root * 2)
 
-            mcx = self.get_mct(self, qubits[:-2], qubits[-2])
+            mcx = self.get_mct(qubits[:-2], qubits[-2])
 
             circ.append(CV, [qubits[-2], qubits[-1]])
             circ.append(mcx, qubits[:-1])
             circ.append(CVdg, [qubits[-2], qubits[-1]])
             circ.append(mcx, qubits[:-1])
 
-            ccv = make_mct(self, circ, qubits[:-2] + [qubits[-1]], root * 2)
+            ccv = make_mct(circ, qubits[:-2] + [qubits[-1]], root * 2)
 
             return ccv
 
-        circ = make_mct(self, circ, qubitss, 1)
+        circ = make_mct(circ, qubitss, 1)
 
         return circ
 
     @classmethod
-    def generate_mct_cases(cls, controls_no: int, max_ancilla: int, **kwargs) -> List["MCTBase"]:
+    def generate_mct_cases(
+        self,
+        controls_no: int,
+        max_ancilla: int,
+        relative_phase: bool = False,
+        clean_acilla: bool = True,
+        wasted_ancilla: bool = False,
+        separable_wasted_ancilla: bool = False,
+    ) -> List["MCTBase"]:
         """Generate all possible MCT implementation satisfying the requirements
+
+        relative_phase: true / false (D)
+        clean_ancilla: true (D) / false
+        wasted_ancilla: true / false (D)
+        separable_wasted_ancilla: true / false (D)    # requires wasted_ancilla set to True
 
         :return: a quantum circuit
         :rtype: QuantumCircuit
@@ -78,10 +91,6 @@ class MCTBarenco75Dirty(MCTBase):
         else:
             return [MCTBarenco75Dirty(controls_no)]  # only one available
 
-    @classmethod
-    def MCT(self, controls_no):
-        return self.recursive(self, list(range(controls_no + 1)))
-
     def generate_circuit(self) -> QuantumCircuit:
         """Return a QuantumCircuit implementation
 
@@ -89,9 +98,7 @@ class MCTBarenco75Dirty(MCTBase):
         :rtype: QuantumCircuit
         """
 
-        # print("self._n : ", self._n, ", self.num_ancilla_qubit : ", self.num_ancilla_qubits())
-
-        circ = self.MCT(self._n)
+        circ = self.recursive(list(range(self._n + 1)))
 
         self._circuit = transpile(circ, basis_gates=["cx", "u3"])
 

@@ -16,14 +16,16 @@ class MCTBarenco74Dirty(MCTBase):
         pass
 
     # Lemma 7.2
-    def L7_2(self, c, a, t=False):
+    def L7_2(self, c: int, a: int, t: bool = False):
 
-        qc = QuantumCircuit(c + a + 1)
+        total_qubits = c + a + 1
+
+        qc = QuantumCircuit(total_qubits)
         tof = CCXGate()
 
         # print("c : ", c, ", a : ", a, ", t:", t)
 
-        def netw(c, a, t=False, sec=0):
+        def netw(c: int, a: int, t: bool = False, sec: int = 0):
             n = 2 * c - 1 + sec
             for i in range(n - 1, c + sec, -1):
                 qc.append(tof, [c + i - n, i - 1, i])
@@ -45,8 +47,21 @@ class MCTBarenco74Dirty(MCTBase):
         return qc
 
     @classmethod
-    def generate_mct_cases(cls, controls_no: int, max_ancilla: int, **kwargs) -> List["MCTBase"]:
+    def generate_mct_cases(
+        self,
+        controls_no: int,
+        max_ancilla: int,
+        relative_phase: bool = False,
+        clean_acilla: bool = True,
+        wasted_ancilla: bool = False,
+        separable_wasted_ancilla: bool = False,
+    ) -> List["MCTBase"]:
         """Generate all possible MCT implementation satisfying the requirements
+
+        relative_phase: true / false (D)
+        clean_ancilla: true (D) / false
+        wasted_ancilla: true / false (D)
+        separable_wasted_ancilla: true / false (D)    # requires wasted_ancilla set to True
 
         :return: a quantum circuit
         :rtype: QuantumCircuit
@@ -56,9 +71,16 @@ class MCTBarenco74Dirty(MCTBase):
         else:
             return [MCTBarenco74Dirty(controls_no)]  # only one available
 
-    @classmethod
-    def MCT(self, controls_no, ancillas_no):
-        qc = QuantumCircuit(controls_no + ancillas_no + 1)
+    def generate_circuit(self) -> QuantumCircuit:
+        """Return a QuantumCircuit implementation
+
+        :return: a quantum circuit
+        :rtype: QuantumCircuit
+        """
+        controls_no = self._n
+        ancillas_no = self.num_ancilla_qubits()
+
+        circ = QuantumCircuit(controls_no + ancillas_no + 1)
 
         n = controls_no + ancillas_no + 1
         m1 = controls_no
@@ -68,23 +90,10 @@ class MCTBarenco74Dirty(MCTBase):
         # print(list(range(m1, n)), list(range(0, m1)))
         # print(list(range(m1, n)) + list(range(0, m1)))
 
-        qc.append(self.L7_2(self, m1, m2), list(range(n)))
-        qc.append(self.L7_2(self, m2, m1, t=True), list(range(m1, n)) + list(range(0, m1)))
-        qc.append(self.L7_2(self, m1, m2), list(range(n)))
-        qc.append(self.L7_2(self, m2, m1, t=True), list(range(m1, n)) + list(range(0, m1)))
-
-        return qc
-
-    def generate_circuit(self) -> QuantumCircuit:
-        """Return a QuantumCircuit implementation
-
-        :return: a quantum circuit
-        :rtype: QuantumCircuit
-        """
-
-        # print("self._n : ", self._n, ", self.num_ancilla_qubit : ", self.num_ancilla_qubits())
-
-        circ = self.MCT(self._n, self.num_ancilla_qubits())
+        circ.append(self.L7_2(m1, m2), list(range(n)))
+        circ.append(self.L7_2(m2, m1, t=True), list(range(m1, n)) + list(range(0, m1)))
+        circ.append(self.L7_2(m1, m2), list(range(n)))
+        circ.append(self.L7_2(m2, m1, t=True), list(range(m1, n)) + list(range(0, m1)))
 
         self._circuit = transpile(circ, basis_gates=["cx", "s", "h", "t", "z", "sdg", "tdg"])
 
