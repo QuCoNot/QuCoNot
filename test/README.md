@@ -47,24 +47,4 @@ The first one is controls_no = 5, max_ancilla = 1, expected_cases = 0 and with t
 
 The second one is controls_no = 5, max_ancilla = 3, expected_cases = 1 and with the label "one-case".
 
-## Adding Markers
-
-By adding marker to the testing function, we can run only specified sections that we want. For example, we add mark "mct_vchain"
-
-```python
-@pytest.mark.mct_vchain
-def test_generate_mct_cases(controls_no, max_ancilla, expected_cases):  
-```
-This means that we can run only this function testing by adding properties "-m <mark_label>" while running the PyTest.
-
-```console
-python -m pytest -m mct_vchain
-```
-
-And this is the result for running with the marker.
-
-```console
-collected 17 items / 8 deselected / 9 selected                                                                                                                         
-Test\test_mct_vchain.py ..x...... 
-```
 
