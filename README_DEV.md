@@ -1,6 +1,10 @@
 # Qumcat Development Guide
 
-This is the documentation to install the requirement for pre-commiting the project
+> **Note**
+> Before running the pre-commit, test the implementation with PyTest first. 
+> See [here](https://github.com/QIntern-2022/qumcat/tree/main/test) for PyTest testing guide
+
+This is the documentation to install the requirement for pre-commiting the project.
 
 ## :rocket:&nbsp; Getting started 
 
@@ -34,7 +38,7 @@ At this point, you already have the required parts, then you can run the pre-com
 pre-commit run --all-files
 ```
 
-Below is the expected result if there is no error
+Below is the expected result if everything is **Passed**
 
 ```bash
 isort....................................................................Passed
@@ -62,14 +66,18 @@ For the error message, it will be clear which part of the code that we need to m
 
 ## Commiting the code
 
+> **Warning**
+> Before commiting the code, make sure the validation from PyTest and pre-commit has been **SUCCESSFULL**.
+
 After passing all the requirements, then you can commit the changes with these code
 
 ```bash
 git add .
 git commit -am "<commit_title>"
+git push
 ```
 
-if it is succeeded, then you can continue with the pytest testing.
 
-Note: Go to test folder for the instructions
+
+
 
