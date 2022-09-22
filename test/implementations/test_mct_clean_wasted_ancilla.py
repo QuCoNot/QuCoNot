@@ -1,6 +1,6 @@
 import numpy as np
 import pytest
-from functions import check_all_zero, identity_matrix, ket_0_matrix, load_matrix, zero_matrix
+from functions import identity_matrix, ket_0_matrix, load_matrix
 from qiskit import Aer
 
 from qumcat.implementations.mct_vchain import MCTVChain
@@ -16,8 +16,6 @@ def test_generate_circuit_clean_wasted_ancilla(implementation, controls_no):
     mct = implementation(controls_no)
 
     circ = mct.generate_circuit()
-
-    no_of_qubits = 0
 
     # get unitary matrix
     unitary_matrix = np.array(usim.run(circ).result().get_unitary())
@@ -53,4 +51,4 @@ def test_generate_circuit_clean_wasted_ancilla(implementation, controls_no):
             np.conj(res_3).T, res_3
         )  # || ( <b_C,T| @ I_A ) (U_MCT @ I) U_tilde(|b_C,T> @ |0_A>) ||_2
 
-        assert (np.round(res_4) == 1, "The length should be 1")
+        assert np.round(res_4) == 1, "The length should be 1"

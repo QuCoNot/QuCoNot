@@ -1,7 +1,6 @@
 from copy import deepcopy
 from typing import List
 
-import numpy as np
 from qiskit import QuantumCircuit, transpile
 from qiskit.circuit.library import CCXGate
 
@@ -30,7 +29,7 @@ class MCTBarenco74Dirty(MCTBase):
             for i in range(n - 1, c + sec, -1):
                 qc.append(tof, [c + i - n, i - 1, i])
 
-            if t == True:
+            if t is True:
                 qc.append(CCXGate(), [0, 1, c + sec])
             else:
                 qc.append(tof, [0, 1, c + sec])

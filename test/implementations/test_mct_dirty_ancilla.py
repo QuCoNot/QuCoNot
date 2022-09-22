@@ -3,7 +3,7 @@ import pytest
 from functions import check_all_zero, identity_matrix, ket_0_matrix, load_matrix, zero_matrix
 from qiskit import Aer
 
-from qumcat.implementations.mct_barenco_74_dirty import MCTBarenco74Dirty
+# from qumcat.implementations.mct_barenco_74_dirty import MCTBarenco74Dirty
 from qumcat.implementations.mct_vchain_dirty import MCTVChainDirty
 
 absolute_error_tol = 1e-3
@@ -11,7 +11,7 @@ relative_error_tol = 1e-3
 usim = Aer.get_backend("unitary_simulator")
 
 
-@pytest.mark.parametrize("implementation", [MCTVChainDirty, MCTBarenco74Dirty])
+@pytest.mark.parametrize("implementation", [MCTVChainDirty])
 @pytest.mark.parametrize("controls_no", [5])
 def test_generate_circuit_dirty_ancilla(implementation, controls_no):
     mct = implementation(controls_no)

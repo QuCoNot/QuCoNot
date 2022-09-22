@@ -1,5 +1,5 @@
 from copy import deepcopy
-from typing import List
+from typing import Any, List
 
 from qiskit import QuantumCircuit, transpile
 
@@ -18,7 +18,7 @@ class MCTParallelDecomposition(MCTBase):
 
         return qc
 
-    def get_pairs(self, qubits: List[int], left: List[list]):
+    def get_pairs(self, qubits: List[int], left: List[Any]):
         if len(qubits) % 2 == 0:
             pairs = [[qubits[i], qubits[i + 1]] for i in range(0, len(qubits), 2)]
             return pairs, left

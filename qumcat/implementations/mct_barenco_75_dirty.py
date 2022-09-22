@@ -1,10 +1,8 @@
 from copy import deepcopy
 from typing import List
 
-import numpy as np
 from qiskit import QuantumCircuit, transpile
 from qiskit.circuit.library import CCXGate, CXGate, XGate
-from qiskit.quantum_info import Operator
 
 from .mct_base import MCTBase
 
@@ -30,7 +28,7 @@ class MCTBarenco75Dirty(MCTBase):
         circ.append(V, [0, 1])
         return circ
 
-    def get_mct(self, controls: List[int], target: List[int]):
+    def get_mct(self, controls: List[int], target: int):
         if len(controls) == 1:
             return CXGate()
         if len(controls) == 2:

@@ -21,8 +21,6 @@ def test_generate_circuit_clean_ancilla(implementation, controls_no):
 
     circ = mct.generate_circuit()
 
-    no_of_qubits = 0
-
     # get unitary matrix
     unitary_matrix = np.array(usim.run(circ).result().get_unitary())
 
