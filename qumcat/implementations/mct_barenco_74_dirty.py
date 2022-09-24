@@ -1,6 +1,7 @@
 from copy import deepcopy
 from typing import List
 
+import numpy as np
 from qiskit import QuantumCircuit, transpile
 from qiskit.circuit.library import CCXGate
 
@@ -14,34 +15,77 @@ class MCTBarenco74Dirty(MCTBase):
         self._circuit: QuantumCircuit = None
         pass
 
-    # Lemma 7.2
-    def L7_2(self, c: int, a: int, t: bool = False):
+    def TofDecomp(self):
+        qc = QuantumCircuit(3)
+        qc.ry(np.pi / 4, 2)
+        qc.cx(1, 2)
+        qc.ry(np.pi / 4, 2)
+        qc.cx(0, 2)
+        qc.ry(-np.pi / 4, 2)
+        qc.cx(1, 2)
+        qc.ry(-np.pi / 4, 2)
+        return qc
 
-        total_qubits = c + a + 1
+    def k_gate(self, qc: QuantumCircuit, c: List[int], t: int, a: int, k: int):
+        k1 = int(np.floor((len(c) + 1) / 2))
+        # k2 = len(c) - k1
 
-        qc = QuantumCircuit(total_qubits)
-        tof = CCXGate()
+        tof = self.TofDecomp()
 
-        # print("c : ", c, ", a : ", a, ", t:", t)
+        if k == 1:
+            controls = c[:k1]
+            target = a
+            auxs = (c[k1:])[: len(controls) - 2]
 
-        def netw(c: int, a: int, t: bool = False, sec: int = 0):
-            n = 2 * c - 1 + sec
-            for i in range(n - 1, c + sec, -1):
-                qc.append(tof, [c + i - n, i - 1, i])
+        elif k == 2:
 
-            if t is True:
-                qc.append(CCXGate(), [0, 1, c + sec])
+            controls = c[k1:] + [a]
+            target = t
+            auxs = (c[:k1] + [a])[: len(controls) - 2]
+
+        for c1, c2, t1 in zip(controls[::-1][:-2], auxs[::-1], [target] + auxs[::-1][:-1]):
+            if t1 == t:
+                qc.append(CCXGate(), (c1, c2, t1))
             else:
-                qc.append(tof, [0, 1, c + sec])
+                qc.append(tof, [c1, c2, t1])
 
-            for i in range(c + sec + 1, n):
-                qc.append(tof, [c + i - n, i - 1, i])
+        qc.append(tof, [controls[0], controls[1], auxs[0]])
+        for c1, c2, t1 in zip(
+            controls[::-1][:-2][::-1], auxs[::-1][::-1], ([target] + auxs[::-1][:-1])[::-1]
+        ):
+            if t1 == t:
+                qc.append(CCXGate(), (c1, c2, t1))
+            else:
+                qc.append(tof, [c1, c2, t1])
 
-        if c == 2:
-            qc.ccx(0, 1, c)
-        else:
-            netw(c, a, t=t)
-            netw(c - 1, a, t=t, sec=1)
+        for c1, c2, t1 in zip(controls[::-1][1:-2], auxs[::-1][1:], auxs[::-1][:-1]):
+            if t1 == t:
+                qc.append(CCXGate(), (c1, c2, t1))
+            else:
+                qc.append(tof, [c1, c2, t1])
+
+        qc.append(tof, [controls[0], controls[1], auxs[0]])
+        for c1, c2, t1 in zip(
+            controls[::-1][1:-2][::-1], auxs[::-1][1:][::-1], auxs[::-1][:-1][::-1]
+        ):
+            if t1 == t:
+                qc.append(CCXGate(), (c1, c2, t1))
+            else:
+                qc.append(tof, [c1, c2, t1])
+
+        return qc
+
+    def L7_4(self, c_qubits: List[int], t_qubit: int, aux_qubit: int):
+        n = len(c_qubits) + 2
+        qc = QuantumCircuit(n)
+
+        qc = self.k_gate(qc, c_qubits, t_qubit, aux_qubit, 1)
+        qc.barrier()
+        qc = self.k_gate(qc, c_qubits, t_qubit, aux_qubit, 2)
+        qc.barrier()
+        qc = self.k_gate(qc, c_qubits, t_qubit, aux_qubit, 1)
+        qc.barrier()
+        qc = self.k_gate(qc, c_qubits, t_qubit, aux_qubit, 2)
 
         return qc
 
@@ -76,35 +120,21 @@ class MCTBarenco74Dirty(MCTBase):
         :return: a quantum circuit
         :rtype: QuantumCircuit
         """
-        controls_no = self._n
-        ancillas_no = self.num_ancilla_qubits()
 
-        circ = QuantumCircuit(controls_no + ancillas_no + 1)
+        circ = self.L7_4(list(range(self._n)), self._n, self._n + self.num_ancilla_qubits())
 
-        n = controls_no + ancillas_no + 1
-        m1 = controls_no
-        m2 = ancillas_no
-
-        # print(list(range(n)))
-        # print(list(range(m1, n)), list(range(0, m1)))
-        # print(list(range(m1, n)) + list(range(0, m1)))
-
-        circ.append(self.L7_2(m1, m2), list(range(n)))
-        circ.append(self.L7_2(m2, m1, t=True), list(range(m1, n)) + list(range(0, m1)))
-        circ.append(self.L7_2(m1, m2), list(range(n)))
-        circ.append(self.L7_2(m2, m1, t=True), list(range(m1, n)) + list(range(0, m1)))
-
-        self._circuit = transpile(circ, basis_gates=["cx", "s", "h", "t", "z", "sdg", "tdg"])
+        self._circuit = transpile(circ, basis_gates=["cx", "u3"])
+        # self._circuit = transpile(circ, basis_gates=["cx", "s", "h", "t", "z", "sdg", "tdg"])
 
         return deepcopy(self._circuit)
 
     def num_ancilla_qubits(self):
 
-        return (self._n * 2) - self._n - 1
+        return 1
 
 
 if __name__ == "__main__":
-    MCTNQubit = MCTBarenco74Dirty(3)
+    MCTNQubit = MCTBarenco74Dirty(5)
     circ = MCTNQubit.generate_circuit()
     # print(circ.draw(fold=-1))
     print(circ.depth(), "depth")
