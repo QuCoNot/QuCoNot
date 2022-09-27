@@ -1,3 +1,9 @@
+# Qumcat/qumcat/implementations/mct_barenco_75_dirty.py
+#
+# Authors:
+#  - Ankit Khandelwal
+#  - Shraddha Aangiras
+
 from copy import deepcopy
 from typing import List
 

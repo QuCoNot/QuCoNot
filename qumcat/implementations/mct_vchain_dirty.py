@@ -1,3 +1,10 @@
+# Qumcat/qumcat/implementations/mct_vchain_dirty.py
+#
+# Authors:
+#  - Handy Kurniawan
+#
+# Apply the implementation from Qiskit MCT
+
 from copy import deepcopy
 from typing import List
 

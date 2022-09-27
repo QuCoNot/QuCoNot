@@ -1,3 +1,26 @@
+# Qumcat/qumcat/implementations/mct_n_qubit_decomposition.py
+#
+# Authors:
+#  - Ankit Khandelwal
+#  - Shraddha Aangiras
+#############
+# Decompositions of n-qubit Toffoli Gates with Linear Circuit Complexity
+# This implementation is based on part 1 of the paper "Decompositions of n-qubit
+# Toffoli Gates with Linear Circuit Complexity".
+# https://doi.org/10.1007/s10773-017-3389-4
+# From our testing, it looks like the implementation in the paper is incorrect.
+# Some of the phase Toffoli gates
+# that are in the decomposition must be replaced with actual Toffolis for the
+# implementation to work.
+# The implementation in this file contains this fix.
+# We do not find any advantage in this implementation. The original
+# implementation from the paper "Elementary gates for quantum computation",
+# is basically the same decomposition. There it also says which gates need
+# to be actual Toffolis.
+# The depth mentioned in the paper is also a naive calculation and offers an
+# upper bound. The actual depth of the circuit is lower.
+#############
+
 from copy import deepcopy
 from typing import List
 

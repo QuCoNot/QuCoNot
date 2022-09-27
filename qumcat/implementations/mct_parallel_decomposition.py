@@ -1,3 +1,9 @@
+# Qumcat/qumcat/implementations/mct_parallel_decomposition.py
+#
+# Authors:
+#  - Ankit Khandelwal
+#  - Shraddha Aangiras
+
 from copy import deepcopy
 from typing import Any, List
 
