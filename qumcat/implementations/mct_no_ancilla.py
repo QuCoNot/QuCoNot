@@ -64,6 +64,11 @@ class MCTNoAncilla(MCTBase):
         return deepcopy(self._circuit)
 
     def num_ancilla_qubits(self):
+        """Return number of ancilla qubits
+
+        :return: number of ancilla qubits
+        :rtype: int
+        """
         return 0
 
 

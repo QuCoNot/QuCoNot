@@ -41,6 +41,11 @@ class MCTBase:
         raise NotImplementedError
 
     def num_gates(self, gates_id: List[str] = None) -> int:
+        """Return number of gates
+
+        :return: number of gates
+        :rtype: int
+        """
         if not self._circuit:
             self._circuit = self.generate_circuit()
         ops: dict = self._circuit.count_ops()
@@ -50,11 +55,21 @@ class MCTBase:
         return sum(ops.values())
 
     def depth(self) -> int:
+        """Return number of circuit depth
+
+        :return: number of depth
+        :rtype: int
+        """
         if not self._circuit:
             self._circuit = self.generate_circuit()
         return self._circuit.depth()
 
     def num_ancilla_qubits(self) -> int:
+        """Return number of ancilla qubits
+
+        :return: number of ancilla qubits
+        :rtype: int
+        """
         if not self._circuit:
             self._circuit = self.generate_circuit()
         return self._circuit.num_qubits() - self._n

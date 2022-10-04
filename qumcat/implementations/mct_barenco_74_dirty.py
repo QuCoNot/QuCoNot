@@ -135,13 +135,18 @@ class MCTBarenco74Dirty(MCTBase):
         return deepcopy(self._circuit)
 
     def num_ancilla_qubits(self):
+        """Return number of ancilla qubits
 
+        :return: number of ancilla qubits
+        :rtype: int
+        """
         return 1
 
 
 if __name__ == "__main__":
     MCTNQubit = MCTBarenco74Dirty(5)
     circ = MCTNQubit.generate_circuit()
+    MCTNQubit.nu
     # print(circ.draw(fold=-1))
     print(circ.depth(), "depth")
     print(dict(circ.count_ops()))

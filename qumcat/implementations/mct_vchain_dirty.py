@@ -65,6 +65,11 @@ class MCTVChainDirty(MCTBase):
         return deepcopy(self._circuit)
 
     def num_ancilla_qubits(self):
+        """Return number of ancilla qubits
+
+        :return: number of ancilla qubits
+        :rtype: int
+        """
         return self._n - 2
 
 
