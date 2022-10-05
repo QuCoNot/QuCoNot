@@ -42,10 +42,7 @@ class MCTNoAncillaRelativePhase(MCTBase):
         :return: a quantum circuit
         :rtype: QuantumCircuit
         """
-        if max_ancilla < controls_no - 2:
-            return []  # if max_ancilla allowed is to small - no representation given
-        else:
-            return [MCTNoAncillaRelativePhase(controls_no)]  # only one available
+        return [MCTNoAncillaRelativePhase(controls_no)]
 
     def generate_circuit(self) -> QuantumCircuit:
         """Return a QuantumCircuit implementation

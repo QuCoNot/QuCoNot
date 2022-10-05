@@ -7,8 +7,8 @@ from qumcat.implementations.mct_barenco_75_dirty import MCTBarenco75Dirty
 from qumcat.implementations.mct_no_ancilla import MCTNoAncilla
 from qumcat.implementations.mct_no_ancilla_relative_phase import MCTNoAncillaRelativePhase
 
-absolute_error_tol = 1e-3
-relative_error_tol = 1e-3
+absolute_error_tol = 1e-8
+relative_error_tol = 1e-8
 usim = Aer.get_backend("unitary_simulator")
 
 

@@ -5,8 +5,8 @@ from qiskit import Aer
 
 from qumcat.implementations.mct_vchain import MCTVChain
 
-absolute_error_tol = 1e-3
-relative_error_tol = 1e-3
+absolute_error_tol = 1e-8
+relative_error_tol = 1e-8
 usim = Aer.get_backend("unitary_simulator")
 
 

@@ -11,8 +11,8 @@ from .implementations.mct_vchain import MCTVChain
 class Qumcat:
     def __init__(self):
         self._registered_methods: List[Type[MCTBase]] = [
-            MCTNoAncilla,
             MCTNQubitDecomposition,
+            MCTNoAncilla,
             MCTNoAncillaRelativePhase,
             MCTParallelDecomposition,
             MCTVChain,
@@ -30,10 +30,30 @@ class Qumcat:
         pass
 
     # TODO replace kwargs below with the same arguments as the concrete implementations
-    def generate_mct_cases(self, controls_no: int, max_ancilla: int, **kwargs):
+    # def generate_mct_cases(self, controls_no: int, max_ancilla: int, **kwargs):
+    def generate_mct_cases(
+        self,
+        controls_no: int,
+        max_ancilla: int,
+        relative_phase: bool = False,
+        clean_acilla: bool = True,
+        wasted_ancilla: bool = False,
+        separable_wasted_ancilla: bool = False,
+    ) -> List["MCTBase"]:
+
         self._implementations = []
         for cls in self._registered_methods:
-            self._implementations += cls.generate_mct_cases(controls_no, max_ancilla, **kwargs)
+
+            self._implementations += cls.generate_mct_cases(
+                controls_no,
+                max_ancilla,
+                relative_phase,
+                clean_acilla,
+                wasted_ancilla,
+                separable_wasted_ancilla,
+            )
+
+        return self._implementations
 
     def filter_mct_cases(self, filter_fun: Callable[[MCTBase], bool]):
         self._implementations = list(filter(filter_fun, self._implementations))

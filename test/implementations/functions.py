@@ -2,6 +2,11 @@
 import numpy as np
 from qiskit import Aer, QuantumCircuit, transpile
 
+# constants
+absolute_error_tol = 1e-8
+relative_error_tol = 1e-8
+usim = Aer.get_backend("unitary_simulator")
+
 
 def identity_matrix(qubits_no):
     return np.identity(2**qubits_no, dtype=complex)

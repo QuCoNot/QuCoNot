@@ -7,8 +7,8 @@ from qumcat.implementations.mct_n_qubit_decomposition import MCTNQubitDecomposit
 from qumcat.implementations.mct_parallel_decomposition import MCTParallelDecomposition
 from qumcat.implementations.mct_vchain import MCTVChain
 
-absolute_error_tol = 1e-3
-relative_error_tol = 1e-3
+absolute_error_tol = 1e-8
+relative_error_tol = 1e-8
 usim = Aer.get_backend("unitary_simulator")
 
 
