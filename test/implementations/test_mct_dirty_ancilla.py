@@ -43,7 +43,6 @@ def test_generate_circuit_dirty_ancilla(implementation, controls_no):
     ), "Result should close to 0"
 
 
-@pytest.mark.dirty_relative
 @pytest.mark.parametrize("implementation", [MCTVChainDirty])
 @pytest.mark.parametrize("controls_no", [5])
 def test_generate_circuit_dirty_ancilla_relative_phase(implementation, controls_no):
