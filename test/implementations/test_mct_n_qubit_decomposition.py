@@ -11,9 +11,9 @@ from functions import (
     zero_matrix,
 )
 
-from qumcat.implementations.mct_barenco_74_dirty import MCTBarenco74Dirty
+from qumcat.implementations.mct_n_qubit_decomposition import MCTNQubitDecomposition
 
-implementation = MCTBarenco74Dirty
+implementation = MCTNQubitDecomposition
 
 
 @pytest.mark.parametrize("controls_no", [5])

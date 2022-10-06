@@ -1,10 +1,9 @@
-import os
 import sys
-from glob import glob
+
+from qumcat import Qumcat
 
 sys.path.append("C:\\Github\\qumcat")
 
-from qumcat import Qumcat
 
 q = Qumcat()
 print(q._registered_methods)

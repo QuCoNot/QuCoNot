@@ -38,6 +38,4 @@ def reverse_kronecker_product(A, B_shape):
     Vec_C = np.sqrt(s[idx]) * V[idx, :]
     C = Vec_C.reshape(C_shape)
 
-    
-
     return B, C
