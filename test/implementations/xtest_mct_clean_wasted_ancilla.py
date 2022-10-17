@@ -13,6 +13,8 @@ usim = Aer.get_backend("unitary_simulator")
 @pytest.mark.parametrize("implementation", [MCTVChain])
 @pytest.mark.parametrize("controls_no", [4, 5])
 def test_generate_circuit_clean_wasted_ancilla(implementation, controls_no):
+    # Entangled left-out...
+
     mct = implementation(controls_no)
 
     circ = mct.generate_circuit()

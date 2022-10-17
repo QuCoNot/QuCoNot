@@ -56,12 +56,12 @@ class MCTRecursion(MCTBase):
 
         if ancilla_no == 1:
             ancilla_qubit = [self._n + 1]
-            
+
         qc = QuantumCircuit(self._n + 1 + ancilla_no)
         qc.mct(
             list(range(self._n)),
             self._n,
-            ancilla_qubits = ancilla_qubit,
+            ancilla_qubits=ancilla_qubit,
             mode="recursion",
         )
 
