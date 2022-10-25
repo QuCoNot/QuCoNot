@@ -28,9 +28,9 @@ def generate_circuit_no_ancilla(unitary_matrix, controls_no: int, ancillas_no: i
 
     assert generated_unitary.shape == expected_unitary.shape
 
-    assert (
-        check_all_zero(generated_unitary, absolute_error_tol, relative_error_tol) == 1
-    ), "Result should close to 0"
+    assert np.allclose(
+        generated_unitary, expected_unitary, atol=absolute_error_tol, rtol=relative_error_tol
+    )
 
 
 # 1.2 No Ancilla Relative
@@ -49,9 +49,9 @@ def generate_circuit_no_ancilla_relative(unitary_matrix, controls_no: int, ancil
 
     assert generated_unitary.shape == expected_unitary.shape
 
-    assert (
-        check_all_zero(generated_unitary, absolute_error_tol, relative_error_tol) == 1
-    ), "Result should close to 0"
+    assert np.allclose(
+        generated_unitary, expected_unitary, atol=absolute_error_tol, rtol=relative_error_tol
+    )
 
 
 # 2.1 Clean Non-wasted
@@ -74,9 +74,9 @@ def generate_circuit_clean_ancilla(unitary_matrix, controls_no: int, ancillas_no
 
     assert generated_unitary.shape == expected_unitary.shape
 
-    assert (
-        check_all_zero(generated_unitary, absolute_error_tol, relative_error_tol) == 1
-    ), "Result should close to 0"
+    assert np.allclose(
+        generated_unitary, expected_unitary, atol=absolute_error_tol, rtol=relative_error_tol
+    )
 
 
 # 2.2 Clean Non-wasted Relative
@@ -99,9 +99,9 @@ def generate_circuit_clean_relative_ancilla(unitary_matrix, controls_no: int, an
 
     assert generated_unitary.shape == expected_unitary.shape
 
-    assert (
-        check_all_zero(generated_unitary, absolute_error_tol, relative_error_tol) == 1
-    ), "Result should close to 0"
+    assert np.allclose(
+        generated_unitary, expected_unitary, atol=absolute_error_tol, rtol=relative_error_tol
+    )
 
 
 # 3.1 Dirty Non-Wasted
@@ -121,9 +121,9 @@ def generate_circuit_dirty_ancilla(unitary_matrix, controls_no: int, ancillas_no
 
     assert generated_unitary.shape == expected_unitary.shape
 
-    assert (
-        check_all_zero(generated_unitary, absolute_error_tol, relative_error_tol) == 1
-    ), "Result should close to 0"
+    assert np.allclose(
+        generated_unitary, expected_unitary, atol=absolute_error_tol, rtol=relative_error_tol
+    )
 
 
 # 3.2 Dirty Non-Wasted Relative
@@ -153,9 +153,9 @@ def generate_circuit_dirty_relative_ancilla(unitary_matrix, controls_no: int, an
 
     assert generated_unitary.shape == expected_unitary.shape
 
-    assert (
-        check_all_zero(generated_unitary, absolute_error_tol, relative_error_tol) == 1
-    ), "Result should close to 0"
+    assert np.allclose(
+        generated_unitary, expected_unitary, atol=absolute_error_tol, rtol=relative_error_tol
+    )
 
 
 # 4.1 Clean Wasted Entangled Leftout
@@ -189,9 +189,10 @@ def generate_circuit_clean_wasted_entangled_ancilla(
             ket_b_ct_i, res_2
         )  # ( <b_C,T| @ I_A ) (U_MCT @ I) U_tilde(|b_C,T> @ |0_A>)
 
-        res_4 = np.matmul(
-            np.conj(res_3).T, res_3
-        )  # || ( <b_C,T| @ I_A ) (U_MCT @ I) U_tilde(|b_C,T> @ |0_A>) ||_2
+        # res_4 = np.matmul(
+        #    np.conj(res_3).T, res_3
+        # )  # || ( <b_C,T| @ I_A ) (U_MCT @ I) U_tilde(|b_C,T> @ |0_A>) ||_2
+        res_4 = np.linalg.norm(res_3)
 
         assert np.round(res_4) == 1, "The length should be 1"
 
@@ -228,9 +229,10 @@ def generate_circuit_clean_wasted_relative_entangled_ancilla(
             ket_b_ct_i, res_2
         )  # ( <b_C,T| @ I_A ) (U_MCT @ I) U_tilde(|b_C,T> @ |0_A>)
 
-        res_4 = np.matmul(
-            np.conj(res_3).T, res_3
-        )  # || ( <b_C,T| @ I_A ) (U_MCT @ I) U_tilde(|b_C,T> @ |0_A>) ||_2
+        # res_4 = np.matmul(
+        #    np.conj(res_3).T, res_3
+        # )  # || ( <b_C,T| @ I_A ) (U_MCT @ I) U_tilde(|b_C,T> @ |0_A>) ||_2
+        res_4 = np.linalg.norm(res_3)
 
         assert np.round(res_4) == 1, "The length should be 1"
 

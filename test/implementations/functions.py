@@ -1,6 +1,7 @@
 # This is where we put fixtures
 import numpy as np
 from qiskit import Aer, QuantumCircuit, transpile
+from scipy.sparse import identity
 
 # constants
 absolute_error_tol = 1e-8
@@ -9,7 +10,8 @@ usim = Aer.get_backend("unitary_simulator")
 
 
 def identity_matrix(qubits_no):
-    return np.identity(2**qubits_no, dtype=complex)
+    # return np.identity(2**qubits_no, dtype=complex)
+    return identity(2**qubits_no).toarray()
 
 
 def zero_matrix(qubits_no):
