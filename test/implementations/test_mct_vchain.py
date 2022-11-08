@@ -9,13 +9,14 @@ from functions_testing import (
     generate_circuit_clean_wasted_relative_separable_ancilla,
     generate_circuit_clean_wasted_separable_ancilla,
 )
+from qiskit.quantum_info.operators import Operator
 
 from qumcat.implementations.mct_vchain import MCTVChain
 
 implementation = MCTVChain
 
 
-@pytest.mark.parametrize("controls_no", [4, 5])
+@pytest.mark.parametrize("controls_no", [5])
 def test_unitary_matrix(controls_no):
     mct = implementation(controls_no)
 
@@ -31,7 +32,8 @@ def test_unitary_matrix(controls_no):
     ]
 
     # get unitary matrix
-    unitary_matrix = np.array(np.absolute(usim.run(circ).result().get_unitary()))
+    # unitary_matrix = np.array(np.absolute(usim.run(circ).result().get_unitary()))
+    unitary_matrix = Operator(circ).data
 
     for function_testing in function_testing_list:
         function_testing(unitary_matrix, controls_no, mct.num_ancilla_qubits())

@@ -17,7 +17,7 @@ from qumcat.implementations.mct_vchain_dirty import MCTVChainDirty
 implementation = MCTVChainDirty
 
 
-@pytest.mark.parametrize("controls_no", [4, 5])
+@pytest.mark.parametrize("controls_no", [10])
 def test_unitary_matrix(controls_no):
     mct = implementation(controls_no)
 

@@ -74,9 +74,11 @@ def generate_circuit_clean_ancilla(unitary_matrix, controls_no: int, ancillas_no
 
     assert generated_unitary.shape == expected_unitary.shape
 
+    print(np.round(generated_unitary))
+
     assert np.allclose(
         generated_unitary, expected_unitary, atol=absolute_error_tol, rtol=relative_error_tol
-    )
+    ), "Generated matrix should be all 0"
 
 
 # 2.2 Clean Non-wasted Relative

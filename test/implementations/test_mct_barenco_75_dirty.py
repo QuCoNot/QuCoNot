@@ -15,7 +15,7 @@ from qumcat.implementations.mct_barenco_75_dirty import MCTBarenco75Dirty
 implementation = MCTBarenco75Dirty
 
 
-@pytest.mark.parametrize("controls_no", [5])
+@pytest.mark.parametrize("controls_no", [10])
 def test_unitary_matrix(controls_no):
     mct = implementation(controls_no)
 

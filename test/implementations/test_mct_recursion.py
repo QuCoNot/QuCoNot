@@ -15,7 +15,7 @@ from qumcat.implementations.mct_recursion import MCTRecursion
 implementation = MCTRecursion
 
 
-@pytest.mark.parametrize("controls_no", [5])
+@pytest.mark.parametrize("controls_no", [10])
 def test_unitary_matrix(controls_no):
     mct = implementation(controls_no)
 

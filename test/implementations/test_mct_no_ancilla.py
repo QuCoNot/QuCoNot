@@ -8,7 +8,7 @@ from qumcat.implementations.mct_no_ancilla import MCTNoAncilla
 implementation = MCTNoAncilla
 
 
-@pytest.mark.parametrize("controls_no", [3, 4, 5])
+@pytest.mark.parametrize("controls_no", [10])
 def test_unitary_matrix(controls_no):
     mct = implementation(controls_no)
 
