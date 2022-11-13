@@ -1,13 +1,10 @@
 import numpy as np
-import pytest
 from functions import (
     absolute_error_tol,
-    check_all_zero,
     identity_matrix,
     ket_0_matrix,
     load_matrix,
     relative_error_tol,
-    usim,
     zero_matrix,
 )
 
@@ -74,7 +71,7 @@ def generate_circuit_clean_ancilla(unitary_matrix, controls_no: int, ancillas_no
 
     assert generated_unitary.shape == expected_unitary.shape
 
-    print(np.round(generated_unitary))
+    # print(np.round(generated_unitary))
 
     assert np.allclose(
         generated_unitary, expected_unitary, atol=absolute_error_tol, rtol=relative_error_tol
@@ -170,23 +167,23 @@ def generate_circuit_clean_wasted_entangled_ancilla(
     # || ( <b_C,T| @ I_A ) (U_MCT @ I) U_tilde(|b_C,T> @ |0_A>) ||_2
 
     # |0>_A
-    ket_0_A = ket_0_matrix(ancillas_no)
+    ket_0_a = ket_0_matrix(ancillas_no)
 
-    I_A = identity_matrix(ancillas_no)
+    i_a = identity_matrix(ancillas_no)
+    u_mct_i = np.kron(i_a, inverse_matrix)  # (U_MCT @ I)
 
     for i in range(2 ** (controls_no + 1)):
         ket_b_ct = np.zeros(2 ** (controls_no + 1))
 
         ket_b_ct[i] = 1  # |b_C,T>
 
-        bct_0a = np.kron(ket_0_A, ket_b_ct)  # (|b_C,T> @ |0_A>)
+        bct_0a = np.kron(ket_0_a, ket_b_ct)  # (|b_C,T> @ |0_A>)
 
         res_1 = np.matmul(unitary_matrix, bct_0a)  # U_tilde(|b_C,T> @ |0_A>)
 
-        u_mct_i = np.kron(I_A, inverse_matrix)  # (U_MCT @ I)
         res_2 = np.matmul(u_mct_i, res_1)  # (U_MCT @ I) U_tilde(|b_C,T> @ |0_A>)
 
-        ket_b_ct_i = np.kron(I_A, np.conj(ket_b_ct).T)  # ( <b_C,T| @ I_A )
+        ket_b_ct_i = np.kron(i_a, np.conj(ket_b_ct).T)  # ( <b_C,T| @ I_A )
         res_3 = np.matmul(
             ket_b_ct_i, res_2
         )  # ( <b_C,T| @ I_A ) (U_MCT @ I) U_tilde(|b_C,T> @ |0_A>)
@@ -212,7 +209,8 @@ def generate_circuit_clean_wasted_relative_entangled_ancilla(
     # |0>_A
     ket_0_A = ket_0_matrix(ancillas_no)
 
-    I_A = identity_matrix(ancillas_no)
+    i_a = identity_matrix(ancillas_no)
+    u_mct_i = np.kron(i_a, inverse_matrix)  # (U_MCT @ I)
 
     for i in range(2 ** (controls_no + 1)):
         ket_b_ct = np.zeros(2 ** (controls_no + 1))
@@ -223,10 +221,9 @@ def generate_circuit_clean_wasted_relative_entangled_ancilla(
 
         res_1 = np.matmul(unitary_matrix, bct_0a)  # U_tilde(|b_C,T> @ |0_A>)
 
-        u_mct_i = np.kron(I_A, inverse_matrix)  # (U_MCT @ I)
         res_2 = np.matmul(u_mct_i, res_1)  # (U_MCT @ I) U_tilde(|b_C,T> @ |0_A>)
 
-        ket_b_ct_i = np.kron(I_A, np.conj(ket_b_ct).T)  # ( <b_C,T| @ I_A )
+        ket_b_ct_i = np.kron(i_a, np.conj(ket_b_ct).T)  # ( <b_C,T| @ I_A )
         res_3 = np.matmul(
             ket_b_ct_i, res_2
         )  # ( <b_C,T| @ I_A ) (U_MCT @ I) U_tilde(|b_C,T> @ |0_A>)
@@ -249,9 +246,10 @@ def generate_circuit_clean_wasted_separable_ancilla(
     # || ( <b_C,T| @ I_A ) (U_MCT @ I) U_tilde(|b_C,T> @ |0_A>) ||_2
 
     # |0>_A
-    ket_0_A = ket_0_matrix(ancillas_no)
+    ket_0_a = ket_0_matrix(ancillas_no)
 
-    I_A = identity_matrix(ancillas_no)
+    i_a = identity_matrix(ancillas_no)
+    u_mct_i = np.kron(i_a, inverse_matrix)  # (U_MCT @ I)
 
     phi_0 = np.zeros(2)
 
@@ -260,14 +258,13 @@ def generate_circuit_clean_wasted_separable_ancilla(
 
         ket_b_ct[i] = 1  # |b_C,T>
 
-        bct_0a = np.kron(ket_0_A, ket_b_ct)  # (|b_C,T> @ |0_A>)
+        bct_0a = np.kron(ket_0_a, ket_b_ct)  # (|b_C,T> @ |0_A>)
 
         res_1 = np.matmul(unitary_matrix, bct_0a)  # U_tilde(|b_C,T> @ |0_A>)
 
-        u_mct_i = np.kron(I_A, inverse_matrix)  # (U_MCT @ I)
         res_2 = np.matmul(u_mct_i, res_1)  # (U_MCT @ I) U_tilde(|b_C,T> @ |0_A>)
 
-        ket_b_ct_i = np.kron(I_A, np.conj(ket_b_ct).T)  # ( <b_C,T| @ I_A )
+        ket_b_ct_i = np.kron(i_a, np.conj(ket_b_ct).T)  # ( <b_C,T| @ I_A )
         res_3 = np.matmul(
             ket_b_ct_i, res_2
         )  # ( <b_C,T| @ I_A ) (U_MCT @ I) U_tilde(|b_C,T> @ |0_A>)
@@ -290,26 +287,25 @@ def generate_circuit_clean_wasted_relative_separable_ancilla(
     # || ( <b_C,T| @ I_A ) (U_MCT @ I) U_tilde(|b_C,T> @ |0_A>) ||_2
 
     # |0>_A
-    ket_0_A = ket_0_matrix(ancillas_no)
+    ket_0_a = ket_0_matrix(ancillas_no)
 
-    I_A = identity_matrix(ancillas_no)
+    i_a = identity_matrix(ancillas_no)
 
-    I_ct = identity_matrix(controls_no + 1)  # I_ct
-    u_mct_i = np.kron(I_A, inverse_matrix)  # (U_MCT @ I_A)
-    ket_0_A = ket_0_matrix(ancillas_no)  # |0>_A
+    i_ct = identity_matrix(controls_no + 1)  # I_ct
+    u_mct_i = np.kron(i_a, inverse_matrix)  # (U_MCT @ I_A)
 
-    I_ct_0 = np.kron(ket_0_A, I_ct)  # ( I_ct @ |0>_A )
+    i_ct_0 = np.kron(ket_0_a, i_ct)  # ( I_ct @ |0>_A )
 
     # U_tilde (U_MCT @ I_A)
     res_1 = np.matmul(unitary_matrix, u_mct_i)
 
-    I_ct_0_T = np.kron(ket_0_A.T, I_ct.T)  # ( I_ct @ <0|_A )
+    i_ct_0_t = np.kron(ket_0_a.T, i_ct.T)  # ( I_ct @ <0|_A )
 
     # ( I_ct @ <0|_A ) U_tilde (U_MCT @ I_A)
-    res_2 = np.matmul(I_ct_0_T, res_1)
+    res_2 = np.matmul(i_ct_0_t, res_1)
 
     # D_R = ( I_ct @ <0|_A ) U_tilde (U_MCT @ I_A) ( I_ct @ |0>_A )
-    D_R = np.matmul(res_2, I_ct_0.T)
+    d_r = np.matmul(res_2, i_ct_0.T)
 
     phi_0 = np.zeros(2)
 
@@ -318,20 +314,19 @@ def generate_circuit_clean_wasted_relative_separable_ancilla(
 
         ket_b_ct[i] = 1  # |b_C,T>
 
-        bct_0a = np.kron(ket_0_A, ket_b_ct)  # (|b_C,T> @ |0_A>)
+        bct_0a = np.kron(ket_0_a, ket_b_ct)  # (|b_C,T> @ |0_A>)
 
         res_1 = np.matmul(unitary_matrix, bct_0a)  # U_tilde(|b_C,T> @ |0_A>)
 
-        u_mct_i = np.kron(I_A, inverse_matrix)  # (U_MCT @ I)
         res_2 = np.matmul(u_mct_i, res_1)  # (U_MCT @ I) U_tilde(|b_C,T> @ |0_A>)
 
-        ket_b_ct_i = np.kron(I_A, np.conj(ket_b_ct).T)  # ( <b_C,T| @ I_A )
+        ket_b_ct_i = np.kron(i_a, np.conj(ket_b_ct).T)  # ( <b_C,T| @ I_A )
 
         # ( D_R^\dagger @ I_A )
-        D_R_I = np.kron(I_A, np.linalg.inv(D_R))
+        d_r_i = np.kron(i_a, np.linalg.inv(d_r))
 
         res_3 = np.matmul(
-            D_R_I, res_2
+            d_r_i, res_2
         )  # ( (D_R^\dagger @ I_A) (U_MCT @ I) U_tilde(|b_C,T> @ |0_A>) )
 
         res_4 = np.matmul(
