@@ -1,6 +1,6 @@
 import numpy as np
 import pytest
-from functions import identity_matrix, ket_0_matrix, load_matrix
+from .functions import identity_matrix, ket_0_matrix, load_matrix
 from qiskit import Aer
 
 from qumcat.implementations.mct_vchain import MCTVChain

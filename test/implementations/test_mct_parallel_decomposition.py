@@ -1,8 +1,8 @@
 from typing import Dict
 
 import numpy as np
-from functions import usim
-from functions_testing import (
+from .functions import usim
+from .functions_testing import (
     generate_circuit_clean_ancilla,
     generate_circuit_clean_relative_ancilla,
 )

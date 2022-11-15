@@ -1,8 +1,8 @@
 from typing import Dict
 
 import numpy as np
-from functions import usim
-from functions_testing import generate_circuit_no_ancilla
+from .functions import usim
+from .functions_testing import generate_circuit_no_ancilla
 
 from qumcat.implementations.mct_no_ancilla import MCTNoAncilla
 

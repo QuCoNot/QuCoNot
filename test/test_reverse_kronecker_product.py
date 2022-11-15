@@ -1,7 +1,8 @@
 import numpy as np
 import pytest
-from implementations.functions import absolute_error_tol, check_all_zero, relative_error_tol
-from reverse_kronecker_product import reverse_kronecker_product
+
+from .implementations.functions import absolute_error_tol, check_all_zero, relative_error_tol
+from .reverse_kronecker_product import reverse_kronecker_product
 
 
 @pytest.mark.parametrize("par_B", [np.array([[1, 0], [0, -1]]), np.array([[0, 1], [1, 0]])])

@@ -1,6 +1,6 @@
 import numpy as np
 import pytest
-from functions import check_all_zero, identity_matrix, load_matrix, zero_matrix
+from .functions import check_all_zero, identity_matrix, load_matrix, zero_matrix
 from qiskit import Aer
 
 from qumcat.implementations.mct_n_qubit_decomposition import MCTNQubitDecomposition
