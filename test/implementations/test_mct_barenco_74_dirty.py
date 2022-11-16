@@ -1,11 +1,7 @@
 from typing import Dict
 
 import numpy as np
-
-from qumcat.implementations.mct_barenco_74_dirty import MCTBarenco74Dirty
-
-from .functions import usim
-from .functions_testing import (
+from functions_testing import (
     generate_circuit_clean_ancilla,
     generate_circuit_clean_relative_ancilla,
     generate_circuit_clean_wasted_entangled_ancilla,
@@ -13,9 +9,12 @@ from .functions_testing import (
     generate_circuit_clean_wasted_relative_separable_ancilla,
     generate_circuit_clean_wasted_separable_ancilla,
 )
+from qiskit.quantum_info.operators import Operator
+
+from qumcat.implementations.mct_barenco_74_dirty import MCTBarenco74Dirty
 
 implementation = MCTBarenco74Dirty
-controls_no_list = [5]
+controls_no_list = [6]
 
 
 class Test:
@@ -27,7 +26,7 @@ class Test:
             return self._matrix_dict[controls_no]
 
         circ = implementation(controls_no).generate_circuit()
-        unitary_matrix = np.array(np.absolute(usim.run(circ).result().get_unitary()))
+        unitary_matrix = Operator(circ).data
         self._matrix_dict[controls_no] = unitary_matrix
 
         return self._matrix_dict[controls_no]

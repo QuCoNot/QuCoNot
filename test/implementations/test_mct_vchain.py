@@ -1,8 +1,7 @@
 from typing import Dict
 
 import numpy as np
-from .functions import usim
-from .functions_testing import (
+from functions_testing import (
     generate_circuit_clean_ancilla,
     generate_circuit_clean_relative_ancilla,
     generate_circuit_clean_wasted_entangled_ancilla,
@@ -10,6 +9,7 @@ from .functions_testing import (
     generate_circuit_clean_wasted_relative_separable_ancilla,
     generate_circuit_clean_wasted_separable_ancilla,
 )
+from qiskit.quantum_info.operators import Operator
 
 from qumcat.implementations.mct_vchain import MCTVChain
 
@@ -26,7 +26,7 @@ class Test:
             return self._matrix_dict[controls_no]
 
         circ = implementation(controls_no).generate_circuit()
-        unitary_matrix = np.array(np.absolute(usim.run(circ).result().get_unitary()))
+        unitary_matrix = Operator(circ).data
         self._matrix_dict[controls_no] = unitary_matrix
 
         return self._matrix_dict[controls_no]
@@ -95,7 +95,7 @@ if __name__ == "__main__":
     mct = Test()
     # mct.test_circuit_clean_ancilla()
     # mct.test_circuit_clean_relative_ancilla()
-    mct.test_circuit_clean_wasted_entangled_ancilla()
+    # mct.test_circuit_clean_wasted_entangled_ancilla()
     # mct.test_circuit_clean_wasted_relative_entangled_ancilla()
     # mct.test_circuit_clean_wasted_relative_separable_ancilla()
     # mct.test_circuit_clean_wasted_separable_ancilla()

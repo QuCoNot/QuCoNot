@@ -1,12 +1,12 @@
 # This is where we put fixtures
 import numpy as np
 from qiskit import Aer, QuantumCircuit, transpile
+from qiskit.quantum_info.operators import Operator
 from scipy.sparse import identity
 
 # constants
 absolute_error_tol = 1e-8
 relative_error_tol = 1e-8
-usim = Aer.get_backend("unitary_simulator")
 
 
 def identity_matrix(qubits_no):
@@ -40,8 +40,7 @@ def mct_inverse(method, controls_no, ancillas_no):
     )
     qc = transpile(qc, basis_gates=["cx", "u3"])
 
-    usim = Aer.get_backend("unitary_simulator")
-    matrix = usim.run(qc).result().get_unitary()
+    matrix = Operator(qc).data
 
     # return np.conjugate(matrix).transpose()
     return np.linalg.inv(matrix)
