@@ -28,23 +28,23 @@ There are a couple of ways to add test case for PyTest, one of them is using the
 
 ```python
 @pytest.mark.parametrize(
-    "controls_no, max_ancilla, expected_cases",
+    "controls_no, max_auxiliary, expected_cases",
     [
         pytest.param(
-            5, 1, 0, id="not-enough-ancilla"
+            5, 1, 0, id="not-enough-auxiliary"
         ),
         pytest.param(
             5, 3, 1, id="one-case"
         )
     ],
 )
-def test_generate_mct_cases(controls_no, max_ancilla, expected_cases):
+def test_generate_mct_cases(controls_no, max_auxiliary, expected_cases):
 ```
 
 For the above example, it means that the "test_generate_mct_cases" will be executed twice with the given parameters. 
 
-The first one is controls_no = 5, max_ancilla = 1, expected_cases = 0 and with the label "not-enough-ancilla". 
+The first one is controls_no = 5, max_auxiliary = 1, expected_cases = 0 and with the label "not-enough-auxiliary". 
 
-The second one is controls_no = 5, max_ancilla = 3, expected_cases = 1 and with the label "one-case".
+The second one is controls_no = 5, max_auxiliary = 3, expected_cases = 1 and with the label "one-case".
 
 

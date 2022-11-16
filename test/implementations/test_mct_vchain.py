@@ -3,12 +3,12 @@ from typing import Dict
 import numpy as np
 from .functions import usim
 from .functions_testing import (
-    generate_circuit_clean_ancilla,
-    generate_circuit_clean_relative_ancilla,
-    generate_circuit_clean_wasted_entangled_ancilla,
-    generate_circuit_clean_wasted_relative_entangled_ancilla,
-    generate_circuit_clean_wasted_relative_separable_ancilla,
-    generate_circuit_clean_wasted_separable_ancilla,
+    generate_circuit_clean_auxiliary,
+    generate_circuit_clean_relative_auxiliary,
+    generate_circuit_clean_wasted_entangled_auxiliary,
+    generate_circuit_clean_wasted_relative_entangled_auxiliary,
+    generate_circuit_clean_wasted_relative_separable_auxiliary,
+    generate_circuit_clean_wasted_separable_auxiliary,
 )
 
 from qumcat.implementations.mct_vchain import MCTVChain
@@ -19,7 +19,7 @@ controls_no_list = [6]
 
 class Test:
     _matrix_dict: Dict[np.array, int] = {}
-    _ancilla_dict: Dict[int, int] = {}
+    _auxiliary_dict: Dict[int, int] = {}
 
     def _take_matrix(self, controls_no: int):
         if controls_no in self._matrix_dict:
@@ -31,71 +31,71 @@ class Test:
 
         return self._matrix_dict[controls_no]
 
-    def _take_ancillas_no(self, controls_no: int):
-        if controls_no in self._ancilla_dict:
-            return self._ancilla_dict[controls_no]
+    def _take_auxiliaries_no(self, controls_no: int):
+        if controls_no in self._auxiliary_dict:
+            return self._auxiliary_dict[controls_no]
 
         mct = implementation(controls_no)
-        self._ancilla_dict[controls_no] = mct.num_ancilla_qubits()
+        self._auxiliary_dict[controls_no] = mct.num_auxiliary_qubits()
 
         return self._matrix_dict[controls_no]
 
-    def test_circuit_clean_ancilla(self):
+    def test_circuit_clean_auxiliary(self):
         for controls_no in controls_no_list:
             unitary_matrix = self._take_matrix(controls_no)
-            ancillas_no = self._take_ancillas_no(controls_no)
+            auxiliaries_no = self._take_auxiliaries_no(controls_no)
 
-            generate_circuit_clean_ancilla(unitary_matrix, controls_no, ancillas_no)
+            generate_circuit_clean_auxiliary(unitary_matrix, controls_no, auxiliaries_no)
 
-    def test_circuit_clean_relative_ancilla(self):
+    def test_circuit_clean_relative_auxiliary(self):
         for controls_no in controls_no_list:
             unitary_matrix = self._take_matrix(controls_no)
-            ancillas_no = self._take_ancillas_no(controls_no)
+            auxiliaries_no = self._take_auxiliaries_no(controls_no)
 
-            generate_circuit_clean_relative_ancilla(unitary_matrix, controls_no, ancillas_no)
+            generate_circuit_clean_relative_auxiliary(unitary_matrix, controls_no, auxiliaries_no)
 
-    def test_circuit_clean_wasted_entangled_ancilla(self):
+    def test_circuit_clean_wasted_entangled_auxiliary(self):
         for controls_no in controls_no_list:
             unitary_matrix = self._take_matrix(controls_no)
-            ancillas_no = self._take_ancillas_no(controls_no)
+            auxiliaries_no = self._take_auxiliaries_no(controls_no)
 
-            generate_circuit_clean_wasted_entangled_ancilla(
-                unitary_matrix, controls_no, ancillas_no
+            generate_circuit_clean_wasted_entangled_auxiliary(
+                unitary_matrix, controls_no, auxiliaries_no
             )
 
-    def test_circuit_clean_wasted_relative_entangled_ancilla(self):
+    def test_circuit_clean_wasted_relative_entangled_auxiliary(self):
         for controls_no in controls_no_list:
             unitary_matrix = self._take_matrix(controls_no)
-            ancillas_no = self._take_ancillas_no(controls_no)
+            auxiliaries_no = self._take_auxiliaries_no(controls_no)
 
-            generate_circuit_clean_wasted_relative_entangled_ancilla(
-                unitary_matrix, controls_no, ancillas_no
+            generate_circuit_clean_wasted_relative_entangled_auxiliary(
+                unitary_matrix, controls_no, auxiliaries_no
             )
 
-    def test_circuit_clean_wasted_relative_separable_ancilla(self):
+    def test_circuit_clean_wasted_relative_separable_auxiliary(self):
         for controls_no in controls_no_list:
             unitary_matrix = self._take_matrix(controls_no)
-            ancillas_no = self._take_ancillas_no(controls_no)
+            auxiliaries_no = self._take_auxiliaries_no(controls_no)
 
-            generate_circuit_clean_wasted_relative_separable_ancilla(
-                unitary_matrix, controls_no, ancillas_no
+            generate_circuit_clean_wasted_relative_separable_auxiliary(
+                unitary_matrix, controls_no, auxiliaries_no
             )
 
-    def test_circuit_clean_wasted_separable_ancilla(self):
+    def test_circuit_clean_wasted_separable_auxiliary(self):
         for controls_no in controls_no_list:
             unitary_matrix = self._take_matrix(controls_no)
-            ancillas_no = self._take_ancillas_no(controls_no)
+            auxiliaries_no = self._take_auxiliaries_no(controls_no)
 
-            generate_circuit_clean_wasted_separable_ancilla(
-                unitary_matrix, controls_no, ancillas_no
+            generate_circuit_clean_wasted_separable_auxiliary(
+                unitary_matrix, controls_no, auxiliaries_no
             )
 
 
 if __name__ == "__main__":
     mct = Test()
-    # mct.test_circuit_clean_ancilla()
-    # mct.test_circuit_clean_relative_ancilla()
-    mct.test_circuit_clean_wasted_entangled_ancilla()
-    # mct.test_circuit_clean_wasted_relative_entangled_ancilla()
-    # mct.test_circuit_clean_wasted_relative_separable_ancilla()
-    # mct.test_circuit_clean_wasted_separable_ancilla()
+    # mct.test_circuit_clean_auxiliary()
+    # mct.test_circuit_clean_relative_auxiliary()
+    mct.test_circuit_clean_wasted_entangled_auxiliary()
+    # mct.test_circuit_clean_wasted_relative_entangled_auxiliary()
+    # mct.test_circuit_clean_wasted_relative_separable_auxiliary()
+    # mct.test_circuit_clean_wasted_separable_auxiliary()

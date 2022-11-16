@@ -58,8 +58,8 @@ flake8...................................................................Failed
 - hook id: flake8
 - exit code: 1
 
-test/test_mct_clean_ancilla.py:7:1: F401 'qumcat.mct_no_ancilla.MCTNoAncilla' imported but unused
-test/test_mct_clean_ancilla.py:10:1: F401 'qumcat.mct_vchain_dirty.MCTVChainDirty' imported but unused
+test/test_mct_clean_auxiliary.py:7:1: F401 'qumcat.mct_no_auxiliary.MCTNoAuxiliary' imported but unused
+test/test_mct_clean_auxiliary.py:10:1: F401 'qumcat.mct_vchain_dirty.MCTVChainDirty' imported but unused
 ```
 
 For the error message, it will be clear which part of the code that we need to manually fix it.

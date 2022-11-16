@@ -1,7 +1,7 @@
-qumcat.implementations.mct\_no\_ancilla
+qumcat.implementations.mct\_no\_auxiliary
 =======================================
 
-.. automodule:: qumcat.implementations.mct_no_ancilla
+.. automodule:: qumcat.implementations.mct_no_auxiliary
 
    
    
@@ -17,7 +17,7 @@ qumcat.implementations.mct\_no\_ancilla
 
    .. autosummary::
    
-      MCTNoAncilla
+      MCTNoAuxiliary
    
    
 

@@ -12,7 +12,7 @@ usim = Aer.get_backend("unitary_simulator")
 
 @pytest.mark.parametrize("implementation", [MCTVChain])
 @pytest.mark.parametrize("controls_no", [4, 5])
-def test_generate_circuit_clean_wasted_ancilla(implementation, controls_no):
+def test_generate_circuit_clean_wasted_auxiliary(implementation, controls_no):
     # Entangled left-out...
 
     mct = implementation(controls_no)
@@ -23,14 +23,14 @@ def test_generate_circuit_clean_wasted_ancilla(implementation, controls_no):
     unitary_matrix = np.array(usim.run(circ).result().get_unitary())
 
     # get mct inverse matrix
-    inverse_matrix = load_matrix("noancilla", controls_no)
+    inverse_matrix = load_matrix("noauxiliary", controls_no)
 
     # || ( <b_C,T| @ I_A ) (U_MCT @ I) U_tilde(|b_C,T> @ |0_A>) ||_2
 
     # |0>_A
-    ket_0_A = ket_0_matrix(mct.num_ancilla_qubits())
+    ket_0_A = ket_0_matrix(mct.num_auxiliary_qubits())
 
-    I_A = identity_matrix(mct.num_ancilla_qubits())
+    I_A = identity_matrix(mct.num_auxiliary_qubits())
 
     for i in range(2 ** (controls_no + 1)):
         ket_b_ct = np.zeros(2 ** (controls_no + 1))

@@ -16,7 +16,7 @@ usim = Aer.get_backend("unitary_simulator")
     "implementation", [MCTVChain, MCTNQubitDecomposition, MCTParallelDecomposition]
 )
 @pytest.mark.parametrize("controls_no", [5])
-def test_generate_circuit_clean_ancilla(implementation, controls_no):
+def test_generate_circuit_clean_auxiliary(implementation, controls_no):
     mct = implementation(controls_no)
 
     circ = mct.generate_circuit()
@@ -28,7 +28,7 @@ def test_generate_circuit_clean_ancilla(implementation, controls_no):
     unitary_matrix = unitary_matrix[: 2 ** (controls_no + 1), : 2 ** (controls_no + 1)]
 
     # get mct inverse matrix
-    inverse_matrix = load_matrix("noancilla", controls_no)
+    inverse_matrix = load_matrix("noauxiliary", controls_no)
 
     no_of_qubits = controls_no + 1
 
@@ -50,7 +50,7 @@ def test_generate_circuit_clean_ancilla(implementation, controls_no):
     "implementation", [MCTVChain, MCTNQubitDecomposition, MCTParallelDecomposition]
 )
 @pytest.mark.parametrize("controls_no", [5])
-def test_generate_circuit_clean_ancilla_relative_phase(implementation, controls_no):
+def test_generate_circuit_clean_auxiliary_relative_phase(implementation, controls_no):
     mct = implementation(controls_no)
 
     circ = mct.generate_circuit()
@@ -64,7 +64,7 @@ def test_generate_circuit_clean_ancilla_relative_phase(implementation, controls_
     unitary_matrix = unitary_matrix[: 2 ** (controls_no + 1), : 2 ** (controls_no + 1)]
 
     # get mct inverse matrix
-    inverse_matrix = load_matrix("noancilla", controls_no)
+    inverse_matrix = load_matrix("noauxiliary", controls_no)
 
     no_of_qubits = controls_no + 1
 
