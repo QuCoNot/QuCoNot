@@ -74,24 +74,24 @@ class MCTBarenco75Dirty(MCTBase):
     def generate_mct_cases(
         self,
         controls_no: int,
-        max_ancilla: int,
+        max_auxiliary: int,
         relative_phase: bool = False,
         clean_acilla: bool = True,
-        wasted_ancilla: bool = False,
-        separable_wasted_ancilla: bool = False,
+        wasted_auxiliary: bool = False,
+        separable_wasted_auxiliary: bool = False,
     ) -> List["MCTBase"]:
         """Generate all possible MCT implementation satisfying the requirements
 
         relative_phase: true / false (D)
-        clean_ancilla: true (D) / false
-        wasted_ancilla: true / false (D)
-        separable_wasted_ancilla: true / false (D)    # requires wasted_ancilla set to True
+        clean_auxiliary: true (D) / false
+        wasted_auxiliary: true / false (D)
+        separable_wasted_auxiliary: true / false (D)    # requires wasted_auxiliary set to True
 
         :return: a quantum circuit
         :rtype: QuantumCircuit
         """
-        if max_ancilla < controls_no - 2:
-            return []  # if max_ancilla allowed is to small - no representation given
+        if max_auxiliary < controls_no - 2:
+            return []  # if max_auxiliary allowed is to small - no representation given
         else:
             return [MCTBarenco75Dirty(controls_no)]  # only one available
 
@@ -108,10 +108,10 @@ class MCTBarenco75Dirty(MCTBase):
 
         return deepcopy(self._circuit)
 
-    def num_ancilla_qubits(self):
-        """Return number of ancilla qubits
+    def num_auxiliary_qubits(self):
+        """Return number of auxiliary qubits
 
-        :return: number of ancilla qubits
+        :return: number of auxiliary qubits
         :rtype: int
         """
         return 0

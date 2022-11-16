@@ -9,10 +9,10 @@ from .functions import (
 )
 
 
-# 1.1 No Ancilla
-def generate_circuit_no_ancilla(unitary_matrix, controls_no: int, ancillas_no: int):
+# 1.1 No Auxiliary
+def generate_circuit_no_auxiliary(unitary_matrix, controls_no: int, auxiliaries_no: int):
     # get mct inverse matrix
-    inverse_matrix = load_matrix("noancilla", controls_no)
+    inverse_matrix = load_matrix("noauxiliary", controls_no)
 
     no_of_qubits = controls_no + 1
 
@@ -30,10 +30,10 @@ def generate_circuit_no_ancilla(unitary_matrix, controls_no: int, ancillas_no: i
     )
 
 
-# 1.2 No Ancilla Relative
-def generate_circuit_no_ancilla_relative(unitary_matrix, controls_no: int, ancillas_no: int):
+# 1.2 No Auxiliary Relative
+def generate_circuit_no_auxiliary_relative(unitary_matrix, controls_no: int, auxiliaries_no: int):
     # get mct inverse matrix
-    inverse_matrix = load_matrix("noancilla", controls_no)
+    inverse_matrix = load_matrix("noauxiliary", controls_no)
 
     no_of_qubits = controls_no + 1
 
@@ -52,13 +52,13 @@ def generate_circuit_no_ancilla_relative(unitary_matrix, controls_no: int, ancil
 
 
 # 2.1 Clean Non-wasted
-def generate_circuit_clean_ancilla(unitary_matrix, controls_no: int, ancillas_no: int):
+def generate_circuit_clean_auxiliary(unitary_matrix, controls_no: int, auxiliaries_no: int):
 
     # slice the matrix M = U[0:2**n,0:2**n]  (n = controls qubit + target qubit)
     unitary_matrix = unitary_matrix[: 2 ** (controls_no + 1), : 2 ** (controls_no + 1)]
 
     # get mct inverse matrix
-    inverse_matrix = load_matrix("noancilla", controls_no)
+    inverse_matrix = load_matrix("noauxiliary", controls_no)
 
     no_of_qubits = controls_no + 1
 
@@ -79,13 +79,13 @@ def generate_circuit_clean_ancilla(unitary_matrix, controls_no: int, ancillas_no
 
 
 # 2.2 Clean Non-wasted Relative
-def generate_circuit_clean_relative_ancilla(unitary_matrix, controls_no: int, ancillas_no: int):
+def generate_circuit_clean_relative_auxiliary(unitary_matrix, controls_no: int, auxiliaries_no: int):
 
     # slice the matrix M = U[0:2**n,0:2**n]  (n = controls qubit + target qubit)
     unitary_matrix = unitary_matrix[: 2 ** (controls_no + 1), : 2 ** (controls_no + 1)]
 
     # get mct inverse matrix
-    inverse_matrix = load_matrix("noancilla", controls_no)
+    inverse_matrix = load_matrix("noauxiliary", controls_no)
 
     no_of_qubits = controls_no + 1
 
@@ -104,12 +104,12 @@ def generate_circuit_clean_relative_ancilla(unitary_matrix, controls_no: int, an
 
 
 # 3.1 Dirty Non-Wasted
-def generate_circuit_dirty_ancilla(unitary_matrix, controls_no: int, ancillas_no: int):
+def generate_circuit_dirty_auxiliary(unitary_matrix, controls_no: int, auxiliaries_no: int):
     # get mct inverse matrix
-    inverse_matrix = load_matrix("noancilla", controls_no)
-    inverse_matrix = np.kron(identity_matrix(ancillas_no), inverse_matrix)
+    inverse_matrix = load_matrix("noauxiliary", controls_no)
+    inverse_matrix = np.kron(identity_matrix(auxiliaries_no), inverse_matrix)
 
-    no_of_qubits = controls_no + ancillas_no + 1
+    no_of_qubits = controls_no + auxiliaries_no + 1
 
     # X_1 * X_2^dagger * np.conj((X_1 * X_2^dagger)[0,0]) - I = 0
     M = np.matmul(unitary_matrix, inverse_matrix)
@@ -126,21 +126,21 @@ def generate_circuit_dirty_ancilla(unitary_matrix, controls_no: int, ancillas_no
 
 
 # 3.2 Dirty Non-Wasted Relative
-def generate_circuit_dirty_relative_ancilla(unitary_matrix, controls_no: int, ancillas_no: int):
+def generate_circuit_dirty_relative_auxiliary(unitary_matrix, controls_no: int, auxiliaries_no: int):
     # get mct inverse matrix
-    inverse_matrix = load_matrix("noancilla", controls_no)
+    inverse_matrix = load_matrix("noauxiliary", controls_no)
     I_ct = identity_matrix(controls_no + 1)  # I_C,T
-    I_a = identity_matrix(ancillas_no)  # I_A
-    ket_0_A = ket_0_matrix(ancillas_no)  # |0>_A
+    I_a = identity_matrix(auxiliaries_no)  # I_A
+    ket_0_A = ket_0_matrix(auxiliaries_no)  # |0>_A
 
-    # tensor with the I for the Ancilla qubit
+    # tensor with the I for the Auxiliary qubit
     inverse_matrix_I = np.kron(I_a, inverse_matrix)  # --> (U_MCT^\dagger @ I_A)
 
     A = np.kron(ket_0_A, I_ct)  # A = ( I_C,T @ <0|_A )
     B = np.matmul(inverse_matrix_I, np.kron(ket_0_A, I_ct).T)  # B = (U_MCT @ I_A) ( I_C,T @ |0>_A )
     dr = np.matmul(A, np.matmul(unitary_matrix, B))  # D^R = A * U * B
 
-    no_of_qubits = controls_no + ancillas_no + 1
+    no_of_qubits = controls_no + auxiliaries_no + 1
 
     # ( ( ( D^R )^\dagger @ I_A) * U * inverse_matrix ) - I = 0
     generated_unitary = np.matmul(
@@ -158,18 +158,18 @@ def generate_circuit_dirty_relative_ancilla(unitary_matrix, controls_no: int, an
 
 
 # 4.1 Clean Wasted Entangled Leftout
-def generate_circuit_clean_wasted_entangled_ancilla(
-    unitary_matrix, controls_no: int, ancillas_no: int
+def generate_circuit_clean_wasted_entangled_auxiliary(
+    unitary_matrix, controls_no: int, auxiliaries_no: int
 ):
     # get mct inverse matrix
-    inverse_matrix = load_matrix("noancilla", controls_no)
+    inverse_matrix = load_matrix("noauxiliary", controls_no)
 
     # || ( <b_C,T| @ I_A ) (U_MCT @ I) U_tilde(|b_C,T> @ |0_A>) ||_2
 
     # |0>_A
-    ket_0_a = ket_0_matrix(ancillas_no)
+    ket_0_a = ket_0_matrix(auxiliaries_no)
 
-    i_a = identity_matrix(ancillas_no)
+    i_a = identity_matrix(auxiliaries_no)
     u_mct_i = np.kron(i_a, inverse_matrix)  # (U_MCT @ I)
 
     for i in range(2 ** (controls_no + 1)):
@@ -198,18 +198,18 @@ def generate_circuit_clean_wasted_entangled_ancilla(
 
 # 4.2 Clean Wasted Relative Entangled Leftout
 # currently it is the same with 4.1
-def generate_circuit_clean_wasted_relative_entangled_ancilla(
-    unitary_matrix, controls_no: int, ancillas_no: int
+def generate_circuit_clean_wasted_relative_entangled_auxiliary(
+    unitary_matrix, controls_no: int, auxiliaries_no: int
 ):
     # get mct inverse matrix
-    inverse_matrix = load_matrix("noancilla", controls_no)
+    inverse_matrix = load_matrix("noauxiliary", controls_no)
 
     # || ( <b_C,T| @ I_A ) (U_MCT @ I) U_tilde(|b_C,T> @ |0_A>) ||_2
 
     # |0>_A
-    ket_0_A = ket_0_matrix(ancillas_no)
+    ket_0_A = ket_0_matrix(auxiliaries_no)
 
-    i_a = identity_matrix(ancillas_no)
+    i_a = identity_matrix(auxiliaries_no)
     u_mct_i = np.kron(i_a, inverse_matrix)  # (U_MCT @ I)
 
     for i in range(2 ** (controls_no + 1)):
@@ -237,18 +237,18 @@ def generate_circuit_clean_wasted_relative_entangled_ancilla(
 
 
 # 4.3 Clean Wasted Separable
-def generate_circuit_clean_wasted_separable_ancilla(
-    unitary_matrix, controls_no: int, ancillas_no: int
+def generate_circuit_clean_wasted_separable_auxiliary(
+    unitary_matrix, controls_no: int, auxiliaries_no: int
 ):
     # get mct inverse matrix
-    inverse_matrix = load_matrix("noancilla", controls_no)
+    inverse_matrix = load_matrix("noauxiliary", controls_no)
 
     # || ( <b_C,T| @ I_A ) (U_MCT @ I) U_tilde(|b_C,T> @ |0_A>) ||_2
 
     # |0>_A
-    ket_0_a = ket_0_matrix(ancillas_no)
+    ket_0_a = ket_0_matrix(auxiliaries_no)
 
-    i_a = identity_matrix(ancillas_no)
+    i_a = identity_matrix(auxiliaries_no)
     u_mct_i = np.kron(i_a, inverse_matrix)  # (U_MCT @ I)
 
     phi_0 = np.zeros(2)
@@ -278,18 +278,18 @@ def generate_circuit_clean_wasted_separable_ancilla(
 
 
 # 4.4 Clean Wasted Relative Separable
-def generate_circuit_clean_wasted_relative_separable_ancilla(
-    unitary_matrix, controls_no: int, ancillas_no: int
+def generate_circuit_clean_wasted_relative_separable_auxiliary(
+    unitary_matrix, controls_no: int, auxiliaries_no: int
 ):
     # get mct inverse matrix
-    inverse_matrix = load_matrix("noancilla", controls_no)
+    inverse_matrix = load_matrix("noauxiliary", controls_no)
 
     # || ( <b_C,T| @ I_A ) (U_MCT @ I) U_tilde(|b_C,T> @ |0_A>) ||_2
 
     # |0>_A
-    ket_0_a = ket_0_matrix(ancillas_no)
+    ket_0_a = ket_0_matrix(auxiliaries_no)
 
-    i_a = identity_matrix(ancillas_no)
+    i_a = identity_matrix(auxiliaries_no)
 
     i_ct = identity_matrix(controls_no + 1)  # I_ct
     u_mct_i = np.kron(i_a, inverse_matrix)  # (U_MCT @ I_A)

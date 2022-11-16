@@ -13,7 +13,7 @@ usim = Aer.get_backend("unitary_simulator")
 
 @pytest.mark.parametrize("implementation", [MCTVChainDirty, MCTBarenco74Dirty])
 @pytest.mark.parametrize("controls_no", [5])
-def test_generate_circuit_dirty_ancilla(implementation, controls_no):
+def test_generate_circuit_dirty_auxiliary(implementation, controls_no):
     mct = implementation(controls_no)
 
     circ = mct.generate_circuit()
@@ -24,10 +24,10 @@ def test_generate_circuit_dirty_ancilla(implementation, controls_no):
     unitary_matrix = np.array(np.absolute(usim.run(circ).result().get_unitary()))
 
     # get mct inverse matrix
-    inverse_matrix = load_matrix("noancilla", controls_no)
-    inverse_matrix = np.kron(identity_matrix(mct.num_ancilla_qubits()), inverse_matrix)
+    inverse_matrix = load_matrix("noauxiliary", controls_no)
+    inverse_matrix = np.kron(identity_matrix(mct.num_auxiliary_qubits()), inverse_matrix)
 
-    no_of_qubits = controls_no + mct.num_ancilla_qubits() + 1
+    no_of_qubits = controls_no + mct.num_auxiliary_qubits() + 1
 
     # X_1 * X_2^dagger * np.conj((X_1 * X_2^dagger)[0,0]) - I = 0
     M = np.matmul(unitary_matrix, inverse_matrix)
@@ -45,7 +45,7 @@ def test_generate_circuit_dirty_ancilla(implementation, controls_no):
 
 @pytest.mark.parametrize("implementation", [MCTVChainDirty])
 @pytest.mark.parametrize("controls_no", [5])
-def test_generate_circuit_dirty_ancilla_relative_phase(implementation, controls_no):
+def test_generate_circuit_dirty_auxiliary_relative_phase(implementation, controls_no):
     mct = implementation(controls_no)
 
     circ = mct.generate_circuit()
@@ -56,18 +56,18 @@ def test_generate_circuit_dirty_ancilla_relative_phase(implementation, controls_
     unitary_matrix = np.array(np.absolute(usim.run(circ).result().get_unitary()))  # --> U
 
     # get mct inverse matrix
-    inverse_matrix = load_matrix("noancilla", controls_no)
+    inverse_matrix = load_matrix("noauxiliary", controls_no)
 
     # I_C,T
     I_ct = identity_matrix(mct._n + 1)
 
     # I_A
-    I_a = identity_matrix(mct.num_ancilla_qubits())
+    I_a = identity_matrix(mct.num_auxiliary_qubits())
 
     # |0>_A
-    ket_0_A = ket_0_matrix(mct.num_ancilla_qubits())
+    ket_0_A = ket_0_matrix(mct.num_auxiliary_qubits())
 
-    # tensor with the I for the Ancilla qubit
+    # tensor with the I for the Auxiliary qubit
     inverse_matrix_I = np.kron(I_a, inverse_matrix)  # --> (U_MCT^\dagger @ I_A)
 
     # D^R = A * U * B
@@ -79,7 +79,7 @@ def test_generate_circuit_dirty_ancilla_relative_phase(implementation, controls_
 
     dr = np.matmul(A, np.matmul(unitary_matrix, B))
 
-    no_of_qubits = controls_no + mct.num_ancilla_qubits() + 1
+    no_of_qubits = controls_no + mct.num_auxiliary_qubits() + 1
 
     # ( ( ( D^R )^\dagger @ I_A) * U * inverse_matrix ) - I = 0
 

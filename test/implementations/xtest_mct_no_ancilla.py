@@ -4,17 +4,17 @@ from .functions import check_all_zero, identity_matrix, load_matrix, zero_matrix
 from qiskit import Aer
 
 from qumcat.implementations.mct_barenco_75_dirty import MCTBarenco75Dirty
-from qumcat.implementations.mct_no_ancilla import MCTNoAncilla
-from qumcat.implementations.mct_no_ancilla_relative_phase import MCTNoAncillaRelativePhase
+from qumcat.implementations.mct_no_auxiliary import MCTNoAuxiliary
+from qumcat.implementations.mct_no_auxiliary_relative_phase import MCTNoAuxiliaryRelativePhase
 
 absolute_error_tol = 1e-8
 relative_error_tol = 1e-8
 usim = Aer.get_backend("unitary_simulator")
 
 
-@pytest.mark.parametrize("implementation", [MCTNoAncilla, MCTBarenco75Dirty])
+@pytest.mark.parametrize("implementation", [MCTNoAuxiliary, MCTBarenco75Dirty])
 @pytest.mark.parametrize("controls_no", [2, 3, 4, 5, 6])
-def test_generate_circuit_no_ancilla(implementation, controls_no):
+def test_generate_circuit_no_auxiliary(implementation, controls_no):
     mct = implementation(controls_no)
 
     circ = mct.generate_circuit()
@@ -25,7 +25,7 @@ def test_generate_circuit_no_ancilla(implementation, controls_no):
     unitary_matrix = np.array(usim.run(circ).result().get_unitary())
 
     # get mct inverse matrix
-    inverse_matrix = load_matrix("noancilla", controls_no)
+    inverse_matrix = load_matrix("noauxiliary", controls_no)
 
     no_of_qubits = controls_no + 1
 
@@ -43,11 +43,11 @@ def test_generate_circuit_no_ancilla(implementation, controls_no):
     ), "Result should close to 0"
 
 
-@pytest.mark.parametrize("implementation", [MCTNoAncillaRelativePhase, MCTBarenco75Dirty])
+@pytest.mark.parametrize("implementation", [MCTNoAuxiliaryRelativePhase, MCTBarenco75Dirty])
 @pytest.mark.parametrize(
     "controls_no", [2, 3, pytest.param(4, marks=pytest.mark.xfail, id="accepted-fail-example")]
 )
-def test_generate_circuit_no_ancilla_relative_phase(implementation, controls_no):
+def test_generate_circuit_no_auxiliary_relative_phase(implementation, controls_no):
     mct = implementation(controls_no)
 
     circ = mct.generate_circuit()
@@ -58,7 +58,7 @@ def test_generate_circuit_no_ancilla_relative_phase(implementation, controls_no)
     unitary_matrix = np.array(np.absolute(usim.run(circ).result().get_unitary()))
 
     # get mct inverse matrix
-    inverse_matrix = load_matrix("noancilla", controls_no)
+    inverse_matrix = load_matrix("noauxiliary", controls_no)
 
     no_of_qubits = controls_no + 1
 

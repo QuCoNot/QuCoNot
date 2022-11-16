@@ -2,8 +2,8 @@ from typing import Callable, List, Type
 
 from .implementations.mct_base import MCTBase
 from .implementations.mct_n_qubit_decomposition import MCTNQubitDecomposition
-from .implementations.mct_no_ancilla import MCTNoAncilla
-from .implementations.mct_no_ancilla_relative_phase import MCTNoAncillaRelativePhase
+from .implementations.mct_no_auxiliary import MCTNoAuxiliary
+from .implementations.mct_no_auxiliary_relative_phase import MCTNoAuxiliaryRelativePhase
 from .implementations.mct_parallel_decomposition import MCTParallelDecomposition
 from .implementations.mct_vchain import MCTVChain
 
@@ -12,8 +12,8 @@ class Qumcat:
     def __init__(self):
         self._registered_methods: List[Type[MCTBase]] = [
             MCTNQubitDecomposition,
-            MCTNoAncilla,
-            MCTNoAncillaRelativePhase,
+            MCTNoAuxiliary,
+            MCTNoAuxiliaryRelativePhase,
             MCTParallelDecomposition,
             MCTVChain,
         ]
@@ -30,15 +30,15 @@ class Qumcat:
         pass
 
     # TODO replace kwargs below with the same arguments as the concrete implementations
-    # def generate_mct_cases(self, controls_no: int, max_ancilla: int, **kwargs):
+    # def generate_mct_cases(self, controls_no: int, max_auxiliary: int, **kwargs):
     def generate_mct_cases(
         self,
         controls_no: int,
-        max_ancilla: int,
+        max_auxiliary: int,
         relative_phase: bool = False,
         clean_acilla: bool = True,
-        wasted_ancilla: bool = False,
-        separable_wasted_ancilla: bool = False,
+        wasted_auxiliary: bool = False,
+        separable_wasted_auxiliary: bool = False,
     ) -> List["MCTBase"]:
 
         self._implementations = []
@@ -46,11 +46,11 @@ class Qumcat:
 
             self._implementations += cls.generate_mct_cases(
                 controls_no,
-                max_ancilla,
+                max_auxiliary,
                 relative_phase,
                 clean_acilla,
-                wasted_ancilla,
-                separable_wasted_ancilla,
+                wasted_auxiliary,
+                separable_wasted_auxiliary,
             )
 
         return self._implementations

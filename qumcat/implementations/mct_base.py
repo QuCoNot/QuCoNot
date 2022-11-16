@@ -14,18 +14,18 @@ class MCTBase:
     def generate_mct_cases(
         self,
         controls_no: int,
-        max_ancilla: int,
+        max_auxiliary: int,
         relative_phase: bool = False,
         clean_acilla: bool = True,
-        wasted_ancilla: bool = False,
-        separable_wasted_ancilla: bool = False,
+        wasted_auxiliary: bool = False,
+        separable_wasted_auxiliary: bool = False,
     ) -> List["MCTBase"]:
         """Generate all possible MCT implementation satisfying the requirements
 
         relative_phase: true / false (D)
-        clean_ancilla: true (D) / false
-        wasted_ancilla: true / false (D)
-        separable_wasted_ancilla: true / false (D)    # requires wasted_ancilla set to True
+        clean_auxiliary: true (D) / false
+        wasted_auxiliary: true / false (D)
+        separable_wasted_auxiliary: true / false (D)    # requires wasted_auxiliary set to True
 
         :return: a quantum circuit
         :rtype: QuantumCircuit
@@ -64,10 +64,10 @@ class MCTBase:
             self._circuit = self.generate_circuit()
         return self._circuit.depth()
 
-    def num_ancilla_qubits(self) -> int:
-        """Return number of ancilla qubits
+    def num_auxiliary_qubits(self) -> int:
+        """Return number of auxiliary qubits
 
-        :return: number of ancilla qubits
+        :return: number of auxiliary qubits
         :rtype: int
         """
         if not self._circuit:

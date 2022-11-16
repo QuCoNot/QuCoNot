@@ -30,12 +30,12 @@ def ket_0_matrix(qubits_no):
     return res
 
 
-def mct_inverse(method, controls_no, ancillas_no):
-    qc = QuantumCircuit(controls_no + ancillas_no + 1)
+def mct_inverse(method, controls_no, auxiliaries_no):
+    qc = QuantumCircuit(controls_no + auxiliaries_no + 1)
     qc.mct(
         list(range(controls_no)),
         controls_no,
-        ancilla_qubits=list(range(controls_no + 1, controls_no + 1 + ancillas_no)),
+        ancilla_qubits=list(range(controls_no + 1, controls_no + 1 + auxiliaries_no)),
         mode=method,
     )
     qc = transpile(qc, basis_gates=["cx", "u3"])

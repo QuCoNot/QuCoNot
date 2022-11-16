@@ -2,15 +2,12 @@ from typing import Dict
 
 import numpy as np
 from .functions import usim
-from .functions_testing import (
-    generate_circuit_clean_auxiliary,
-    generate_circuit_clean_relative_auxiliary,
-)
+from .functions_testing import generate_circuit_no_auxiliary
 
-from qumcat.implementations.mct_parallel_decomposition import MCTParallelDecomposition
+from qumcat.implementations.mct_no_auxiliary import MCTNoAuxiliary
 
-implementation = MCTParallelDecomposition
-controls_no_list = [5]
+implementation = MCTNoAuxiliary
+controls_no_list = [5, 6]
 
 
 class Test:
@@ -36,22 +33,14 @@ class Test:
 
         return self._matrix_dict[controls_no]
 
-    def test_circuit_clean_auxiliary(self):
+    def test_circuit_no_auxiliary(self):
         for controls_no in controls_no_list:
             unitary_matrix = self._take_matrix(controls_no)
             auxiliaries_no = self._take_auxiliaries_no(controls_no)
 
-            generate_circuit_clean_auxiliary(unitary_matrix, controls_no, auxiliaries_no)
-
-    def test_circuit_clean_relative_auxiliary(self):
-        for controls_no in controls_no_list:
-            unitary_matrix = self._take_matrix(controls_no)
-            auxiliaries_no = self._take_auxiliaries_no(controls_no)
-
-            generate_circuit_clean_relative_auxiliary(unitary_matrix, controls_no, auxiliaries_no)
+            generate_circuit_no_auxiliary(unitary_matrix, controls_no, auxiliaries_no)
 
 
 if __name__ == "__main__":
     mct = Test()
-    mct.test_circuit_clean_auxiliary()
-    mct.test_circuit_clean_relative_auxiliary()
+    mct.test_circuit_no_auxiliary()
