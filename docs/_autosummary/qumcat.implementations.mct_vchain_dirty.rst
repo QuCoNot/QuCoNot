@@ -1,7 +1,7 @@
-qumcat.implementations.mct\_vchain\_dirty
+quconot.implementations.mct\_vchain\_dirty
 =========================================
 
-.. automodule:: qumcat.implementations.mct_vchain_dirty
+.. automodule:: quconot.implementations.mct_vchain_dirty
 
    
    

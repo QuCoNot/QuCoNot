@@ -1,4 +1,4 @@
-# Qumcat/qumcat/implementations/mct_barenco_74_dirty.py
+# Quconot/quconot/implementations/mct_barenco_74_dirty.py
 #
 # Authors:
 #  - Ankit Khandelwal
@@ -96,7 +96,7 @@ class MCTBarenco74Dirty(MCTBase):
         return qc
 
     @classmethod
-    def generate_mct_cases(
+    def verify_mct_cases(
         self,
         controls_no: int,
         max_auxiliary: int,

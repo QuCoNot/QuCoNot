@@ -11,7 +11,7 @@ class MCTBase:
         pass
 
     @classmethod
-    def generate_mct_cases(
+    def verify_mct_cases(
         self,
         controls_no: int,
         max_auxiliary: int,

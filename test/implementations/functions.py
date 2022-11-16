@@ -1,6 +1,6 @@
 # This is where we put fixtures
 import numpy as np
-from qiskit import Aer, QuantumCircuit, transpile
+from qiskit import QuantumCircuit, transpile
 from qiskit.quantum_info.operators import Operator
 from scipy.sparse import identity
 

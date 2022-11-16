@@ -1,7 +1,7 @@
-qumcat.implementations.mct\_parallel\_decomposition
+quconot.implementations.mct\_parallel\_decomposition
 ===================================================
 
-.. automodule:: qumcat.implementations.mct_parallel_decomposition
+.. automodule:: quconot.implementations.mct_parallel_decomposition
 
    
    

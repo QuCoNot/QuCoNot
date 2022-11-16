@@ -1,7 +1,7 @@
-qumcat.implementations.mct\_base
+quconot.implementations.mct\_base
 ================================
 
-.. automodule:: qumcat.implementations.mct_base
+.. automodule:: quconot.implementations.mct_base
 
    
    

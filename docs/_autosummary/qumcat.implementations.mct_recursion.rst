@@ -1,7 +1,7 @@
-qumcat.implementations.mct\_recursion
+quconot.implementations.mct\_recursion
 =====================================
 
-.. automodule:: qumcat.implementations.mct_recursion
+.. automodule:: quconot.implementations.mct_recursion
 
    
    

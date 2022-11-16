@@ -1,4 +1,5 @@
 import numpy as np
+
 from .functions import (
     absolute_error_tol,
     identity_matrix,
@@ -10,7 +11,7 @@ from .functions import (
 
 
 # 1.1 No Auxiliary
-def generate_circuit_no_auxiliary(unitary_matrix, controls_no: int, auxiliaries_no: int):
+def verify_circuit_no_auxiliary(unitary_matrix, controls_no: int, auxiliaries_no: int):
     # get mct inverse matrix
     inverse_matrix = load_matrix("noauxiliary", controls_no)
 
@@ -23,15 +24,22 @@ def generate_circuit_no_auxiliary(unitary_matrix, controls_no: int, auxiliaries_
     # Expected unitary after calculation is 0.
     expected_unitary = zero_matrix(no_of_qubits)
 
-    assert generated_unitary.shape == expected_unitary.shape
+    if generated_unitary.shape != expected_unitary.shape:
+        return False, "Unitary has different shape."
 
-    assert np.allclose(
-        generated_unitary, expected_unitary, atol=absolute_error_tol, rtol=relative_error_tol
-    )
+    if (
+        np.allclose(
+            generated_unitary, expected_unitary, atol=absolute_error_tol, rtol=relative_error_tol
+        )
+        is False
+    ):
+        return False, "Something wrong with the implementation"
+
+    return True, ""
 
 
 # 1.2 No Auxiliary Relative
-def generate_circuit_no_auxiliary_relative(unitary_matrix, controls_no: int, auxiliaries_no: int):
+def verify_circuit_no_auxiliary_relative(unitary_matrix, controls_no: int, auxiliaries_no: int):
     # get mct inverse matrix
     inverse_matrix = load_matrix("noauxiliary", controls_no)
 
@@ -44,15 +52,22 @@ def generate_circuit_no_auxiliary_relative(unitary_matrix, controls_no: int, aux
     # Expected unitary after calculation is 0.
     expected_unitary = zero_matrix(no_of_qubits)
 
-    assert generated_unitary.shape == expected_unitary.shape
+    if generated_unitary.shape != expected_unitary.shape:
+        return False, "Unitary has different shape."
 
-    assert np.allclose(
-        generated_unitary, expected_unitary, atol=absolute_error_tol, rtol=relative_error_tol
-    )
+    if (
+        np.allclose(
+            generated_unitary, expected_unitary, atol=absolute_error_tol, rtol=relative_error_tol
+        )
+        is False
+    ):
+        return False, "Something wrong with the implementation"
+
+    return True, ""
 
 
 # 2.1 Clean Non-wasted
-def generate_circuit_clean_auxiliary(unitary_matrix, controls_no: int, auxiliaries_no: int):
+def verify_circuit_clean_auxiliary(unitary_matrix, controls_no: int, auxiliaries_no: int):
 
     # slice the matrix M = U[0:2**n,0:2**n]  (n = controls qubit + target qubit)
     unitary_matrix = unitary_matrix[: 2 ** (controls_no + 1), : 2 ** (controls_no + 1)]
@@ -69,17 +84,22 @@ def generate_circuit_clean_auxiliary(unitary_matrix, controls_no: int, auxiliari
     # Expected unitary after calculation is 0.
     expected_unitary = zero_matrix(no_of_qubits)
 
-    assert generated_unitary.shape == expected_unitary.shape
+    if generated_unitary.shape != expected_unitary.shape:
+        return False, "Unitary has different shape."
 
-    # print(np.round(generated_unitary))
+    if (
+        np.allclose(
+            generated_unitary, expected_unitary, atol=absolute_error_tol, rtol=relative_error_tol
+        )
+        is False
+    ):
+        return False, "Generated matrix should be all 0"
 
-    assert np.allclose(
-        generated_unitary, expected_unitary, atol=absolute_error_tol, rtol=relative_error_tol
-    ), "Generated matrix should be all 0"
+    return True, ""
 
 
 # 2.2 Clean Non-wasted Relative
-def generate_circuit_clean_relative_auxiliary(unitary_matrix, controls_no: int, auxiliaries_no: int):
+def verify_circuit_clean_relative_auxiliary(unitary_matrix, controls_no: int, auxiliaries_no: int):
 
     # slice the matrix M = U[0:2**n,0:2**n]  (n = controls qubit + target qubit)
     unitary_matrix = unitary_matrix[: 2 ** (controls_no + 1), : 2 ** (controls_no + 1)]
@@ -96,15 +116,22 @@ def generate_circuit_clean_relative_auxiliary(unitary_matrix, controls_no: int, 
     # Expected unitary after calculation is 0.
     expected_unitary = zero_matrix(no_of_qubits)
 
-    assert generated_unitary.shape == expected_unitary.shape
+    if generated_unitary.shape != expected_unitary.shape:
+        return False, "Unitary has different shape."
 
-    assert np.allclose(
-        generated_unitary, expected_unitary, atol=absolute_error_tol, rtol=relative_error_tol
-    )
+    if (
+        np.allclose(
+            generated_unitary, expected_unitary, atol=absolute_error_tol, rtol=relative_error_tol
+        )
+        is False
+    ):
+        return False, "Generated matrix should be all 0"
+
+    return True, ""
 
 
 # 3.1 Dirty Non-Wasted
-def generate_circuit_dirty_auxiliary(unitary_matrix, controls_no: int, auxiliaries_no: int):
+def verify_circuit_dirty_auxiliary(unitary_matrix, controls_no: int, auxiliaries_no: int):
     # get mct inverse matrix
     inverse_matrix = load_matrix("noauxiliary", controls_no)
     inverse_matrix = np.kron(identity_matrix(auxiliaries_no), inverse_matrix)
@@ -118,15 +145,22 @@ def generate_circuit_dirty_auxiliary(unitary_matrix, controls_no: int, auxiliari
     # Expected unitary after calculation is 0.
     expected_unitary = zero_matrix(no_of_qubits)
 
-    assert generated_unitary.shape == expected_unitary.shape
+    if generated_unitary.shape != expected_unitary.shape:
+        return False, "Unitary has different shape."
 
-    assert np.allclose(
-        generated_unitary, expected_unitary, atol=absolute_error_tol, rtol=relative_error_tol
-    )
+    if (
+        np.allclose(
+            generated_unitary, expected_unitary, atol=absolute_error_tol, rtol=relative_error_tol
+        )
+        is False
+    ):
+        return False, "Something wrong with the implementation"
+
+    return True, ""
 
 
 # 3.2 Dirty Non-Wasted Relative
-def generate_circuit_dirty_relative_auxiliary(unitary_matrix, controls_no: int, auxiliaries_no: int):
+def verify_circuit_dirty_relative_auxiliary(unitary_matrix, controls_no: int, auxiliaries_no: int):
     # get mct inverse matrix
     inverse_matrix = load_matrix("noauxiliary", controls_no)
     I_ct = identity_matrix(controls_no + 1)  # I_C,T
@@ -150,15 +184,22 @@ def generate_circuit_dirty_relative_auxiliary(unitary_matrix, controls_no: int, 
     # Expected unitary after calculation is 0.
     expected_unitary = zero_matrix(no_of_qubits)
 
-    assert generated_unitary.shape == expected_unitary.shape
+    if generated_unitary.shape != expected_unitary.shape:
+        return False, "Unitary has different shape."
 
-    assert np.allclose(
-        generated_unitary, expected_unitary, atol=absolute_error_tol, rtol=relative_error_tol
-    )
+    if (
+        np.allclose(
+            generated_unitary, expected_unitary, atol=absolute_error_tol, rtol=relative_error_tol
+        )
+        is False
+    ):
+        return False, "Generated matrix should be all 0"
+
+    return True, ""
 
 
 # 4.1 Clean Wasted Entangled Leftout
-def generate_circuit_clean_wasted_entangled_auxiliary(
+def verify_circuit_clean_wasted_entangled_auxiliary(
     unitary_matrix, controls_no: int, auxiliaries_no: int
 ):
     # get mct inverse matrix
@@ -193,12 +234,15 @@ def generate_circuit_clean_wasted_entangled_auxiliary(
         # )  # || ( <b_C,T| @ I_A ) (U_MCT @ I) U_tilde(|b_C,T> @ |0_A>) ||_2
         res_4 = np.linalg.norm(res_3)
 
-        assert np.round(res_4) == 1, "The length should be 1"
+        if np.round(res_4) != 1:
+            return False, "The length should be 1"
+
+    return True, ""
 
 
 # 4.2 Clean Wasted Relative Entangled Leftout
 # currently it is the same with 4.1
-def generate_circuit_clean_wasted_relative_entangled_auxiliary(
+def verify_circuit_clean_wasted_relative_entangled_auxiliary(
     unitary_matrix, controls_no: int, auxiliaries_no: int
 ):
     # get mct inverse matrix
@@ -233,11 +277,14 @@ def generate_circuit_clean_wasted_relative_entangled_auxiliary(
         # )  # || ( <b_C,T| @ I_A ) (U_MCT @ I) U_tilde(|b_C,T> @ |0_A>) ||_2
         res_4 = np.linalg.norm(res_3)
 
-        assert np.round(res_4) == 1, "The length should be 1"
+        if np.round(res_4) != 1:
+            return False, "The length should be 1"
+
+    return True, ""
 
 
 # 4.3 Clean Wasted Separable
-def generate_circuit_clean_wasted_separable_auxiliary(
+def verify_circuit_clean_wasted_separable_auxiliary(
     unitary_matrix, controls_no: int, auxiliaries_no: int
 ):
     # get mct inverse matrix
@@ -274,11 +321,14 @@ def generate_circuit_clean_wasted_separable_auxiliary(
             phi_0 = res_3
 
         # check if res_3 a quantum state here
-        assert np.round(np.matmul(phi_0.T, res_3)) == 1, "The state should be a quantum state"
+        if np.round(np.matmul(phi_0.T, res_3)) != 1:
+            return False, "The state should be a quantum state"
+
+    return True, ""
 
 
 # 4.4 Clean Wasted Relative Separable
-def generate_circuit_clean_wasted_relative_separable_auxiliary(
+def verify_circuit_clean_wasted_relative_separable_auxiliary(
     unitary_matrix, controls_no: int, auxiliaries_no: int
 ):
     # get mct inverse matrix
@@ -341,4 +391,7 @@ def generate_circuit_clean_wasted_relative_separable_auxiliary(
             phi_0 = res_4
 
         # check if res_3 a quantum state here
-        assert np.round(np.matmul(phi_0.T, res_4)) == 1, "The state should be a quantum state"
+        if np.round(np.matmul(phi_0.T, res_4)) != 1:
+            return False, "The state should be a quantum state"
+
+    return True, ""

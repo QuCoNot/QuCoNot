@@ -38,10 +38,10 @@ There are a couple of ways to add test case for PyTest, one of them is using the
         )
     ],
 )
-def test_generate_mct_cases(controls_no, max_auxiliary, expected_cases):
+def test_verify_mct_cases(controls_no, max_auxiliary, expected_cases):
 ```
 
-For the above example, it means that the "test_generate_mct_cases" will be executed twice with the given parameters. 
+For the above example, it means that the "test_verify_mct_cases" will be executed twice with the given parameters. 
 
 The first one is controls_no = 5, max_auxiliary = 1, expected_cases = 0 and with the label "not-enough-auxiliary". 
 

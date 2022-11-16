@@ -1,7 +1,7 @@
-﻿qumcat
+﻿quconot
 ======
 
-.. automodule:: qumcat
+.. automodule:: quconot
 
    
    
@@ -27,6 +27,6 @@
    :toctree:
    :recursive:
 
-   qumcat.implementations
-   qumcat.qumcat
+   quconot.implementations
+   quconot.quconot
 

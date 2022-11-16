@@ -1,7 +1,7 @@
-qumcat.implementations.mct\_vchain
+quconot.implementations.mct\_vchain
 ==================================
 
-.. automodule:: qumcat.implementations.mct_vchain
+.. automodule:: quconot.implementations.mct_vchain
 
    
    

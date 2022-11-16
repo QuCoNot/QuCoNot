@@ -31,7 +31,7 @@ repos:
     rev: v2.14.5
     hooks:
       - id: pylint
-        args: ["qumcat"]
+        args: ["quconot"]
         additional_dependencies:
           - pyenchant
 

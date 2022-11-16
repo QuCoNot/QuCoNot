@@ -8,7 +8,7 @@ from .implementations.mct_parallel_decomposition import MCTParallelDecomposition
 from .implementations.mct_vchain import MCTVChain
 
 
-class Qumcat:
+class QuCoNot:
     def __init__(self):
         self._registered_methods: List[Type[MCTBase]] = [
             MCTNQubitDecomposition,
@@ -30,8 +30,8 @@ class Qumcat:
         pass
 
     # TODO replace kwargs below with the same arguments as the concrete implementations
-    # def generate_mct_cases(self, controls_no: int, max_auxiliary: int, **kwargs):
-    def generate_mct_cases(
+    # def verify_mct_cases(self, controls_no: int, max_auxiliary: int, **kwargs):
+    def verify_mct_cases(
         self,
         controls_no: int,
         max_auxiliary: int,
@@ -44,7 +44,7 @@ class Qumcat:
         self._implementations = []
         for cls in self._registered_methods:
 
-            self._implementations += cls.generate_mct_cases(
+            self._implementations += cls.verify_mct_cases(
                 controls_no,
                 max_auxiliary,
                 relative_phase,

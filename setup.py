@@ -1,4 +1,4 @@
-"""Setup script for qumcat project
+"""Setup script for quconot project
 
 This is file needed to allow installation in editable mode.
 """

@@ -4,5 +4,5 @@ RKP
 ints
 kron
 qubits
-qumcat
+quconot
 rtype

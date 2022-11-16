@@ -1,7 +1,7 @@
-qumcat.implementations.mct\_barenco\_74\_dirty
+quconot.implementations.mct\_barenco\_74\_dirty
 ==============================================
 
-.. automodule:: qumcat.implementations.mct_barenco_74_dirty
+.. automodule:: quconot.implementations.mct_barenco_74_dirty
 
    
    

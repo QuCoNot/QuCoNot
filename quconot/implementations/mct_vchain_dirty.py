@@ -1,4 +1,4 @@
-# Qumcat/qumcat/implementations/mct_vchain_dirty.py
+# Quconot/quconot/implementations/mct_vchain_dirty.py
 #
 # Authors:
 #  - Handy Kurniawan
@@ -21,7 +21,7 @@ class MCTVChainDirty(MCTBase):
         pass
 
     @classmethod
-    def generate_mct_cases(
+    def verify_mct_cases(
         self,
         controls_no: int,
         max_auxiliary: int,
@@ -74,9 +74,9 @@ class MCTVChainDirty(MCTBase):
 
 
 if __name__ == "__main__":
-    print(MCTVChainDirty.generate_mct_cases(5, 1))  # not enough auxiliary - empty list
+    print(MCTVChainDirty.verify_mct_cases(5, 1))  # not enough auxiliary - empty list
 
-    cases = MCTVChainDirty.generate_mct_cases(5, 3)
+    cases = MCTVChainDirty.verify_mct_cases(5, 3)
     assert len(cases) == 1  # here only one case
     case = cases[0]
 
@@ -88,12 +88,12 @@ if __name__ == "__main__":
     print(case.num_gates())
     print(case.depth())
 
-    cases = MCTVChainDirty.generate_mct_cases(5, 3)
+    cases = MCTVChainDirty.verify_mct_cases(5, 3)
     assert len(cases) == 1  # here only one case
     case = cases[0]
 
     # if depth not previously known, generate circuit and compute (see base)
-    cases = MCTVChainDirty.generate_mct_cases(5, 3)
+    cases = MCTVChainDirty.verify_mct_cases(5, 3)
     assert len(cases) == 1  # here only one case
     case = cases[0]
     print(case.depth())

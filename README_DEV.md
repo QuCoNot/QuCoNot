@@ -1,17 +1,17 @@
-# Qumcat Development Guide
+# QuCoNot Development Guide
 
 > **Note**
 > Before running the pre-commit, test the implementation with PyTest first. 
-> See [here](https://github.com/QIntern-2022/qumcat/tree/main/test) for PyTest testing guide
+> See [here](https://github.com/QIntern-2022/quconot/tree/main/test) for PyTest testing guide
 
 This is the documentation to install the requirement for pre-commiting the project.
 
 ## :rocket:&nbsp; Getting started 
 
-To rocket right in, download  qumcat with [git](https://git-scm.com/) at the terminal
+To rocket right in, download  quconot with [git](https://git-scm.com/) at the terminal
 ```bash
 git clone https://github.com/QIntern-2022/OpenQASM2-Compiler.git
-cd qumcat
+cd quconot
 ```
 
 Then you need to check the version of the related libraries (whether you have installed or not), it should be the same version with the `.pre-commit-config.yaml`.
@@ -58,8 +58,8 @@ flake8...................................................................Failed
 - hook id: flake8
 - exit code: 1
 
-test/test_mct_clean_auxiliary.py:7:1: F401 'qumcat.mct_no_auxiliary.MCTNoAuxiliary' imported but unused
-test/test_mct_clean_auxiliary.py:10:1: F401 'qumcat.mct_vchain_dirty.MCTVChainDirty' imported but unused
+test/test_mct_clean_auxiliary.py:7:1: F401 'quconot.mct_no_auxiliary.MCTNoAuxiliary' imported but unused
+test/test_mct_clean_auxiliary.py:10:1: F401 'quconot.mct_vchain_dirty.MCTVChainDirty' imported but unused
 ```
 
 For the error message, it will be clear which part of the code that we need to manually fix it.

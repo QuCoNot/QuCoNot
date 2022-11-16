@@ -1,7 +1,7 @@
-﻿qumcat.implementations.mct\_no\_auxiliary
+﻿quconot.implementations.mct\_no\_auxiliary
 =========================================
 
-.. automodule:: qumcat.implementations.mct_no_auxiliary
+.. automodule:: quconot.implementations.mct_no_auxiliary
 
    
    

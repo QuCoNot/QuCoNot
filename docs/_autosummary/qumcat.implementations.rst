@@ -1,7 +1,7 @@
-qumcat.implementations
+quconot.implementations
 ======================
 
-.. automodule:: qumcat.implementations
+.. automodule:: quconot.implementations
 
    
    
@@ -27,14 +27,14 @@ qumcat.implementations
    :toctree:
    :recursive:
 
-   qumcat.implementations.mct_barenco_74_dirty
-   qumcat.implementations.mct_barenco_75_dirty
-   qumcat.implementations.mct_base
-   qumcat.implementations.mct_n_qubit_decomposition
-   qumcat.implementations.mct_no_auxiliary
-   qumcat.implementations.mct_no_auxiliary_relative_phase
-   qumcat.implementations.mct_parallel_decomposition
-   qumcat.implementations.mct_recursion
-   qumcat.implementations.mct_vchain
-   qumcat.implementations.mct_vchain_dirty
+   quconot.implementations.mct_barenco_74_dirty
+   quconot.implementations.mct_barenco_75_dirty
+   quconot.implementations.mct_base
+   quconot.implementations.mct_n_qubit_decomposition
+   quconot.implementations.mct_no_auxiliary
+   quconot.implementations.mct_no_auxiliary_relative_phase
+   quconot.implementations.mct_parallel_decomposition
+   quconot.implementations.mct_recursion
+   quconot.implementations.mct_vchain
+   quconot.implementations.mct_vchain_dirty
 

@@ -1,9 +1,9 @@
-# Qumcat/qumcat/implementations/mct_recursion.py
+# Quconot/quconot/implementations/mct_vchain.py
 #
 # Authors:
 #  - Handy Kurniawan
 #
-# Apply the implementation from Qiskit MCT Recursion
+# Apply the implementation from Qiskit MCT
 
 from copy import deepcopy
 from typing import List
@@ -13,7 +13,7 @@ from qiskit import QuantumCircuit, transpile
 from .mct_base import MCTBase
 
 
-class MCTRecursion(MCTBase):
+class MCTVChain(MCTBase):
     def __init__(self, controls_no: int, **kwargs) -> None:
         assert controls_no >= 2
         self._n = controls_no
@@ -21,7 +21,7 @@ class MCTRecursion(MCTBase):
         pass
 
     @classmethod
-    def generate_mct_cases(
+    def verify_mct_cases(
         self,
         controls_no: int,
         max_auxiliary: int,
@@ -43,7 +43,7 @@ class MCTRecursion(MCTBase):
         if max_auxiliary < controls_no - 2:
             return []  # if max_auxiliary allowed is to small - no representation given
         else:
-            return [MCTRecursion(controls_no)]  # only one available
+            return [MCTVChain(controls_no)]  # only one available
 
     def generate_circuit(self) -> QuantumCircuit:
         """Return a QuantumCircuit implementation
@@ -51,18 +51,12 @@ class MCTRecursion(MCTBase):
         :return: a quantum circuit
         :rtype: QuantumCircuit
         """
-        auxiliary_no = self.num_auxiliary_qubits()
-        auxiliary_qubit = []
-
-        if auxiliary_no == 1:
-            auxiliary_qubit = [self._n + 1]
-
-        qc = QuantumCircuit(self._n + 1 + auxiliary_no)
+        qc = QuantumCircuit(2 * self._n - 1)
         qc.mct(
             list(range(self._n)),
             self._n,
-            ancilla_qubits=auxiliary_qubit,
-            mode="recursion",
+            ancilla_qubits=list(range(self._n + 1, 2 * self._n - 1)),
+            mode="v-chain",
         )
 
         # should be done for all implementations
@@ -76,12 +70,30 @@ class MCTRecursion(MCTBase):
         :return: number of auxiliary qubits
         :rtype: int
         """
-
-        if self._n > 4:
-            return 1
-        else:
-            return 0
+        return self._n - 2
 
 
 if __name__ == "__main__":
-    pass
+    print(MCTVChain.verify_mct_cases(5, 1))  # not enough auxiliary - empty list
+
+    cases = MCTVChain.verify_mct_cases(5, 3)
+    assert len(cases) == 1  # here only one case
+    case = cases[0]
+
+    circ = case.generate_circuit()
+    # print(circ.draw())
+
+    # I can get quickly statistics out of it now
+    print(case.num_auxiliary_qubits())  # this is very fast as always known
+    print(case.num_gates())
+    print(case.depth())
+
+    cases = MCTVChain.verify_mct_cases(5, 3)
+    assert len(cases) == 1  # here only one case
+    case = cases[0]
+
+    # if depth not previously known, generate circuit and compute (see base)
+    cases = MCTVChain.verify_mct_cases(5, 3)
+    assert len(cases) == 1  # here only one case
+    case = cases[0]
+    print(case.depth())

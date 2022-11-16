@@ -1,4 +1,4 @@
-# Qumcat/qumcat/implementations/mct_parallel_decomposition.py
+# Quconot/quconot/implementations/mct_parallel_decomposition.py
 #
 # Authors:
 #  - Ankit Khandelwal
@@ -34,7 +34,7 @@ class MCTParallelDecomposition(MCTBase):
             return pairs, left
 
     @classmethod
-    def generate_mct_cases(
+    def verify_mct_cases(
         self,
         controls_no: int,
         max_auxiliary: int,

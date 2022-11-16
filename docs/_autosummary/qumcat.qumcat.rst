@@ -1,7 +1,7 @@
-qumcat.qumcat
+quconot.quconot
 =============
 
-.. automodule:: qumcat.qumcat
+.. automodule:: quconot.quconot
 
    
    
@@ -17,7 +17,7 @@ qumcat.qumcat
 
    .. autosummary::
    
-      Qumcat
+      quconot
    
    
 

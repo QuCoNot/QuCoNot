@@ -17,7 +17,7 @@ Implementations
    :toctree: _autosummary
    :recursive:
 
-   qumcat
+   quconot
 
 Indices and tables
 ==================
