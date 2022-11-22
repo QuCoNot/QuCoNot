@@ -45,6 +45,8 @@ def verify_circuit_no_auxiliary_relative(unitary_matrix, controls_no: int, auxil
 
     no_of_qubits = controls_no + 1
 
+    unitary_matrix = np.abs(unitary_matrix)
+
     # X_1 * X_2^dagger - I = 0
     M = np.matmul(unitary_matrix, inverse_matrix)
     generated_unitary = M - identity_matrix(no_of_qubits)
@@ -395,3 +397,47 @@ def verify_circuit_clean_wasted_relative_separable_auxiliary(
             return False, "The state should be a quantum state"
 
     return True, ""
+
+
+# 5.1 Dirty Wasted entangled left-out
+def verify_circuit_dirty_wasted_entangled_auxiliary(
+    unitary_matrix, controls_no: int, auxiliaries_no: int
+):
+    # get mct inverse matrix
+    inverse_matrix = load_matrix("noauxiliary", controls_no)
+
+    i_a = identity_matrix(auxiliaries_no)
+
+    # Expected unitary after calculation is 0.
+    expected_unitary = zero_matrix(2)
+
+    for i in range(2 ** (controls_no + 1)):
+        ket_b_ct = np.zeros(2 ** (controls_no + 1))
+
+        ket_b_ct[i] = 1  # |b_C,T>
+
+        ket_b_ct_i = np.kron(i_a, np.conj(ket_b_ct))  # ( |b_C> @ I_A )
+
+        res_1 = np.matmul(ket_b_ct_i, inverse_matrix)  # U_tilde ( |b_C> @ I_A )
+
+        v_b = np.matmul(res_1, ket_b_ct_i.T)  # ( <b_C,T| @ I_A ) U_tilde ( |b_C> @ I_A )
+
+        res = np.matmul(v_b, np.linalg.inv(v_b))
+
+        # check that (V_b * V_B') - I = 0
+        if (
+            np.allclose(
+                res - i_a, expected_unitary, atol=absolute_error_tol, rtol=relative_error_tol
+            )
+            is False
+        ):
+            return False, "Something wrong with the implementation"
+
+    return True, ""
+
+
+# 5.2 Dirty Wasted Relative-phase (entangled left-out)
+# In here, similarly as for the clean-wasted case, this class is reducible to
+# the regular MCT entangled left-out.
+
+# 5.3 Dirty Wasted seperable left-out

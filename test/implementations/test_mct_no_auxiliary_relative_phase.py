@@ -10,8 +10,7 @@ from .functions_testing import verify_circuit_no_auxiliary_relative
 
 class TestMCTNoAuxiliaryRelativePhase:
     _matrix_dict: Dict[np.array, int] = {}
-    _auxiliary_dict: Dict[int, int] = {}
-    _controls_no_list = [3]
+    _controls_no_list = [2, 3]
 
     def _take_matrix(self, controls_no: int):
         if controls_no in self._matrix_dict:
@@ -23,19 +22,10 @@ class TestMCTNoAuxiliaryRelativePhase:
 
         return self._matrix_dict[controls_no]
 
-    def _take_auxiliaries_no(self, controls_no: int):
-        if controls_no in self._auxiliary_dict:
-            return self._auxiliary_dict[controls_no]
-
-        mct = MCTNoAuxiliaryRelativePhase(controls_no)
-        self._auxiliary_dict[controls_no] = mct.num_auxiliary_qubits()
-
-        return self._auxiliary_dict[controls_no]
-
     def test_circuit_no_auxiliary_relative(self):
         for controls_no in self._controls_no_list:
             unitary_matrix = self._take_matrix(controls_no)
-            auxiliaries_no = self._take_auxiliaries_no(controls_no)
+            auxiliaries_no = 0
 
             res, msg = verify_circuit_no_auxiliary_relative(
                 unitary_matrix, controls_no, auxiliaries_no
