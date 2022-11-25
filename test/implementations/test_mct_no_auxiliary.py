@@ -5,7 +5,7 @@ from qiskit.quantum_info.operators import Operator
 
 from quconot.implementations.mct_no_auxiliary import MCTNoAuxiliary
 
-from .functions_testing import verify_circuit_no_auxiliary
+from functions_testing import verify_circuit_no_auxiliary
 
 
 class TestMCTNoAuxiliary:
