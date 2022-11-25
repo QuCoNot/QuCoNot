@@ -46,7 +46,7 @@ authors = [
 description = 'QuCoNot is a Python library for all your MCT needs.'
 readme = "README.md"
 requires-python = ">=3.7"
-license = "Apache-2.0"
+license = {file = "LICENSE.txt"}
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Environment :: Console",
