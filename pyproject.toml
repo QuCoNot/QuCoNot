@@ -31,3 +31,42 @@ spelling-dict = ['en_US']
 disable = "all"
 enable = "C0402, C0403" 
 spelling-private-dict-file = "wordlist.txt"
+
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "QuCoNot"
+version = "0.01"
+authors = [
+  { name="Adam Glos", email="aglos@iitis.pl" },
+]
+description = 'QuCoNot is a Python library for all your MCT needs.'
+readme = "README.md"
+requires-python = ">=3.7"
+license = "Apache License 2.0"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Natural Language :: English",
+    "Operating System :: POSIX",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Scientific/Engineering :: Physics",
+]
+
+[project.urls]
+"Bug Reports" = "https://github.com/QuCoNot/QuCoNot/issues"
+"Source" = "https://github.com/QuCoNot/QuCoNot/"
