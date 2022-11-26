@@ -8,6 +8,7 @@ from quconot.implementations.mct_barenco_75_dirty import MCTBarenco75Dirty
 from functions_testing import (
     verify_circuit_clean_auxiliary,
     verify_circuit_clean_relative_auxiliary,
+    verify_circuit_dirty_wasted_entangled_auxiliary,
 )
 
 
@@ -50,6 +51,17 @@ class TestMCTBarenco75Dirty:
             auxiliaries_no = self._take_auxiliaries_no(controls_no)
 
             res, msg = verify_circuit_clean_relative_auxiliary(
+                unitary_matrix, controls_no, auxiliaries_no
+            )
+
+            assert res, msg
+
+    def test_circuit_dirty_wasted_entangled_auxiliary(self):
+        for controls_no in self._controls_no_list:
+            unitary_matrix = self._take_matrix(controls_no)
+            auxiliaries_no = self._take_auxiliaries_no(controls_no)
+
+            res, msg = verify_circuit_dirty_wasted_entangled_auxiliary(
                 unitary_matrix, controls_no, auxiliaries_no
             )
 
