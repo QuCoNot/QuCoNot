@@ -38,4 +38,7 @@ def reverse_kronecker_product(A, B_shape):
     Vec_C = np.sqrt(s[idx]) * V[idx, :]
     C = Vec_C.reshape(C_shape)
 
+    B /= np.linalg.norm(B[:, 0], ord=2)
+    C /= np.linalg.norm(C[:, 0], ord=2)
+
     return B, C
