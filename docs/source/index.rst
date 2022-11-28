@@ -15,20 +15,10 @@ Check out the :doc:`usage` section for further information, including how to :re
    This project is under active development.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Contents:
 
-   api_doc/quconot.implementations
-   api_doc/quconot
-   api_doc/modules
-
-
-
-Contents
---------
-
-.. toctree::
-
+   implementations
    usage
    api
 
