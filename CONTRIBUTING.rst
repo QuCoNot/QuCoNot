@@ -6,8 +6,6 @@ Contributing
 
 Contributions are welcome and greatly appreciated!
 
-You can contribute in many ways:
-
 Please ensure you follow our `Code of Conduct <https://github.com/QuCoNot/QuCoNot/blob/documentation/CODE_OF_CONDUCT.md>`_.
 
 Types of Contributions

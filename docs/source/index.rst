@@ -14,7 +14,7 @@ Check out the :doc:`usage` section for further information, including how to :re
 
    This project is under active development.
 
-It creates MCT circuits depending on user needs.
+It creates MCT circuits depending on user resource restrictions.
 
 .. toctree::
    :maxdepth: 1
@@ -23,6 +23,7 @@ It creates MCT circuits depending on user needs.
    implementations
    usage
    api
+   contribution
 
 Support
 =======
