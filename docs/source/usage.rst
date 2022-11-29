@@ -6,7 +6,7 @@ Usage
 Installation
 ------------
 
-To use QuCoNot, first install it using pip:
+To use QuCoNot, first install it and its dependencies from PyPI with:
 
 .. code-block:: console
 

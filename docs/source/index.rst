@@ -6,13 +6,15 @@
 Welcome to QuCoNot's documentation!
 ===================================
 
-**QuCoNot** is a Python Library for all your MCT needs. It creates MCT circuits depending on user needs.
+**QuCoNot** is a Python Library for all your MCT needs.
 
 Check out the :doc:`usage` section for further information, including how to :ref:`install <installation>` the project.
 
 .. note::
 
    This project is under active development.
+
+It creates MCT circuits depending on user needs.
 
 .. toctree::
    :maxdepth: 1
@@ -22,6 +24,13 @@ Check out the :doc:`usage` section for further information, including how to :re
    usage
    api
 
+Support
+=======
+If you are having issues, please let us know by filling an issue on our `issue tracker <https://github.com/QuCoNot/QuCoNot/issues>`_.
+
+License
+=======
+QuCoNot is licensed under the Apache 2.0 License.
 
 Indices and tables
 ==================
