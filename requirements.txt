@@ -11,3 +11,4 @@ m2r2
 sphinxcontrib-bibtex
 pytest==7.2.0
 sphinx-togglebutton
+sphinx_book_theme

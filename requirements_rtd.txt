@@ -10,3 +10,4 @@ scipy
 sphinx-togglebutton
 m2r2
 sphinxcontrib-bibtex
+sphinx_book_theme
