@@ -7,3 +7,6 @@ sphinx_automodapi
 sphinx_copybutton
 numpy
 scipy
+sphinx-togglebutton
+m2r2
+sphinxcontrib-bibtex
