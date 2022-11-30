@@ -1,15 +1,13 @@
 from typing import Dict
 
 import numpy as np
+from functions_testing import (  # verify_circuit_dirty_wasted_separable_auxiliary,
+    verify_circuit_dirty_relative_auxiliary,
+    verify_circuit_dirty_wasted_entangled_auxiliary,
+)
 from qiskit.quantum_info.operators import Operator
 
 from quconot.implementations.mct_barenco_74_dirty import MCTBarenco74Dirty
-
-from .functions_testing import (
-    verify_circuit_dirty_relative_auxiliary,
-    verify_circuit_dirty_wasted_entangled_auxiliary,
-    verify_circuit_dirty_wasted_separable_auxiliary,
-)
 
 
 class TestMCTBarenco74Dirty:

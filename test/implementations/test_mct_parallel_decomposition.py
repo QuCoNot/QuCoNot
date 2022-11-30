@@ -1,16 +1,13 @@
 from typing import Dict
 
 import numpy as np
-from qiskit.quantum_info.operators import Operator
-
-from quconot.implementations.mct_parallel_decomposition import MCTParallelDecomposition
-
 from functions_testing import (
     verify_circuit_clean_auxiliary,
     verify_circuit_clean_relative_auxiliary,
-    verify_circuit_dirty_wasted_entangled_auxiliary,
-    verify_circuit_dirty_wasted_separable_auxiliary,
 )
+from qiskit.quantum_info.operators import Operator
+
+from quconot.implementations.mct_parallel_decomposition import MCTParallelDecomposition
 
 
 class TestMCTParallelDecomposition:

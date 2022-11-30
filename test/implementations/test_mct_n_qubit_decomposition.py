@@ -1,10 +1,6 @@
 from typing import Dict
 
 import numpy as np
-from qiskit.quantum_info.operators import Operator
-
-from quconot.implementations.mct_n_qubit_decomposition import MCTNQubitDecomposition
-
 from functions_testing import (
     verify_circuit_clean_auxiliary,
     verify_circuit_clean_relative_auxiliary,
@@ -15,6 +11,9 @@ from functions_testing import (
     verify_circuit_dirty_wasted_entangled_auxiliary,
     verify_circuit_dirty_wasted_separable_auxiliary,
 )
+from qiskit.quantum_info.operators import Operator
+
+from quconot.implementations.mct_n_qubit_decomposition import MCTNQubitDecomposition
 
 
 class TestMCTNQubitDecomposition:

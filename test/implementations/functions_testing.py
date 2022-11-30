@@ -1,7 +1,5 @@
 import numpy as np
-
-from ..reverse_kronecker_product import reverse_kronecker_product
-from .functions import (
+from functions import (
     absolute_error_tol,
     identity_matrix,
     ket_0_matrix,
@@ -9,6 +7,7 @@ from .functions import (
     relative_error_tol,
     zero_matrix,
 )
+from reverse_kronecker_product import reverse_kronecker_product
 
 
 # 1.1 No Auxiliary
@@ -405,7 +404,7 @@ def verify_circuit_dirty_wasted_entangled_auxiliary(
     unitary_matrix, controls_no: int, auxiliaries_no: int
 ):
     # get mct inverse matrix
-    inverse_matrix = load_matrix("noauxiliary", controls_no)
+    # inverse_matrix = load_matrix("noauxiliary", controls_no)
 
     i_a = identity_matrix(auxiliaries_no)
 
