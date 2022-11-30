@@ -5,7 +5,7 @@ from qiskit.quantum_info.operators import Operator
 
 from quconot.implementations.mct_no_auxiliary_relative_phase import MCTNoAuxiliaryRelativePhase
 
-from .functions_testing import verify_circuit_no_auxiliary_relative
+from functions_testing import verify_circuit_no_auxiliary_relative
 
 
 class TestMCTNoAuxiliaryRelativePhase:
