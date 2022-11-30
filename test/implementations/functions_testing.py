@@ -1,6 +1,6 @@
 import numpy as np
 
-from .functions import (
+from functions import (
     absolute_error_tol,
     identity_matrix,
     ket_0_matrix,

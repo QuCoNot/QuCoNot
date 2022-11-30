@@ -5,7 +5,7 @@ from qiskit.quantum_info.operators import Operator
 
 from quconot.implementations.mct_n_qubit_decomposition import MCTNQubitDecomposition
 
-from .functions_testing import (
+from functions_testing import (
     verify_circuit_clean_auxiliary,
     verify_circuit_clean_relative_auxiliary,
     verify_circuit_clean_wasted_entangled_auxiliary,
