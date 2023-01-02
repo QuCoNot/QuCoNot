@@ -13,6 +13,7 @@ from .mct_base import MCTBase
 
 
 class MCTParallelDecomposition(MCTBase):
+
     def __init__(self, controls_no: int, **kwargs) -> None:
         assert controls_no >= 2
         self._n = controls_no
