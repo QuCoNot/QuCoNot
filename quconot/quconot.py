@@ -36,7 +36,7 @@ class QuCoNot:
         controls_no: int,
         max_auxiliary: int,
         relative_phase: bool = False,
-        clean_acilla: bool = True,
+        clean_auxiliary: bool = True,
         wasted_auxiliary: bool = False,
         separable_wasted_auxiliary: bool = False,
     ) -> List["MCTBase"]:
@@ -48,7 +48,7 @@ class QuCoNot:
                 controls_no,
                 max_auxiliary,
                 relative_phase,
-                clean_acilla,
+                clean_auxiliary,
                 wasted_auxiliary,
                 separable_wasted_auxiliary,
             )
