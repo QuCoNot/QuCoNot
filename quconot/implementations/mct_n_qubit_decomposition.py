@@ -31,6 +31,20 @@ from .mct_base import MCTBase
 
 
 class MCTNQubitDecomposition(MCTBase):
+    r"""
+    **Decompositions of n-qubit Toffoli Gates with Linear Circuit Complexity Yong He et al.:**
+
+    An n-qubit Toffoli gate :math:`∧_{n-1}(\sigma_{x})` can be implemented by a circuit depth of ``216n − 648`` assisted by a recyclable auxiliary qubit. Moreover, :math:`∧_{n-1}(\sigma_{x})` requires ``24n − 72`` CNOT gates and ``32n−96`` :math:`T` or  :math:`T^{†}`
+
+    .. image:: ../../n_qubit_tof.png
+       :width: 400
+    Efficient decomposition of an approximate Toffoli gate :math:`∧_{4}(\sigma_{x})` without auxiliary qubit. This approximate Toffoli gate is different from the Toffoli gate with the phase −1 at the |101⟩
+
+    .. image:: ../../n_qubit_tof2.png
+       :width: 400
+    Efficient decomposition of a 7-qubit Toffoli gate :math:`∧_{6}(\sigma_{x})` using an 8-qubit system. Here, one qubit is used as auxiliary qubit
+
+    """
     def __init__(self, controls_no: int, **kwargs) -> None:
         assert controls_no >= 2
         self._n = controls_no
@@ -38,6 +52,22 @@ class MCTNQubitDecomposition(MCTBase):
         pass
 
     def RyDecomp(self):
+        r"""Decomposition of :math: `R_{y}(frac{\pi}{4})` and its inverse :math: `R_{y}(frac{- \pi}{4})`
+
+        Returns:
+            QuantumCircuit: two 1-qubit circuits containing the decomposition and its inverse
+
+        **Example**
+            >>> print(MCTNQubitDecomposition(controls_no = 2).RyDecomp()[0])
+            >>> print(MCTNQubitDecomposition(controls_no = 2).RyDecomp()[1])
+               ┌───┐┌───┐┌───┐┌───┐┌───┐┌───┐
+            q: ┤ Z ├┤ S ├┤ H ├┤ T ├┤ H ├┤ S ├
+               └───┘└───┘└───┘└───┘└───┘└───┘
+               ┌─────┐┌───┐┌─────┐┌───┐┌─────┐┌───┐
+            q: ┤ Sdg ├┤ H ├┤ Tdg ├┤ H ├┤ Sdg ├┤ Z ├
+               └─────┘└───┘└─────┘└───┘└─────┘└───┘
+
+        """
         ry_circuit = QuantumCircuit(1)
         ry_circuit.z(0)
         ry_circuit.s(0)
@@ -49,6 +79,21 @@ class MCTNQubitDecomposition(MCTBase):
         return ry_circuit, ry_circuit.inverse()
 
     def TofDecomp(self):
+        r"""Decomposition of Toffoli gate into RY and CX gates. Uses RyDecomp() for decomposition of the RY gates
+
+        Returns:
+            QuantumCircuit: A 3-qubit quantum circuit containing decomposition
+
+        **Example**
+            >>> print(MCTBarenco74Dirty(controls_no = 3).TofDecomp())
+            q_0: ─────────────────────────────■───────────────────────────────
+                                              │
+            q_1: ─────────────■───────────────┼────────────────■──────────────
+                 ┌─────────┐┌─┴─┐┌─────────┐┌─┴─┐┌──────────┐┌─┴─┐┌──────────┐
+            q_2: ┤ Ry(π/4) ├┤ X ├┤ Ry(π/4) ├┤ X ├┤ Ry(-π/4) ├┤ X ├┤ Ry(-π/4) ├
+                 └─────────┘└───┘└─────────┘└───┘└──────────┘└───┘└──────────┘
+
+        """
         ry, ry_inv = self.RyDecomp()
         qc = QuantumCircuit(3)
         qc.append(ry, [2])
@@ -61,6 +106,65 @@ class MCTNQubitDecomposition(MCTBase):
         return qc
 
     def k_gate(self, qc: QuantumCircuit, c: List[int], t: int, a: int, k: int):
+
+        r"""Generates network of ``4(m-2)`` gates that simulates a controlled not gate with m controls. Uses ``TofDecomp`` when target qubit of the Toffoli gate is not target of the k gate
+
+        Args:
+            qc (QuantumCircuit): Quantum circuit to which gates are to be appended
+            c (list[int]): list of control qubits of Toffoli gate
+            t (int): target qubit of Toffoli gate
+            a (int): auxiliary qubit of Toffoli gate
+            k (int): takes values ``1`` or ``2`` depending on type of k-gate required
+
+
+        Returns:
+            QuantumCircuit: Appends network of gates to qc
+
+        **Example**
+            >>> qc = QuantumCircuit(9)
+            >>> print(MCTBarenco74Dirty(controls_no = 5).k_gate(qc, list(range(9)), 5, 8,1))
+            q_0: ─────────────────■─────────────────────────────■────────────
+                                  │                             │
+            q_1: ─────────────────■─────────────────────────────■────────────
+                                  │                             │
+            q_2: ────────────■────┼────■───────────────────■────┼────■───────
+                             │    │    │                   │    │    │
+            q_3: ───────■────┼────┼────┼────■─────────■────┼────┼────┼────■──
+                        │    │    │    │    │         │    │    │    │    │
+            q_4: ──■────┼────┼────┼────┼────┼────■────┼────┼────┼────┼────┼──
+                   │    │    │  ┌─┴─┐  │    │    │    │    │  ┌─┴─┐  │    │
+            q_5: ──┼────┼────■──┤ X ├──■────┼────┼────┼────■──┤ X ├──■────┼──
+                   │    │  ┌─┴─┐└───┘┌─┴─┐  │    │    │  ┌─┴─┐└───┘┌─┴─┐  │
+            q_6: ──┼────■──┤ X ├─────┤ X ├──■────┼────■──┤ X ├─────┤ X ├──■──
+                   │  ┌─┴─┐└───┘     └───┘┌─┴─┐  │  ┌─┴─┐└───┘     └───┘┌─┴─┐
+            q_7: ──■──┤ X ├───────────────┤ X ├──■──┤ X ├───────────────┤ X ├
+                 ┌─┴─┐└───┘               └───┘┌─┴─┐└───┘               └───┘
+            q_8: ┤ X ├─────────────────────────┤ X ├─────────────────────────
+                 └───┘                         └───┘
+
+
+            >>> qc = QuantumCircuit(9)
+            >>> print(MCTBarenco74Dirty(controls_no = 5).k_gate(qc, list(range(9)), 5, 8,1))
+                                ┌───┐                         ┌───┐
+            q_0: ────────────■──┤ X ├──■───────────────────■──┤ X ├──■───────
+                           ┌─┴─┐└─┬─┘┌─┴─┐               ┌─┴─┐└─┬─┘┌─┴─┐
+            q_1: ───────■──┤ X ├──┼──┤ X ├──■─────────■──┤ X ├──┼──┤ X ├──■──
+                      ┌─┴─┐└─┬─┘  │  └─┬─┘┌─┴─┐     ┌─┴─┐└─┬─┘  │  └─┬─┘┌─┴─┐
+            q_2: ──■──┤ X ├──┼────┼────┼──┤ X ├──■──┤ X ├──┼────┼────┼──┤ X ├
+                   │  └─┬─┘  │    │    │  └─┬─┘  │  └─┬─┘  │    │    │  └─┬─┘
+            q_3: ──┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼──
+                   │    │    │    │    │    │    │    │    │    │    │    │
+            q_4: ──┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼──
+                 ┌─┴─┐  │    │    │    │    │  ┌─┴─┐  │    │    │    │    │
+            q_5: ┤ X ├──┼────┼────■────┼────┼──┤ X ├──┼────┼────■────┼────┼──
+                 └─┬─┘  │    │    │    │    │  └─┬─┘  │    │    │    │    │
+            q_6: ──┼────┼────┼────■────┼────┼────┼────┼────┼────■────┼────┼──
+                   │    │    │         │    │    │    │    │         │    │
+            q_7: ──┼────┼────■─────────■────┼────┼────┼────■─────────■────┼──
+                   │    │                   │    │    │                   │
+            q_8: ──■────■───────────────────■────■────■───────────────────■──
+
+        """
         from qiskit.circuit.library import CCXGate
 
         k1 = int(np.ceil((len(c) + 1) / 2))
@@ -110,6 +214,66 @@ class MCTNQubitDecomposition(MCTBase):
         return qc
 
     def MCT(self, c_qubits: List[int], t_qubit: int, aux_qubit: int):
+        r"""Implements theorem 1 of "Decompositions of n-qubit Toffoli Gates with Linear Circuit Complexity"
+
+        Args:
+            c_qubits (list[int]): list of control qubits of Toffoli gate
+            t_qubit (int): target qubit of Toffoli gate
+            aux_qubit (int): auxiliary qubit of Toffoli gate
+
+        Returns:
+            QuantumCircuit: returns decomposition as quantum circuit
+
+        **Example**
+            >>> print(MCTNQubitDecomposition(controls_no = 2).MCT(c_qubits = [0,1,2,3,4], t_qubit = 5, aux_qubit = 6))
+                           ┌───────────────┐     ┌───────────────┐                      »
+            q_0: ──────────┤0              ├─────┤0              ├──────────────────────»
+                           │               │     │               │                      »
+            q_1: ──────────┤1              ├─────┤1              ├──────────────────────»
+                           │               │     │               │     ┌───────────────┐»
+            q_2: ───────■──┤               ├──■──┤               ├──■──┤2              ├»
+                        │  │  circuit-1849 │  │  │  circuit-1849 │  │  │               │»
+            q_3: ───────┼──┤               ├──┼──┤               ├──┼──┤0 circuit-1864 ├»
+                        │  │               │  │  │               │  │  │               │»
+            q_4: ───────┼──┤               ├──┼──┤               ├──┼──┤1              ├»
+                 ┌───┐  │  │               │  │  │               │  │  └───────────────┘»
+            q_5: ┤ H ├──■──┤2              ├──■──┤2              ├──■───────────────────»
+                 └───┘┌─┴─┐└───────────────┘┌─┴─┐└─────┬───┬─────┘┌─┴─┐                 »
+            q_6: ─────┤ X ├─────────────────┤ X ├──────┤ S ├──────┤ X ├─────────────────»
+                      └───┘                 └───┘      └───┘      └───┘                 »
+            «                                ┌───────────────┐     ┌───────────────┐     »
+            «q_0: ───────────────────────────┤0              ├─────┤0              ├─────»
+            «                                │               │     │               │     »
+            «q_1: ───────────────────────────┤1              ├─────┤1              ├─────»
+            «          ┌───────────────┐     │               │     │               │     »
+            «q_2: ──■──┤2              ├──■──┤               ├──■──┤               ├──■──»
+            «       │  │               │  │  │  circuit-1879 │  │  │  circuit-1879 │  │  »
+            «q_3: ──┼──┤0 circuit-1864 ├──┼──┤               ├──┼──┤               ├──┼──»
+            «       │  │               │  │  │               │  │  │               │  │  »
+            «q_4: ──┼──┤1              ├──┼──┤               ├──┼──┤               ├──┼──»
+            «       │  └───────────────┘  │  │               │  │  │               │  │  »
+            «q_5: ──■─────────────────────■──┤2              ├──■──┤2              ├──■──»
+            «     ┌─┴─┐     ┌─────┐     ┌─┴─┐└───────────────┘┌─┴─┐└─────┬───┬─────┘┌─┴─┐»
+            «q_6: ┤ X ├─────┤ Sdg ├─────┤ X ├─────────────────┤ X ├──────┤ S ├──────┤ X ├»
+            «     └───┘     └─────┘     └───┘                 └───┘      └───┘      └───┘»
+            «
+            «q_0: ───────────────────────────────────────
+            «
+            «q_1: ───────────────────────────────────────
+            «     ┌───────────────┐     ┌───────────────┐
+            «q_2: ┤2              ├──■──┤2              ├
+            «     │               │  │  │               │
+            «q_3: ┤0 circuit-1894 ├──┼──┤0 circuit-1894 ├
+            «     │               │  │  │               │
+            «q_4: ┤1              ├──┼──┤1              ├
+            «     └───────────────┘  │  └─────┬───┬─────┘
+            «q_5: ───────────────────■────────┤ H ├──────
+            «                      ┌─┴─┐     ┌┴───┴┐
+            «q_6: ─────────────────┤ X ├─────┤ Sdg ├─────
+            «                      └───┘     └─────┘
+
+        """
+
         qc = QuantumCircuit(len(c_qubits) + 2)
 
         qc.h(t_qubit)

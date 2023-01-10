@@ -14,6 +14,9 @@ from .mct_base import MCTBase
 
 
 class MCTNoAuxiliary(MCTBase):
+    r"""
+    Implementation of the multi-controlled not gate with no auxiliary qubits using Qiskit's ``noancilla`` mode. This is implemented using the Gray code.
+    """
     def __init__(self, controls_no: int, **kwargs) -> None:
         assert controls_no >= 2
         self._n = controls_no
