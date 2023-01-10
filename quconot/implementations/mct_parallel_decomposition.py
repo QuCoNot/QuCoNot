@@ -21,8 +21,16 @@ class MCTParallelDecomposition(MCTBase):
         pass
 
     def get_toffoli(self, qc: QuantumCircuit, c1: List[list], c2: List[list], t: int):
+        r"""Returns a Toffoli gate
+        Args:
+            qc (QuantumCircuit): Quantum circuit to which gates are to be appended
+            c1(list[int]): the qubit(s) used as the first control for Toffoli
+            c2(list[int]): the qubit(s) used as the second control for Toffoli
+            t (int): the qubit(s) targeted by the gate
+        Returns:
+            QuantumCircuit: a quantum circuit containing implementation
+        """
         qc.toffoli(c1, c2, t)
-
         return qc
 
     def get_pairs(self, qubits: List[int], left: List[Any]):
@@ -60,6 +68,14 @@ class MCTParallelDecomposition(MCTBase):
             return [MCTParallelDecomposition(controls_no)]  # only one available
 
     def MCT(self, c_qubits: List[int], t_qubit: int, aux_qubits: List[int]):
+        r"""Returns MCT gate
+            Args:
+                c_qubits(list[int]): list of control qubits of Toffoli gate
+                t_qubits(int): target qubit of Toffoli gate
+                 aux_qubits(list[int]): list of auxiliary qubits of Toffoli gate
+            Returns:
+                QuantumCircuit: a quantum circuit containing implementation
+        """
         qc = QuantumCircuit(len(c_qubits) + len(aux_qubits) + 1)
 
         ps, ls = [], []

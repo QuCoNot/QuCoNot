@@ -38,16 +38,6 @@ class MCTBarenco74Dirty(MCTBase):
         pass
 
     def TofDecomp(self):
-        qc = QuantumCircuit(3)
-        qc.ry(np.pi / 4, 2)
-        qc.cx(1, 2)
-        qc.ry(np.pi / 4, 2)
-        qc.cx(0, 2)
-        qc.ry(-np.pi / 4, 2)
-        qc.cx(1, 2)
-        qc.ry(-np.pi / 4, 2)
-        return qc
-
         r"""Decomposition of Toffoli gate into RY and CX gates
 
         Returns:
@@ -63,6 +53,17 @@ class MCTBarenco74Dirty(MCTBase):
                  └─────────┘└───┘└─────────┘└───┘└──────────┘└───┘└──────────┘
 
         """
+        qc = QuantumCircuit(3)
+        qc.ry(np.pi / 4, 2)
+        qc.cx(1, 2)
+        qc.ry(np.pi / 4, 2)
+        qc.cx(0, 2)
+        qc.ry(-np.pi / 4, 2)
+        qc.cx(1, 2)
+        qc.ry(-np.pi / 4, 2)
+        return qc
+
+
 
 
 
