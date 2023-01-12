@@ -1,6 +1,7 @@
 from typing import Dict
 
 import numpy as np
+import pytest
 from functions_testing import (
     verify_circuit_clean_auxiliary,
     verify_circuit_clean_relative_auxiliary,
@@ -8,8 +9,13 @@ from functions_testing import (
     verify_circuit_clean_wasted_relative_entangled_auxiliary,
     verify_circuit_clean_wasted_relative_separable_auxiliary,
     verify_circuit_clean_wasted_separable_auxiliary,
+    verify_circuit_dirty_auxiliary,
+    verify_circuit_dirty_relative_auxiliary,
     verify_circuit_dirty_wasted_entangled_auxiliary,
+    verify_circuit_dirty_wasted_relative_separable_auxiliary,
     verify_circuit_dirty_wasted_separable_auxiliary,
+    verify_circuit_no_auxiliary,
+    verify_circuit_no_auxiliary_relative,
 )
 from qiskit.quantum_info.operators import Operator
 
@@ -52,6 +58,28 @@ class TestMCTNQubitDecomposition:
 
         return self._auxiliary_dict[controls_no]
 
+    @pytest.mark.xfail
+    def test_circuit_no_auxiliary(self):
+        for controls_no in self._controls_no_list:
+            unitary_matrix = self._take_matrix(controls_no)
+            auxiliaries_no = self._take_auxiliaries_no(controls_no)
+
+            res, msg = verify_circuit_no_auxiliary(unitary_matrix, controls_no, auxiliaries_no)
+
+            assert res, msg
+
+    @pytest.mark.xfail
+    def test_circuit_no_auxiliary_relative(self):
+        for controls_no in self._controls_no_list:
+            unitary_matrix = self._take_matrix(controls_no)
+            auxiliaries_no = 0
+
+            res, msg = verify_circuit_no_auxiliary_relative(
+                unitary_matrix, controls_no, auxiliaries_no
+            )
+
+            assert res, msg
+
     def test_circuit_clean_auxiliary(self):
         for controls_no in self._controls_no_list:
             unitary_matrix = self._take_matrix(controls_no)
@@ -67,6 +95,26 @@ class TestMCTNQubitDecomposition:
             auxiliaries_no = self._take_auxiliaries_no(controls_no)
 
             res, msg = verify_circuit_clean_relative_auxiliary(
+                unitary_matrix, controls_no, auxiliaries_no
+            )
+
+            assert res, msg
+
+    def test_circuit_dirty_auxiliary(self):
+        for controls_no in self._controls_no_list:
+            unitary_matrix = self._take_matrix(controls_no)
+            auxiliaries_no = self._take_auxiliaries_no(controls_no)
+
+            res, msg = verify_circuit_dirty_auxiliary(unitary_matrix, controls_no, auxiliaries_no)
+
+            assert res, msg
+
+    def test_circuit_dirty_relative_auxiliary(self):
+        for controls_no in self._controls_no_list:
+            unitary_matrix = self._take_matrix(controls_no)
+            auxiliaries_no = self._take_auxiliaries_no(controls_no)
+
+            res, msg = verify_circuit_dirty_relative_auxiliary(
                 unitary_matrix, controls_no, auxiliaries_no
             )
 
@@ -94,23 +142,23 @@ class TestMCTNQubitDecomposition:
 
             assert res, msg
 
-    def test_circuit_clean_wasted_relative_separable_auxiliary(self):
-        for controls_no in self._controls_no_list:
-            unitary_matrix = self._take_matrix(controls_no)
-            auxiliaries_no = self._take_auxiliaries_no(controls_no)
-
-            res, msg = verify_circuit_clean_wasted_relative_separable_auxiliary(
-                unitary_matrix, controls_no, auxiliaries_no
-            )
-
-            assert res, msg
-
     def test_circuit_clean_wasted_separable_auxiliary(self):
         for controls_no in self._controls_no_list:
             unitary_matrix = self._take_matrix(controls_no)
             auxiliaries_no = self._take_auxiliaries_no(controls_no)
 
             res, msg = verify_circuit_clean_wasted_separable_auxiliary(
+                unitary_matrix, controls_no, auxiliaries_no
+            )
+
+            assert res, msg
+
+    def test_circuit_clean_wasted_relative_separable_auxiliary(self):
+        for controls_no in self._controls_no_list:
+            unitary_matrix = self._take_matrix(controls_no)
+            auxiliaries_no = self._take_auxiliaries_no(controls_no)
+
+            res, msg = verify_circuit_clean_wasted_relative_separable_auxiliary(
                 unitary_matrix, controls_no, auxiliaries_no
             )
 
@@ -133,6 +181,17 @@ class TestMCTNQubitDecomposition:
             auxiliaries_no = self._take_auxiliaries_no(controls_no)
 
             res, msg = verify_circuit_dirty_wasted_separable_auxiliary(
+                unitary_matrix, controls_no, auxiliaries_no
+            )
+
+            assert res, msg
+
+    def test_circuit_dirty_wasted_relative_separable_auxiliary(self):
+        for controls_no in self._controls_no_list:
+            unitary_matrix = self._take_matrix(controls_no, True)
+            auxiliaries_no = self._take_auxiliaries_no(controls_no)
+
+            res, msg = verify_circuit_dirty_wasted_relative_separable_auxiliary(
                 unitary_matrix, controls_no, auxiliaries_no
             )
 

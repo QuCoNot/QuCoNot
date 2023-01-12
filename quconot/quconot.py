@@ -3,7 +3,7 @@ from typing import Callable, List, Type
 from .implementations.mct_base import MCTBase
 from .implementations.mct_n_qubit_decomposition import MCTNQubitDecomposition
 from .implementations.mct_no_auxiliary import MCTNoAuxiliary
-from .implementations.mct_no_auxiliary_relative_phase import MCTNoAuxiliaryRelativePhase
+from .implementations.mct_no_auxiliary_relative import MCTNoAuxiliaryRelative
 from .implementations.mct_parallel_decomposition import MCTParallelDecomposition
 from .implementations.mct_vchain import MCTVChain
 
@@ -13,7 +13,7 @@ class QuCoNot:
         self._registered_methods: List[Type[MCTBase]] = [
             MCTNQubitDecomposition,
             MCTNoAuxiliary,
-            MCTNoAuxiliaryRelativePhase,
+            MCTNoAuxiliaryRelative,
             MCTParallelDecomposition,
             MCTVChain,
         ]
