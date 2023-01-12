@@ -169,18 +169,8 @@ def verify_circuit_dirty_relative_auxiliary(unitary_matrix, controls_no: int, au
     inverse_matrix = load_matrix("noauxiliary", controls_no)
     I_ct = identity_matrix(controls_no + 1)  # I_C,T
 
-    zero_auxiliary = False
-    if auxiliaries_no == 0:
-        zero_auxiliary = True
-
-    if zero_auxiliary:
-        auxiliaries_no = 1
-
     i_a = identity_matrix(auxiliaries_no)  # I_A
     ket_0_a = ket_0_matrix(auxiliaries_no)  # |0>_A
-
-    if zero_auxiliary:
-        unitary_matrix = np.kron(i_a, unitary_matrix)
 
     # tensor with the I for the Auxiliary qubit
     inverse_matrix_I = np.kron(i_a, inverse_matrix)  # --> (U_MCT^\dagger @ I_A)
@@ -226,18 +216,8 @@ def verify_circuit_clean_wasted_entangled_auxiliary(
 
     # || ( <b_C,T| @ I_A ) (U_MCT @ I) U_tilde(|b_C,T> @ |0_A>) ||_2
 
-    zero_auxiliary = False
-    if auxiliaries_no == 0:
-        zero_auxiliary = True
-
-    if zero_auxiliary:
-        auxiliaries_no = 1
-
     i_a = identity_matrix(auxiliaries_no)  # I_A
     ket_0_a = ket_0_matrix(auxiliaries_no)  # |0>_A
-
-    if zero_auxiliary:
-        unitary_matrix = np.kron(i_a, unitary_matrix)
 
     u_mct_i = np.kron(i_a, inverse_matrix)  # (U_MCT @ I)
 
@@ -278,18 +258,8 @@ def verify_circuit_clean_wasted_relative_entangled_auxiliary(
 
     # || ( <b_C,T| @ I_A ) (U_MCT @ I) U_tilde(|b_C,T> @ |0_A>) ||_2
 
-    zero_auxiliary = False
-    if auxiliaries_no == 0:
-        zero_auxiliary = True
-
-    if zero_auxiliary:
-        auxiliaries_no = 1
-
     i_a = identity_matrix(auxiliaries_no)  # I_A
     ket_0_a = ket_0_matrix(auxiliaries_no)  # |0>_A
-
-    if zero_auxiliary:
-        unitary_matrix = np.kron(i_a, unitary_matrix)
 
     u_mct_i = np.kron(i_a, inverse_matrix)  # (U_MCT @ I)
 
@@ -329,18 +299,8 @@ def verify_circuit_clean_wasted_separable_auxiliary(
 
     # || ( <b_C,T| @ I_A ) (U_MCT @ I) U_tilde(|b_C,T> @ |0_A>) ||_2
 
-    zero_auxiliary = False
-    if auxiliaries_no == 0:
-        zero_auxiliary = True
-
-    if zero_auxiliary:
-        auxiliaries_no = 1
-
     i_a = identity_matrix(auxiliaries_no)  # I_A
     ket_0_a = ket_0_matrix(auxiliaries_no)  # |0>_A
-
-    if zero_auxiliary:
-        unitary_matrix = np.kron(i_a, unitary_matrix)
 
     u_mct_i = np.kron(i_a, inverse_matrix)  # (U_MCT @ I)
 
@@ -382,18 +342,8 @@ def verify_circuit_clean_wasted_relative_separable_auxiliary(
 
     # || ( <b_C,T| @ I_A ) (U_MCT @ I) U_tilde(|b_C,T> @ |0_A>) ||_2
 
-    zero_auxiliary = False
-    if auxiliaries_no == 0:
-        zero_auxiliary = True
-
-    if zero_auxiliary:
-        auxiliaries_no = 1
-
     i_a = identity_matrix(auxiliaries_no)  # I_A
     ket_0_a = ket_0_matrix(auxiliaries_no)  # |0>_A
-
-    if zero_auxiliary:
-        unitary_matrix = np.kron(i_a, unitary_matrix)
 
     i_ct = identity_matrix(controls_no + 1)  # I_ct
     u_mct_i = np.kron(i_a, inverse_matrix)  # (U_MCT @ I_A)
