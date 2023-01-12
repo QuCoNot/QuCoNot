@@ -130,7 +130,7 @@ class MCTParallelDecomposition(MCTBase):
         :return: number of auxiliary qubits
         :rtype: int
         """
-        return self._n > 4 - 2
+        return self._n - 2
 
 
 if __name__ == "__main__":

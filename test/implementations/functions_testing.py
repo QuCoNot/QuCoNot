@@ -1,5 +1,4 @@
 import numpy as np
-
 from functions import (
     absolute_error_tol,
     identity_matrix,
@@ -8,6 +7,7 @@ from functions import (
     relative_error_tol,
     zero_matrix,
 )
+from reverse_kronecker_product import reverse_kronecker_product
 
 
 # 1.1 No Auxiliary
@@ -163,24 +163,29 @@ def verify_circuit_dirty_auxiliary(unitary_matrix, controls_no: int, auxiliaries
 
 # 3.2 Dirty Non-Wasted Relative
 def verify_circuit_dirty_relative_auxiliary(unitary_matrix, controls_no: int, auxiliaries_no: int):
+    # print(controls_no, " - ", auxiliaries_no)
+
     # get mct inverse matrix
     inverse_matrix = load_matrix("noauxiliary", controls_no)
     I_ct = identity_matrix(controls_no + 1)  # I_C,T
-    I_a = identity_matrix(auxiliaries_no)  # I_A
-    ket_0_A = ket_0_matrix(auxiliaries_no)  # |0>_A
+
+    i_a = identity_matrix(auxiliaries_no)  # I_A
+    ket_0_a = ket_0_matrix(auxiliaries_no)  # |0>_A
 
     # tensor with the I for the Auxiliary qubit
-    inverse_matrix_I = np.kron(I_a, inverse_matrix)  # --> (U_MCT^\dagger @ I_A)
+    inverse_matrix_I = np.kron(i_a, inverse_matrix)  # --> (U_MCT^\dagger @ I_A)
 
-    A = np.kron(ket_0_A, I_ct)  # A = ( I_C,T @ <0|_A )
-    B = np.matmul(inverse_matrix_I, np.kron(ket_0_A, I_ct).T)  # B = (U_MCT @ I_A) ( I_C,T @ |0>_A )
+    # print(inverse_matrix_I.shape, " - ", np.kron(ket_0_a, I_ct).T.shape)
+
+    A = np.kron(ket_0_a, I_ct)  # A = ( I_C,T @ <0|_A )
+    B = np.matmul(inverse_matrix_I, np.kron(ket_0_a, I_ct).T)  # B = (U_MCT @ I_A) ( I_C,T @ |0>_A )
     dr = np.matmul(A, np.matmul(unitary_matrix, B))  # D^R = A * U * B
 
     no_of_qubits = controls_no + auxiliaries_no + 1
 
     # ( ( ( D^R )^\dagger @ I_A) * U * inverse_matrix ) - I = 0
     generated_unitary = np.matmul(
-        np.kron(I_a, np.linalg.inv(dr)), np.matmul(unitary_matrix, inverse_matrix_I)
+        np.kron(i_a, np.linalg.inv(dr)), np.matmul(unitary_matrix, inverse_matrix_I)
     ) - identity_matrix(no_of_qubits)
 
     # Expected unitary after calculation is 0.
@@ -204,15 +209,16 @@ def verify_circuit_dirty_relative_auxiliary(unitary_matrix, controls_no: int, au
 def verify_circuit_clean_wasted_entangled_auxiliary(
     unitary_matrix, controls_no: int, auxiliaries_no: int
 ):
+    print(controls_no, " - ", auxiliaries_no)
+
     # get mct inverse matrix
     inverse_matrix = load_matrix("noauxiliary", controls_no)
 
     # || ( <b_C,T| @ I_A ) (U_MCT @ I) U_tilde(|b_C,T> @ |0_A>) ||_2
 
-    # |0>_A
-    ket_0_a = ket_0_matrix(auxiliaries_no)
+    i_a = identity_matrix(auxiliaries_no)  # I_A
+    ket_0_a = ket_0_matrix(auxiliaries_no)  # |0>_A
 
-    i_a = identity_matrix(auxiliaries_no)
     u_mct_i = np.kron(i_a, inverse_matrix)  # (U_MCT @ I)
 
     for i in range(2 ** (controls_no + 1)):
@@ -252,10 +258,9 @@ def verify_circuit_clean_wasted_relative_entangled_auxiliary(
 
     # || ( <b_C,T| @ I_A ) (U_MCT @ I) U_tilde(|b_C,T> @ |0_A>) ||_2
 
-    # |0>_A
-    ket_0_A = ket_0_matrix(auxiliaries_no)
+    i_a = identity_matrix(auxiliaries_no)  # I_A
+    ket_0_a = ket_0_matrix(auxiliaries_no)  # |0>_A
 
-    i_a = identity_matrix(auxiliaries_no)
     u_mct_i = np.kron(i_a, inverse_matrix)  # (U_MCT @ I)
 
     for i in range(2 ** (controls_no + 1)):
@@ -263,7 +268,7 @@ def verify_circuit_clean_wasted_relative_entangled_auxiliary(
 
         ket_b_ct[i] = 1  # |b_C,T>
 
-        bct_0a = np.kron(ket_0_A, ket_b_ct)  # (|b_C,T> @ |0_A>)
+        bct_0a = np.kron(ket_0_a, ket_b_ct)  # (|b_C,T> @ |0_A>)
 
         res_1 = np.matmul(unitary_matrix, bct_0a)  # U_tilde(|b_C,T> @ |0_A>)
 
@@ -294,10 +299,9 @@ def verify_circuit_clean_wasted_separable_auxiliary(
 
     # || ( <b_C,T| @ I_A ) (U_MCT @ I) U_tilde(|b_C,T> @ |0_A>) ||_2
 
-    # |0>_A
-    ket_0_a = ket_0_matrix(auxiliaries_no)
+    i_a = identity_matrix(auxiliaries_no)  # I_A
+    ket_0_a = ket_0_matrix(auxiliaries_no)  # |0>_A
 
-    i_a = identity_matrix(auxiliaries_no)
     u_mct_i = np.kron(i_a, inverse_matrix)  # (U_MCT @ I)
 
     phi_0 = np.zeros(2)
@@ -338,10 +342,8 @@ def verify_circuit_clean_wasted_relative_separable_auxiliary(
 
     # || ( <b_C,T| @ I_A ) (U_MCT @ I) U_tilde(|b_C,T> @ |0_A>) ||_2
 
-    # |0>_A
-    ket_0_a = ket_0_matrix(auxiliaries_no)
-
-    i_a = identity_matrix(auxiliaries_no)
+    i_a = identity_matrix(auxiliaries_no)  # I_A
+    ket_0_a = ket_0_matrix(auxiliaries_no)  # |0>_A
 
     i_ct = identity_matrix(controls_no + 1)  # I_ct
     u_mct_i = np.kron(i_a, inverse_matrix)  # (U_MCT @ I_A)
@@ -404,23 +406,23 @@ def verify_circuit_dirty_wasted_entangled_auxiliary(
     unitary_matrix, controls_no: int, auxiliaries_no: int
 ):
     # get mct inverse matrix
-    inverse_matrix = load_matrix("noauxiliary", controls_no)
+    # inverse_matrix = load_matrix("noauxiliary", controls_no)
 
     i_a = identity_matrix(auxiliaries_no)
 
     # Expected unitary after calculation is 0.
-    expected_unitary = zero_matrix(2)
+    expected_unitary = zero_matrix(auxiliaries_no)
 
     for i in range(2 ** (controls_no + 1)):
         ket_b_ct = np.zeros(2 ** (controls_no + 1))
 
         ket_b_ct[i] = 1  # |b_C,T>
 
-        ket_b_ct_i = np.kron(i_a, np.conj(ket_b_ct))  # ( |b_C> @ I_A )
+        ket_b_ct_i = np.kron(i_a, np.conj(ket_b_ct))  # ( |b_C,T> @ I_A )
 
-        res_1 = np.matmul(ket_b_ct_i, inverse_matrix)  # U_tilde ( |b_C> @ I_A )
+        res_1 = np.matmul(ket_b_ct_i, unitary_matrix)  # U_tilde ( |b_C,T> @ I_A )
 
-        v_b = np.matmul(res_1, ket_b_ct_i.T)  # ( <b_C,T| @ I_A ) U_tilde ( |b_C> @ I_A )
+        v_b = np.matmul(res_1, ket_b_ct_i.T)  # ( <b_C,T| @ I_A ) U_tilde ( |b_C,T> @ I_A )
 
         res = np.matmul(v_b, np.linalg.inv(v_b))
 
@@ -441,3 +443,112 @@ def verify_circuit_dirty_wasted_entangled_auxiliary(
 # the regular MCT entangled left-out.
 
 # 5.3 Dirty Wasted seperable left-out
+def verify_circuit_dirty_wasted_separable_auxiliary(
+    unitary_matrix, controls_no: int, auxiliaries_no: int
+):
+    # get mct inverse matrix
+    inverse_matrix = load_matrix("reverse_noauxiliary", controls_no)
+
+    b_shape = 2 ** (controls_no + 1)
+    c_shape = 2 ** (auxiliaries_no)
+
+    b, c = reverse_kronecker_product(unitary_matrix, (b_shape, b_shape))
+
+    no_of_qubits = controls_no + 1
+
+    # check shape of c
+    if c.shape != (c_shape, c_shape):
+        return False, "Unitary C has different shape."
+
+    # check if c is unitary
+    check_c = np.matmul(c, np.linalg.inv(c))  # will be faster to multiply with the dagger
+
+    if (
+        np.allclose(
+            check_c,
+            identity_matrix(auxiliaries_no),
+            atol=absolute_error_tol,
+            rtol=relative_error_tol,
+        )
+        is False
+    ):
+        return False, "Something wrong with the implementation"
+
+    # Expected unitary after calculation is identity.
+    expected_unitary = identity_matrix(no_of_qubits)
+
+    # X_1 * X_2^dagger * np.conj((X_1 * X_2^dagger)[0,0]) = I
+    m = np.matmul(b, inverse_matrix)
+    generated_unitary = m * np.conjugate(m[0, 0])
+
+    if generated_unitary.shape != expected_unitary.shape:
+        return False, "Unitary B has different shape."
+
+    if (
+        np.allclose(
+            generated_unitary,
+            expected_unitary,
+            atol=absolute_error_tol,
+            rtol=relative_error_tol,
+        )
+        is False
+    ):
+        return False, "Something wrong with the implementation"
+
+    return True, ""
+
+
+# 5.4 Dirty Wasted Relative-phase seperable left-out
+def verify_circuit_dirty_wasted_relative_separable_auxiliary(
+    unitary_matrix, controls_no: int, auxiliaries_no: int
+):
+    # get mct inverse matrix
+    inverse_matrix = load_matrix("reverse_noauxiliary", controls_no)
+
+    b_shape = 2 ** (controls_no + 1)
+    c_shape = 2 ** (auxiliaries_no)
+
+    b, c = reverse_kronecker_product(unitary_matrix, (b_shape, b_shape))
+
+    no_of_qubits = controls_no + 1
+
+    # check shape of c
+    if c.shape != (c_shape, c_shape):
+        return False, "Unitary C has different shape."
+
+    # check if c is unitary
+    check_c = np.matmul(c, np.linalg.inv(c))
+
+    if (
+        np.allclose(
+            check_c,
+            identity_matrix(auxiliaries_no),
+            atol=absolute_error_tol,
+            rtol=relative_error_tol,
+        )
+        is False
+    ):
+        return False, "Something wrong with the implementation"
+
+    # Expected unitary after calculation is identity.
+    expected_unitary = identity_matrix(no_of_qubits)
+
+    # X_1 * X_2^dagger = I
+    m = np.matmul(b, inverse_matrix)
+    generated_unitary = np.absolute(m)
+
+    if generated_unitary.shape != expected_unitary.shape:
+        return False, "Unitary B has different shape."
+
+    if (
+        np.allclose(
+            generated_unitary,
+            expected_unitary,
+            atol=absolute_error_tol,
+            rtol=relative_error_tol,
+        )
+        is False
+    ):
+        return False, "Something wrong with the implementation"
+
+    return True, ""
