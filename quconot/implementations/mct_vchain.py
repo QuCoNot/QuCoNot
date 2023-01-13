@@ -14,6 +14,12 @@ from .mct_base import MCTBase
 
 
 class MCTVChain(MCTBase):
+    r"""
+    Implementation of the multi-controlled not gate with no auxiliary qubits using Qiskit’s ``v-chain`` mode.
+    This is implemented using MCXVChain, using a V-chain of CX gates.
+    Requires 2 less auxiliary than the number of control qubits
+    """
+
     def __init__(self, controls_no: int, **kwargs) -> None:
         assert controls_no >= 2
         self._n = controls_no

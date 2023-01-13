@@ -15,6 +15,27 @@ from .mct_base import MCTBase
 
 
 class MCTBarenco74Dirty(MCTBase):
+    r"""
+    **Multi-controlled not implementation using Corollary 7.4 of Barenco et al:**
+
+    On an :math:`n`-bit network (where :math:`n ≥ 7`), a :math:`∧_{n-2}(\sigma_{x})` gate can be simulated by ``8(
+    n−5)`` :math:`∧_{2}(\sigma_{x})` gates (3-bit Toffoli gates), as well as by ``48n−204`` basic operations. In this
+    implementation, at least one auxiliary qubit is required i.e. in an :math:`n` qubit network is required for an
+    :math:`(n-1)` qubit gate :math:`∧_{n-2}(\sigma_{x})`
+
+    First, Lemma 7.2 is applied, with :math:`m_{1} = \lceil \frac{n}{2} \rceil` and :math:`m_{2} = n - m_{1} - 1` to
+    simulate :math:`∧_{m_1}(\sigma_{x})` and :math:`∧_{m_2}(\sigma_{x})` gates. It allows a :math:`∧_{m}(\sigma_{x})`
+    gate to be simulated by a network consisting of ``4(m-2)`` :math:`∧_{2}(\sigma_{x})` gates and is of the form:
+
+    Using Lemma 7.3, these gates are combined to simulate the :math:`∧_{n-2}(\sigma_{x})` gate. It allows a
+    :math:`∧_{n-2}(\sigma_{x})` gate to be simulated by a network of two :math:`∧_{m}(\sigma_{x})` and two :math:`∧_{
+    n-m-1}(\sigma_{x})` gates.
+
+    Almost all of the Toffoli gates need only to be simulated modulo phase factors, except 4 Toffoli gates which
+    involve the last bit which need to be simulated without it. Thus, these 4 gates are simulated by 16 basic
+    operations, while the other ``8n-36`` Toffoli gates are simulated in just 6 basic operations.
+    """
+
     def __init__(self, controls_no: int, **kwargs) -> None:
         assert controls_no >= 2
         self._n = controls_no
@@ -22,6 +43,21 @@ class MCTBarenco74Dirty(MCTBase):
         pass
 
     def TofDecomp(self):
+        r"""Decomposition of Toffoli gate into RY and CX gates
+
+        Returns:
+            QuantumCircuit: A 3-qubit quantum circuit containing decomposition
+
+        **Example**
+            >>> print(MCTBarenco74Dirty(controls_no = 3).TofDecomp())
+            q_0: ─────────────────────────────■───────────────────────────────
+                                              │
+            q_1: ─────────────■───────────────┼────────────────■──────────────
+                 ┌─────────┐┌─┴─┐┌─────────┐┌─┴─┐┌──────────┐┌─┴─┐┌──────────┐
+            q_2: ┤ Ry(π/4) ├┤ X ├┤ Ry(π/4) ├┤ X ├┤ Ry(-π/4) ├┤ X ├┤ Ry(-π/4) ├
+                 └─────────┘└───┘└─────────┘└───┘└──────────┘└───┘└──────────┘
+
+        """
         qc = QuantumCircuit(3)
         qc.ry(np.pi / 4, 2)
         qc.cx(1, 2)
@@ -33,6 +69,66 @@ class MCTBarenco74Dirty(MCTBase):
         return qc
 
     def k_gate(self, qc: QuantumCircuit, c: List[int], t: int, a: int, k: int):
+        r"""Generates network of ``4(m-2)`` gates that simulates a controlled not gate with m controls. Uses
+        ``TofDecomp`` when target qubit of the Toffoli gate is not target of the k gate
+
+        Args:
+            qc (QuantumCircuit): Quantum circuit to which gates are to be appended
+            c(list[int]): list of control qubits of Toffoli gate
+            t (int): target qubit of Toffoli gate
+            a (int): auxiliary qubit of Toffoli gate
+            k (int): takes values ``1`` or ``2`` depending on type of k-gate required
+
+
+        Returns:
+            QuantumCircuit: Appends network of gates to qc
+
+        **Example**
+            >>> qc = QuantumCircuit(9)
+            >>> print(MCTBarenco74Dirty(controls_no = 5).k_gate(qc, list(range(9)), 5, 8,1))
+            q_0: ─────────────────■─────────────────────────────■────────────
+                                  │                             │
+            q_1: ─────────────────■─────────────────────────────■────────────
+                                  │                             │
+            q_2: ────────────■────┼────■───────────────────■────┼────■───────
+                             │    │    │                   │    │    │
+            q_3: ───────■────┼────┼────┼────■─────────■────┼────┼────┼────■──
+                        │    │    │    │    │         │    │    │    │    │
+            q_4: ──■────┼────┼────┼────┼────┼────■────┼────┼────┼────┼────┼──
+                   │    │    │  ┌─┴─┐  │    │    │    │    │  ┌─┴─┐  │    │
+            q_5: ──┼────┼────■──┤ X ├──■────┼────┼────┼────■──┤ X ├──■────┼──
+                   │    │  ┌─┴─┐└───┘┌─┴─┐  │    │    │  ┌─┴─┐└───┘┌─┴─┐  │
+            q_6: ──┼────■──┤ X ├─────┤ X ├──■────┼────■──┤ X ├─────┤ X ├──■──
+                   │  ┌─┴─┐└───┘     └───┘┌─┴─┐  │  ┌─┴─┐└───┘     └───┘┌─┴─┐
+            q_7: ──■──┤ X ├───────────────┤ X ├──■──┤ X ├───────────────┤ X ├
+                 ┌─┴─┐└───┘               └───┘┌─┴─┐└───┘               └───┘
+            q_8: ┤ X ├─────────────────────────┤ X ├─────────────────────────
+                 └───┘                         └───┘
+
+
+            >>> qc = QuantumCircuit(9)
+            >>> print(MCTBarenco74Dirty(controls_no = 5).k_gate(qc, list(range(9)), 5, 8,1))
+                                ┌───┐                         ┌───┐
+            q_0: ────────────■──┤ X ├──■───────────────────■──┤ X ├──■───────
+                           ┌─┴─┐└─┬─┘┌─┴─┐               ┌─┴─┐└─┬─┘┌─┴─┐
+            q_1: ───────■──┤ X ├──┼──┤ X ├──■─────────■──┤ X ├──┼──┤ X ├──■──
+                      ┌─┴─┐└─┬─┘  │  └─┬─┘┌─┴─┐     ┌─┴─┐└─┬─┘  │  └─┬─┘┌─┴─┐
+            q_2: ──■──┤ X ├──┼────┼────┼──┤ X ├──■──┤ X ├──┼────┼────┼──┤ X ├
+                   │  └─┬─┘  │    │    │  └─┬─┘  │  └─┬─┘  │    │    │  └─┬─┘
+            q_3: ──┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼──
+                   │    │    │    │    │    │    │    │    │    │    │    │
+            q_4: ──┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼──
+                 ┌─┴─┐  │    │    │    │    │  ┌─┴─┐  │    │    │    │    │
+            q_5: ┤ X ├──┼────┼────■────┼────┼──┤ X ├──┼────┼────■────┼────┼──
+                 └─┬─┘  │    │    │    │    │  └─┬─┘  │    │    │    │    │
+            q_6: ──┼────┼────┼────■────┼────┼────┼────┼────┼────■────┼────┼──
+                   │    │    │         │    │    │    │    │         │    │
+            q_7: ──┼────┼────■─────────■────┼────┼────┼────■─────────■────┼──
+                   │    │                   │    │    │                   │
+            q_8: ──■────■───────────────────■────■────■───────────────────■──
+
+        """
+
         k1 = int(np.floor((len(c) + 1) / 2))
         # k2 = len(c) - k1
 
@@ -82,6 +178,17 @@ class MCTBarenco74Dirty(MCTBase):
         return qc
 
     def L7_4(self, c_qubits: List[int], t_qubit: int, aux_qubit: int):
+        r"""Returns multi-controlled not implementation of Lemma 7.4
+
+        Args:
+            c_qubits(list[int]): list of control qubits of Toffoli gate
+            t_qubit (int): target qubit of Toffoli gate
+            aux_qubit (int): auxiliary qubit of Toffoli gate
+
+        Returns:
+            QuantumCircuit: returns quantum circuit containing required MCT gate
+
+        """
         n = len(c_qubits) + 2
         qc = QuantumCircuit(n)
 

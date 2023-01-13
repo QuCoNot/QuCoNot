@@ -14,6 +14,13 @@ from .mct_base import MCTBase
 
 
 class MCTRecursion(MCTBase):
+    r"""
+    Implementation of the multi-controlled not gate with no auxiliary qubits using Qiskit’s ``recursion`` mode. This
+    is implemented using MCXRecursive. Using one auxiliary qubit, the MCT gate is recursively split onto four
+    sub-registers. This is done until the 3- or 4-controlled X gate is reached, since for these we have a concrete
+    implementation that do not require auxiliary qubits.
+    """
+
     def __init__(self, controls_no: int, **kwargs) -> None:
         assert controls_no >= 2
         self._n = controls_no

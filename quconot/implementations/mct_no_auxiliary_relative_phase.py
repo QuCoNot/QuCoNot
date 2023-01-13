@@ -14,6 +14,60 @@ from .mct_base import MCTBase
 
 
 class MCTNoAuxiliaryRelativePhase(MCTBase):
+
+    r"""
+
+    This is an implementation of the simplified Toffoli gates according to Qiskit. Currently,
+    for this implementation, the number of controls is restricted to 2 or 3 only. They have been implemented using
+    the RCCXGate and the RC3XGate in Qiskit. It implements the 2 or 3 controlled Toffoli gate up to relative phases.
+
+    The simplified Toffoli is not equivalent to the Toffoli, but can be used in places where the Toffoli is
+    uncomputed again.
+
+    The implementation follows https://arxiv.org/abs/1508.03273, the dashed box of Fig. 3 and Fig. 4.
+
+    No auxiliary qubits are used for the implementation.
+
+
+    For two controls, the ``RCCXGate`` is implemented, which uses ``3`` CX gates.
+
+    **Matrix representation**
+
+    .. image:: ../_static/RCCX_gate.png
+        :width: 400
+
+    **Decomposition**
+            >>>
+            q_0: ────────────────────────■────────────────────────
+                                         │
+            q_1: ────────────■───────────┼─────────■──────────────
+                 ┌───┐┌───┐┌─┴─┐┌─────┐┌─┴─┐┌───┐┌─┴─┐┌─────┐┌───┐
+            q_2: ┤ H ├┤ T ├┤ X ├┤ Tdg ├┤ X ├┤ T ├┤ X ├┤ Tdg ├┤ H ├
+                 └───┘└───┘└───┘└─────┘└───┘└───┘└───┘└─────┘└───┘
+
+
+    For three controls, the ``RC3XGate`` is implemented, which uses ``6`` CX gates.
+
+    **Matrix representation**
+
+    .. image:: ../_static/RC3X_gate.png
+        :width: 400
+
+    **Decomposition**
+            >>>
+            q_0: ─────────────────────────────■─────────────────────■──────────────────────────────────────────────
+                                              │                     │
+            q_1: ─────────────────────────────┼─────────■───────────┼─────────■────────────────────────────────────
+                                              │         │           │         │
+            q_2: ────────────■────────────────┼─────────┼───────────┼─────────┼─────────────────────■──────────────
+                 ┌───┐┌───┐┌─┴─┐┌─────┐┌───┐┌─┴─┐┌───┐┌─┴─┐┌─────┐┌─┴─┐┌───┐┌─┴─┐┌─────┐┌───┐┌───┐┌─┴─┐┌─────┐┌───┐
+            q_3: ┤ H ├┤ T ├┤ X ├┤ Tdg ├┤ H ├┤ X ├┤ T ├┤ X ├┤ Tdg ├┤ X ├┤ T ├┤ X ├┤ Tdg ├┤ H ├┤ T ├┤ X ├┤ Tdg ├┤ H ├
+                 └───┘└───┘└───┘└─────┘└───┘└───┘└───┘└───┘└─────┘└───┘└───┘└───┘└─────┘└───┘└───┘└───┘└─────┘└───┘
+
+
+
+    """
+
     def __init__(self, controls_no: int, **kwargs) -> None:
         assert (
             controls_no >= 2 and controls_no <= 3
@@ -45,10 +99,13 @@ class MCTNoAuxiliaryRelativePhase(MCTBase):
         return [MCTNoAuxiliaryRelativePhase(controls_no)]
 
     def generate_circuit(self) -> QuantumCircuit:
-        """Return a QuantumCircuit implementation
+        r"""
 
-        :return: a quantum circuit
-        :rtype: QuantumCircuit
+        Returns simplified Toffoli gate
+
+        Returns:
+            QuantumCircuit: quantum circuit containing simplified Toffoli gate
+
         """
         qc = QuantumCircuit(self._n + 1)
         if self._n == 2:
