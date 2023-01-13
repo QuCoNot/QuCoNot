@@ -1,9 +1,4 @@
-import sys
-
 import numpy as np
-
-np.set_printoptions(threshold=sys.maxsize)
-
 from functions import (
     absolute_error_tol,
     identity_matrix,
@@ -45,7 +40,7 @@ def verify_circuit_no_auxiliary(unitary_matrix, controls_no: int, auxiliaries_no
             return False, "Something wrong with the implementation"
 
         return True, ""
-    except:
+    except Exception:
         return False, ""
 
 
@@ -81,7 +76,7 @@ def verify_circuit_no_auxiliary_relative(unitary_matrix, controls_no: int, auxil
             return False, "Something wrong with the implementation"
 
         return True, ""
-    except:
+    except Exception:
         return False, ""
 
 
@@ -121,7 +116,7 @@ def verify_circuit_clean_auxiliary(unitary_matrix, controls_no: int, auxiliaries
             return False, "Generated matrix should be all 0"
 
         return True, ""
-    except:
+    except Exception:
         return False, ""
 
 
@@ -160,7 +155,7 @@ def verify_circuit_clean_relative_auxiliary(unitary_matrix, controls_no: int, au
             return False, "Generated matrix should be all 0"
 
         return True, ""
-    except:
+    except Exception:
         return False, ""
 
 
@@ -197,7 +192,7 @@ def verify_circuit_dirty_auxiliary(unitary_matrix, controls_no: int, auxiliaries
             return False, "Something wrong with the implementation"
 
         return True, ""
-    except:
+    except Exception:
         return False, ""
 
 
@@ -249,7 +244,7 @@ def verify_circuit_dirty_relative_auxiliary(unitary_matrix, controls_no: int, au
             return False, "Generated matrix should be all 0"
 
         return True, ""
-    except:
+    except Exception:
         return False, ""
 
 
@@ -296,7 +291,7 @@ def verify_circuit_clean_wasted_entangled_auxiliary(
                 return False, "The length should be 1"
 
         return True, ""
-    except:
+    except Exception:
         return False, ""
 
 
@@ -343,7 +338,7 @@ def verify_circuit_clean_wasted_relative_entangled_auxiliary(
                 return False, "The length should be 1"
 
         return True, ""
-    except:
+    except Exception:
         return False, ""
 
 
@@ -391,7 +386,7 @@ def verify_circuit_clean_wasted_separable_auxiliary(
                 return False, "The state should be a quantum state"
 
         return True, ""
-    except:
+    except Exception:
         return False, ""
 
 
@@ -464,7 +459,7 @@ def verify_circuit_clean_wasted_relative_separable_auxiliary(
                 return False, "The state should be a quantum state"
 
         return True, ""
-    except:
+    except Exception:
         return False, ""
 
 
@@ -506,7 +501,7 @@ def verify_circuit_dirty_wasted_entangled_auxiliary(
                 return False, "Something wrong with the implementation"
 
         return True, ""
-    except:
+    except Exception:
         return False, ""
 
 
@@ -571,7 +566,7 @@ def verify_circuit_dirty_wasted_separable_auxiliary(
             return False, "Something wrong with the implementation"
 
         return True, ""
-    except:
+    except Exception:
         return False, ""
 
 
@@ -632,7 +627,7 @@ def verify_circuit_dirty_wasted_relative_separable_auxiliary(
             return False, "Something wrong with the implementation"
 
         return True, ""
-    except:
+    except Exception:
         return False, ""
 
 

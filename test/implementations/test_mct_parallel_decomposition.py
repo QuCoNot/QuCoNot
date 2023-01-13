@@ -1,7 +1,6 @@
 from typing import Dict
 
 import numpy as np
-import pytest
 from functions_testing import (
     verify_circuit_clean_auxiliary,
     verify_circuit_clean_relative_auxiliary,
