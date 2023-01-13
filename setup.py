@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
-VERSION = '0.01'
-DESCRIPTION = 'QuCoNot is a Python library for all your MCT needs.'
+VERSION = "0.01"
+DESCRIPTION = "QuCoNot is a Python library for all your MCT needs."
 
 requirements = [
     "numpy",
