@@ -27,6 +27,7 @@ class TestMCTVChainDirty:
     _reverse_matrix_dict: Dict[np.array, int] = {}
     _auxiliary_dict: Dict[int, int] = {}
     _controls_no_list = [5]
+    _result_dict: Dict[str, bool] = {}
 
     def _take_matrix(self, controls_no: int, reverse: bool = False):
 
@@ -65,6 +66,8 @@ class TestMCTVChainDirty:
 
             res, msg = verify_circuit_no_auxiliary(unitary_matrix, controls_no, auxiliaries_no)
 
+            self._result_dict["NA"] = res
+
             assert not res, msg
 
     def test_circuit_no_auxiliary_relative(self):
@@ -76,6 +79,8 @@ class TestMCTVChainDirty:
                 unitary_matrix, controls_no, auxiliaries_no
             )
 
+            self._result_dict["NAR"] = res
+
             assert not res, msg
 
     def test_circuit_clean_auxiliary(self):
@@ -84,6 +89,8 @@ class TestMCTVChainDirty:
             auxiliaries_no = self._take_auxiliaries_no(controls_no)
 
             res, msg = verify_circuit_clean_auxiliary(unitary_matrix, controls_no, auxiliaries_no)
+
+            self._result_dict["CNW"] = res
 
             assert res, msg
 
@@ -96,6 +103,8 @@ class TestMCTVChainDirty:
                 unitary_matrix, controls_no, auxiliaries_no
             )
 
+            self._result_dict["CNWR"] = res
+
             assert res, msg
 
     def test_circuit_dirty_auxiliary(self):
@@ -104,6 +113,8 @@ class TestMCTVChainDirty:
             auxiliaries_no = self._take_auxiliaries_no(controls_no)
 
             res, msg = verify_circuit_dirty_auxiliary(unitary_matrix, controls_no, auxiliaries_no)
+
+            self._result_dict["DNW"] = res
 
             assert res, msg
 
@@ -116,6 +127,8 @@ class TestMCTVChainDirty:
                 unitary_matrix, controls_no, auxiliaries_no
             )
 
+            self._result_dict["DNWR"] = res
+
             assert res, msg
 
     def test_circuit_clean_wasted_entangled_auxiliary(self):
@@ -126,6 +139,8 @@ class TestMCTVChainDirty:
             res, msg = verify_circuit_clean_wasted_entangled_auxiliary(
                 unitary_matrix, controls_no, auxiliaries_no
             )
+
+            self._result_dict["CWE"] = res
 
             assert res, msg
 
@@ -138,6 +153,8 @@ class TestMCTVChainDirty:
                 unitary_matrix, controls_no, auxiliaries_no
             )
 
+            self._result_dict["CWRE"] = res
+
             assert res, msg
 
     def test_circuit_clean_wasted_separable_auxiliary(self):
@@ -148,6 +165,8 @@ class TestMCTVChainDirty:
             res, msg = verify_circuit_clean_wasted_separable_auxiliary(
                 unitary_matrix, controls_no, auxiliaries_no
             )
+
+            self._result_dict["CWS"] = res
 
             assert res, msg
 
@@ -160,6 +179,8 @@ class TestMCTVChainDirty:
                 unitary_matrix, controls_no, auxiliaries_no
             )
 
+            self._result_dict["CWRS"] = res
+
             assert res, msg
 
     def test_circuit_dirty_wasted_entangled_auxiliary(self):
@@ -170,6 +191,8 @@ class TestMCTVChainDirty:
             res, msg = verify_circuit_dirty_wasted_entangled_auxiliary(
                 unitary_matrix, controls_no, auxiliaries_no
             )
+
+            self._result_dict["DWRE"] = res
 
             assert res, msg
 
@@ -182,6 +205,8 @@ class TestMCTVChainDirty:
                 unitary_matrix, controls_no, auxiliaries_no
             )
 
+            self._result_dict["DWS"] = res
+
             assert res, msg
 
     def test_circuit_dirty_wasted_relative_separable_auxiliary(self):
@@ -193,4 +218,41 @@ class TestMCTVChainDirty:
                 unitary_matrix, controls_no, auxiliaries_no
             )
 
+            self._result_dict["DWRS"] = res
+
             assert res, msg
+
+    def test_dependencies(self):
+        rd = self._result_dict
+
+        if rd["DNW"]:
+            assert rd["CNW"]
+            assert rd["DNWR"]
+            assert rd["DWS"]
+
+        if rd["DNWR"]:
+            assert rd["CNWR"]
+            assert rd["DWRS"]
+
+        if rd["DWS"]:
+            assert rd["CWS"]
+            assert rd["DWRS"]
+
+        if rd["DWRE"]:
+            assert rd["CWRE"]
+
+        if rd["CNW"]:
+            assert rd["CNWR"]
+            assert rd["CWS"]
+
+        if rd["CWS"]:
+            assert rd["CWRS"]
+
+        if rd["CNWR"]:
+            assert rd["CWRS"]
+
+        if rd["DWRS"]:
+            assert rd["DWRE"]
+
+        if rd["CWRS"]:
+            assert rd["CWRE"]

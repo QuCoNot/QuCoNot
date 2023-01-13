@@ -1,4 +1,9 @@
+import sys
+
 import numpy as np
+
+np.set_printoptions(threshold=sys.maxsize)
+
 from functions import (
     absolute_error_tol,
     identity_matrix,
@@ -95,8 +100,8 @@ def verify_circuit_clean_auxiliary(unitary_matrix, controls_no: int, auxiliaries
         no_of_qubits = controls_no + 1
 
         # X_1 * X_2^dagger * np.conj((X_1 * X_2^dagger)[0,0]) - I = 0
-        M = np.matmul(unitary_matrix, inverse_matrix)
-        generated_unitary = M * np.conjugate(M[0, 0]) - identity_matrix(no_of_qubits)
+        m = np.matmul(unitary_matrix, inverse_matrix)
+        generated_unitary = m * np.conjugate(m[0, 0]) - identity_matrix(no_of_qubits)
 
         # Expected unitary after calculation is 0.
         expected_unitary = zero_matrix(no_of_qubits)
@@ -134,8 +139,8 @@ def verify_circuit_clean_relative_auxiliary(unitary_matrix, controls_no: int, au
         no_of_qubits = controls_no + 1
 
         # X_1 * X_2^dagger - I = 0
-        M = np.matmul(unitary_matrix, inverse_matrix)
-        generated_unitary = M - identity_matrix(no_of_qubits)
+        m = np.matmul(unitary_matrix, inverse_matrix)
+        generated_unitary = np.absolute(m) - identity_matrix(no_of_qubits)
 
         # Expected unitary after calculation is 0.
         expected_unitary = zero_matrix(no_of_qubits)
@@ -171,8 +176,8 @@ def verify_circuit_dirty_auxiliary(unitary_matrix, controls_no: int, auxiliaries
         no_of_qubits = controls_no + auxiliaries_no + 1
 
         # X_1 * X_2^dagger * np.conj((X_1 * X_2^dagger)[0,0]) - I = 0
-        M = np.matmul(unitary_matrix, inverse_matrix)
-        generated_unitary = M * np.conjugate(M[0, 0]) - identity_matrix(no_of_qubits)
+        m = np.matmul(unitary_matrix, inverse_matrix)
+        generated_unitary = (m * np.conjugate(m[0, 0])) - identity_matrix(no_of_qubits)
 
         # Expected unitary after calculation is 0.
         expected_unitary = zero_matrix(no_of_qubits)
@@ -629,3 +634,37 @@ def verify_circuit_dirty_wasted_relative_separable_auxiliary(
         return True, ""
     except:
         return False, ""
+
+
+def verify_dependencies(rd):
+    if rd["DNW"]:
+        assert rd["CNW"]
+        assert rd["DNWR"]
+        assert rd["DWS"]
+
+    if rd["DNWR"]:
+        assert rd["CNWR"]
+        assert rd["DWRS"]
+
+    if rd["DWS"]:
+        assert rd["CWS"]
+        assert rd["DWRS"]
+
+    if rd["DWRE"]:
+        assert rd["CWRE"]
+
+    if rd["CNW"]:
+        assert rd["CNWR"]
+        assert rd["CWS"]
+
+    if rd["CWS"]:
+        assert rd["CWRS"]
+
+    if rd["CNWR"]:
+        assert rd["CWRS"]
+
+    if rd["DWRS"]:
+        assert rd["DWRE"]
+
+    if rd["CWRS"]:
+        assert rd["CWRE"]
