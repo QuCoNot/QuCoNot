@@ -58,7 +58,6 @@ class TestMCTRecursion:
 
         return self._auxiliary_dict[controls_no]
 
-    @pytest.mark.xfail
     def test_circuit_no_auxiliary(self):
         for controls_no in self._controls_no_list:
             unitary_matrix = self._take_matrix(controls_no)
@@ -66,9 +65,8 @@ class TestMCTRecursion:
 
             res, msg = verify_circuit_no_auxiliary(unitary_matrix, controls_no, auxiliaries_no)
 
-            assert res, msg
+            assert not res, msg
 
-    @pytest.mark.xfail
     def test_circuit_no_auxiliary_relative(self):
         for controls_no in self._controls_no_list:
             unitary_matrix = self._take_matrix(controls_no)
@@ -78,7 +76,7 @@ class TestMCTRecursion:
                 unitary_matrix, controls_no, auxiliaries_no
             )
 
-            assert res, msg
+            assert not res, msg
 
     def test_circuit_clean_auxiliary(self):
         for controls_no in self._controls_no_list:

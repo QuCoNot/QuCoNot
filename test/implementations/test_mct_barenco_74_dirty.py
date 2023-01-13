@@ -58,7 +58,6 @@ class TestMCTBarenco74Dirty:
 
         return self._auxiliary_dict[controls_no]
 
-    @pytest.mark.xfail
     def test_circuit_no_auxiliary(self):
         for controls_no in self._controls_no_list:
             unitary_matrix = self._take_matrix(controls_no)
@@ -66,9 +65,8 @@ class TestMCTBarenco74Dirty:
 
             res, msg = verify_circuit_no_auxiliary(unitary_matrix, controls_no, auxiliaries_no)
 
-            assert res, msg
+            assert not res, msg
 
-    @pytest.mark.xfail
     def test_circuit_no_auxiliary_relative(self):
         for controls_no in self._controls_no_list:
             unitary_matrix = self._take_matrix(controls_no)
@@ -78,9 +76,8 @@ class TestMCTBarenco74Dirty:
                 unitary_matrix, controls_no, auxiliaries_no
             )
 
-            assert res, msg
+            assert not res, msg
 
-    @pytest.mark.xfail
     def test_circuit_clean_auxiliary(self):
         for controls_no in self._controls_no_list:
             unitary_matrix = self._take_matrix(controls_no)
@@ -88,9 +85,8 @@ class TestMCTBarenco74Dirty:
 
             res, msg = verify_circuit_clean_auxiliary(unitary_matrix, controls_no, auxiliaries_no)
 
-            assert res, msg
+            assert not res, msg
 
-    @pytest.mark.xfail
     def test_circuit_clean_relative_auxiliary(self):
         for controls_no in self._controls_no_list:
             unitary_matrix = self._take_matrix(controls_no)
@@ -100,9 +96,8 @@ class TestMCTBarenco74Dirty:
                 unitary_matrix, controls_no, auxiliaries_no
             )
 
-            assert res, msg
+            assert not res, msg
 
-    @pytest.mark.xfail
     def test_circuit_dirty_auxiliary(self):
         for controls_no in self._controls_no_list:
             unitary_matrix = self._take_matrix(controls_no)
@@ -110,7 +105,7 @@ class TestMCTBarenco74Dirty:
 
             res, msg = verify_circuit_dirty_auxiliary(unitary_matrix, controls_no, auxiliaries_no)
 
-            assert res, msg
+            assert not res, msg
 
     def test_circuit_dirty_relative_auxiliary(self):
         for controls_no in self._controls_no_list:
@@ -145,7 +140,6 @@ class TestMCTBarenco74Dirty:
 
             assert res, msg
 
-    @pytest.mark.xfail
     def test_circuit_clean_wasted_separable_auxiliary(self):
         for controls_no in self._controls_no_list:
             unitary_matrix = self._take_matrix(controls_no)
@@ -155,7 +149,7 @@ class TestMCTBarenco74Dirty:
                 unitary_matrix, controls_no, auxiliaries_no
             )
 
-            assert res, msg
+            assert not res, msg
 
     def test_circuit_clean_wasted_relative_separable_auxiliary(self):
         for controls_no in self._controls_no_list:
@@ -179,7 +173,6 @@ class TestMCTBarenco74Dirty:
 
             assert res, msg
 
-    @pytest.mark.xfail
     def test_circuit_dirty_wasted_separable_auxiliary(self):
         for controls_no in self._controls_no_list:
             unitary_matrix = self._take_matrix(controls_no, True)
@@ -189,7 +182,7 @@ class TestMCTBarenco74Dirty:
                 unitary_matrix, controls_no, auxiliaries_no
             )
 
-            assert res, msg
+            assert not res, msg
 
     def test_circuit_dirty_wasted_relative_separable_auxiliary(self):
         for controls_no in self._controls_no_list:
