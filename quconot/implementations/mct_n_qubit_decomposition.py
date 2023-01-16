@@ -183,11 +183,3 @@ class MCTNQubitDecomposition(MCTBase):
             return 1
         else:
             return 0
-
-
-if __name__ == "__main__":
-    MCTNQubit = MCTNQubitDecomposition(6)
-    circ = MCTNQubit.generate_circuit()
-    # print(circ.draw(fold=-1))
-    print(circ.depth(), "depth")
-    print(dict(circ.count_ops()))

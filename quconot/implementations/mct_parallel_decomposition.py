@@ -131,11 +131,3 @@ class MCTParallelDecomposition(MCTBase):
         :rtype: int
         """
         return self._n - 2
-
-
-if __name__ == "__main__":
-    MCTParallel = MCTParallelDecomposition(6)
-    circ = MCTParallel.generate_circuit()
-    # print(circ.draw(fold=-1))
-    print(circ.depth(), "depth")
-    print(dict(circ.count_ops()))

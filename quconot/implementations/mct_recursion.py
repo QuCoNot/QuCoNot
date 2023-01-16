@@ -81,9 +81,3 @@ class MCTRecursion(MCTBase):
             return 1
         else:
             return 0
-
-
-if __name__ == "__main__":
-    mct = MCTRecursion(5)
-
-    circ = mct.generate_circuit()

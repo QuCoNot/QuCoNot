@@ -141,11 +141,3 @@ class MCTBarenco74Dirty(MCTBase):
         :rtype: int
         """
         return 1
-
-
-if __name__ == "__main__":
-    MCTNQubit = MCTBarenco74Dirty(5)
-    circ = MCTNQubit.generate_circuit()
-    # print(circ.draw(fold=-1))
-    print(circ.depth(), "depth")
-    print(dict(circ.count_ops()))

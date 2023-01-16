@@ -71,29 +71,3 @@ class MCTVChain(MCTBase):
         :rtype: int
         """
         return self._n - 2
-
-
-if __name__ == "__main__":
-    print(MCTVChain.verify_mct_cases(5, 1))  # not enough auxiliary - empty list
-
-    cases = MCTVChain.verify_mct_cases(5, 3)
-    assert len(cases) == 1  # here only one case
-    case = cases[0]
-
-    circ = case.generate_circuit()
-    # print(circ.draw())
-
-    # I can get quickly statistics out of it now
-    print(case.num_auxiliary_qubits())  # this is very fast as always known
-    print(case.num_gates())
-    print(case.depth())
-
-    cases = MCTVChain.verify_mct_cases(5, 3)
-    assert len(cases) == 1  # here only one case
-    case = cases[0]
-
-    # if depth not previously known, generate circuit and compute (see base)
-    cases = MCTVChain.verify_mct_cases(5, 3)
-    assert len(cases) == 1  # here only one case
-    case = cases[0]
-    print(case.depth())

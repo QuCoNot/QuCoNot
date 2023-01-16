@@ -70,10 +70,3 @@ class MCTNoAuxiliaryRelative(MCTBase):
         :rtype: int
         """
         return 0
-
-
-if __name__ == "__main__":
-    mct = MCTNoAuxiliaryRelative(4)
-
-    circ = mct.generate_circuit()
-    # print(circ.draw())
