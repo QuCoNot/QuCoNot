@@ -25,7 +25,7 @@ requirements = [
 info = {
     "name": "QuCoNot",
     "version": VERSION,
-    "author": "Adam Glos",
+    "author": "Adam Glos, Ankit Khandelwal, Handy Kurniawan, Shraddha Aangiras, Özlem Salehi",
     "author_email": "aglos@iitis.pl",
     "url": "https://github.com/QuCoNot/QuCoNot",
     "license": "Apache License 2.0",
