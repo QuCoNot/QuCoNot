@@ -114,7 +114,8 @@ class MCTNQubitDecomposition(MCTBase):
 
     def k_gate(self, qc: QuantumCircuit, c: List[int], t: int, a: int, k: int):
 
-        r"""Generates network of ``4(m-2)`` gates that simulates a controlled not gate with m controls. Uses ``TofDecomp`` when target qubit of the Toffoli gate is not target of the k gate
+        r"""Generates network of ``4(m-2)`` gates that simulates a controlled not gate with m controls. Uses
+        ``TofDecomp`` when target qubit of the Toffoli gate is not target of the k gate
 
         Args:
             qc (QuantumCircuit): Quantum circuit to which gates are to be appended
