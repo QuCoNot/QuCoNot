@@ -174,7 +174,7 @@ class MCTBarenco75Dirty(MCTBase):
         relative_phase: true / false (D)
         clean_auxiliary: true (D) / false
         wasted_auxiliary: true / false (D)
-        separable_wasted_auxiliary: true / false (D)    # requires wasted_auxiliary set to True
+        separable_wasted_auxiliary: true / false (D), requires wasted_auxiliary set to True
 
         :return: a quantum circuit
         :rtype: QuantumCircuit
@@ -193,7 +193,7 @@ class MCTBarenco75Dirty(MCTBase):
         """
 
         circ = self.recursive(list(range(self._n + 1)))
-
+        # print(circ.draw())
         self._circuit = transpile(circ, basis_gates=["cx", "u3"])
 
         return deepcopy(self._circuit)
@@ -205,11 +205,3 @@ class MCTBarenco75Dirty(MCTBase):
         :rtype: int
         """
         return 0
-
-
-if __name__ == "__main__":
-    MCTNQubit = MCTBarenco75Dirty(3)
-    circ = MCTNQubit.generate_circuit()
-    # print(circ.draw(fold=-1))
-    print(circ.depth(), "depth")
-    print(dict(circ.count_ops()))

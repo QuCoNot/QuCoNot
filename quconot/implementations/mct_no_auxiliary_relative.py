@@ -13,7 +13,7 @@ from qiskit import QuantumCircuit, transpile
 from .mct_base import MCTBase
 
 
-class MCTNoAuxiliaryRelativePhase(MCTBase):
+class MCTNoAuxiliaryRelative(MCTBase):
 
     r"""
 
@@ -91,12 +91,12 @@ class MCTNoAuxiliaryRelativePhase(MCTBase):
         relative_phase: true / false (D)
         clean_auxiliary: true (D) / false
         wasted_auxiliary: true / false (D)
-        separable_wasted_auxiliary: true / false (D)    # requires wasted_auxiliary set to True
+        separable_wasted_auxiliary: true / false (D), requires wasted_auxiliary set to True
 
         :return: a quantum circuit
         :rtype: QuantumCircuit
         """
-        return [MCTNoAuxiliaryRelativePhase(controls_no)]
+        return [MCTNoAuxiliaryRelative(controls_no)]
 
     def generate_circuit(self) -> QuantumCircuit:
         r"""
@@ -112,8 +112,6 @@ class MCTNoAuxiliaryRelativePhase(MCTBase):
             qc.rccx(0, 1, 2)
         elif self._n == 3:
             qc.rcccx(0, 1, 2, 3)
-        else:
-            raise ValueError("At the moment we cannot handle controls bigger than 3.")
 
         # should be done for all implementations
         # TODO: solve issue with reordered qubits
@@ -127,10 +125,3 @@ class MCTNoAuxiliaryRelativePhase(MCTBase):
         :rtype: int
         """
         return 0
-
-
-if __name__ == "__main__":
-    mct = MCTNoAuxiliaryRelativePhase(4)
-
-    circ = mct.generate_circuit()
-    # print(circ.draw())
