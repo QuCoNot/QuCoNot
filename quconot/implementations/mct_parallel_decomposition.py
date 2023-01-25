@@ -134,15 +134,11 @@ class MCTParallelDecomposition(MCTBase):
         num_aux_qubits = self._n - 2
         aux_qubits = list(range(self._n + 1, self._n + num_aux_qubits + 1))
 
-        circ = QuantumCircuit(self._n + 1 + num_aux_qubits, self._n + 1 + num_aux_qubits)
-
-        U = self.MCT(control_qubits, target_qubit, aux_qubits)
-
-        circ.append(U, control_qubits + [target_qubit] + aux_qubits)
+        mct = self.MCT(control_qubits, target_qubit, aux_qubits)
 
         # should be done for all implementations
         # TODO: solve issue with reordered qubits
-        self._circuit = transpile(circ, basis_gates=["cx", "s", "h", "t", "z", "sdg", "tdg"])
+        self._circuit = transpile(mct, basis_gates=["cx", "s", "h", "t", "z", "sdg", "tdg"])
 
         return deepcopy(self._circuit)
 

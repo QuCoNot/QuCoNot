@@ -333,15 +333,11 @@ class MCTNQubitDecomposition(MCTBase):
         target_qubit = self._n
         aux_qubit = self._n + 1
 
-        circ = QuantumCircuit(self._n + 2, self._n + 1)
-
         mct = self.MCT(control_qubits, target_qubit, aux_qubit)
-
-        circ.append(mct, control_qubits + [target_qubit] + [aux_qubit])
 
         # should be done for all implementations
         # TODO: solve issue with reordered qubits
-        self._circuit = transpile(circ, basis_gates=["cx", "s", "h", "t", "z", "sdg", "tdg"])
+        self._circuit = transpile(mct, basis_gates=["cx", "s", "h", "t", "z", "sdg", "tdg"])
 
         return deepcopy(self._circuit)
 
