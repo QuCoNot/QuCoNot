@@ -14,10 +14,10 @@ from .mct_base import MCTBase
 
 class MCTParallelDecomposition(MCTBase):
     def __init__(self, controls_no: int, **kwargs) -> None:
-        assert controls_no >= 2
+        if controls_no < 3:
+            raise ValueError("Number of controls must be >= 3 for this implementation")
         self._n = controls_no
         self._circuit: QuantumCircuit = None
-        pass
 
     def get_toffoli(self, qc: QuantumCircuit, c1: List[list], c2: List[list], t: int):
         r"""Returns a Toffoli gate

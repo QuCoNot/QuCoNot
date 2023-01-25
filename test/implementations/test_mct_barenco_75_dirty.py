@@ -1,6 +1,7 @@
 from typing import Dict
 
 import numpy as np
+import pytest
 from functions_testing import verify_circuit_no_auxiliary, verify_circuit_no_auxiliary_relative
 from qiskit.quantum_info.operators import Operator
 
@@ -32,6 +33,18 @@ class TestMCTBarenco75Dirty:
             return self._reverse_matrix_dict[controls_no]
         else:
             return self._matrix_dict[controls_no]
+
+    def test_init(self):
+
+        with pytest.raises(
+            ValueError, match="Number of controls must be >= 2 for this implementation"
+        ):
+            MCTBarenco75Dirty(1)
+
+        try:
+            MCTBarenco75Dirty(2)
+        except Exception:
+            assert False, "object MCTBarenco75Dirty(2) was not created, but it should be"
 
     def test_circuit_no_auxiliary(self):
         for controls_no in self._controls_no_list:

@@ -53,10 +53,10 @@ class MCTNQubitDecomposition(MCTBase):
     """
 
     def __init__(self, controls_no: int, **kwargs) -> None:
-        assert controls_no >= 2
+        if controls_no < 5:
+            raise ValueError("Number of controls must be >= 5 for this implementation")
         self._n = controls_no
         self._circuit: QuantumCircuit = None
-        pass
 
     def RyDecomp(self):
         r"""Decomposition of :math: `R_{y}(frac{\pi}{4})` and its inverse :math: `R_{y}(frac{- \pi}{4})`
