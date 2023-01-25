@@ -40,7 +40,10 @@ class TestMCTNoAuxiliaryRelative:
         ):
             MCTNoAuxiliaryRelative(1)
 
-        assert MCTNoAuxiliaryRelative(2)
+        try:
+            MCTNoAuxiliaryRelative(2)
+        except Exception:
+            assert False, "object MCTNoAuxiliaryRelative(2) was not created, but it should be"
 
     def test_circuit_no_auxiliary(self):
         for controls_no in self._controls_no_list:

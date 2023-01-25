@@ -41,7 +41,10 @@ class TestMCTBarenco75Dirty:
         ):
             MCTBarenco75Dirty(1)
 
-        assert MCTBarenco75Dirty(2)
+        try:
+            MCTBarenco75Dirty(2)
+        except Exception:
+            assert False, "object MCTBarenco75Dirty(2) was not created, but it should be"
 
     def test_circuit_no_auxiliary(self):
         for controls_no in self._controls_no_list:

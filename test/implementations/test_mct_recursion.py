@@ -63,7 +63,10 @@ class TestMCTRecursion:
         ):
             MCTRecursion(1)
 
-        assert MCTRecursion(3)
+        try:
+            MCTRecursion(5)
+        except Exception:
+            assert False, "object MCTRecursion(5) was not created, but it should be"
 
     def test_circuit_clean_auxiliary(self):
         for controls_no in self._controls_no_list:

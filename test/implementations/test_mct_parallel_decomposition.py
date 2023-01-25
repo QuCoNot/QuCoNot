@@ -63,7 +63,10 @@ class TestMCTParallelDecomposition:
         ):
             MCTParallelDecomposition(2)
 
-        assert MCTParallelDecomposition(4)
+        try:
+            MCTParallelDecomposition(4)
+        except Exception:
+            assert False, "object MCTParallelDecomposition(4) was not created, but it should be"
 
     def test_circuit_clean_auxiliary(self):
         for controls_no in self._controls_no_list:

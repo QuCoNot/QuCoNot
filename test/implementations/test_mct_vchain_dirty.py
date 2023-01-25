@@ -63,7 +63,10 @@ class TestMCTVChainDirty:
         ):
             MCTVChainDirty(1)
 
-        assert MCTVChainDirty(3)
+        try:
+            MCTVChainDirty(5)
+        except Exception:
+            assert False, "object MCTVChainDirty(5) was not created, but it should be"
 
     def test_circuit_clean_auxiliary(self):
         for controls_no in self._controls_no_list:

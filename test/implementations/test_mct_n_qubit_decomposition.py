@@ -63,7 +63,10 @@ class TestMCTNQubitDecomposition:
         ):
             MCTNQubitDecomposition(2)
 
-        assert MCTNQubitDecomposition(5)
+        try:
+            MCTNQubitDecomposition(5)
+        except Exception:
+            assert False, "object MCTNQubitDecomposition(5) was not created, but it should be"
 
     def test_circuit_clean_auxiliary(self):
         for controls_no in self._controls_no_list:
