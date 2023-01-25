@@ -117,7 +117,7 @@ class MCTBarenco75Dirty(MCTBase):
         Uses Lemma 7.5 from Barenco et al to implement :math: `∧_{n-1}(X)` gate
 
         Args:
-            qubitss (List[int]): specify number of control qubits
+            qubits (List[int]): specify number of control qubits
 
         Returns:
             QuantumCircuit: quantum circuit containing required MCT gate using lemma 7.5
