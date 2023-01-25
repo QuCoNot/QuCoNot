@@ -15,12 +15,10 @@ from .mct_base import MCTBase
 
 class MCTNoAuxiliaryRelative(MCTBase):
     def __init__(self, controls_no: int, **kwargs) -> None:
-        assert (
-            controls_no >= 2 and controls_no <= 3
-        ), "At the moment we cannot handle controls bigger than 3."
+        if controls_no not in [2,3]:
+            raise ValueError("Number of controls must be 2 or 3 for this implementation")
         self._n = controls_no
         self._circuit: QuantumCircuit = None
-        pass
 
     @classmethod
     def verify_mct_cases(
