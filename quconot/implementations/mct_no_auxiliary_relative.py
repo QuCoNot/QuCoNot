@@ -15,7 +15,7 @@ from .mct_base import MCTBase
 
 class MCTNoAuxiliaryRelative(MCTBase):
     def __init__(self, controls_no: int, **kwargs) -> None:
-        if controls_no not in [2,3]:
+        if controls_no not in [2, 3]:
             raise ValueError("Number of controls must be 2 or 3 for this implementation")
         self._n = controls_no
         self._circuit: QuantumCircuit = None
