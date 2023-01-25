@@ -29,8 +29,8 @@ Support
 =======
 If you are having issues, please let us know by filling an issue on our `issue tracker <https://github.com/QuCoNot/QuCoNot/issues>`_.
 
-Contributors
-============
+Authors
+=======
 QuCoNot is the work of following people (in alphabetical order):
 
 * Shraddha Aangiras
@@ -38,6 +38,15 @@ QuCoNot is the work of following people (in alphabetical order):
 * Ankit Khandelwal
 * Handy Kurniawan
 * Özlem Salehi
+
+How to cite
+===========
+If you use QuCoNot in your work, please cite:
+
+::
+
+   Paper citation
+
 
 License
 =======
