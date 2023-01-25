@@ -44,7 +44,7 @@ class MCTBarenco75Dirty(MCTBase):
         circ.mcx(controls, target)
         return circ
 
-    def recursive(self, qubitss: List[int]):
+    def recursive(self, qubits: List[int]):
         circ = QuantumCircuit(len(qubitss))
 
         def make_mct(circ: QuantumCircuit, qubits: List[int], root: int = 1):
@@ -66,7 +66,7 @@ class MCTBarenco75Dirty(MCTBase):
 
             return ccv
 
-        circ = make_mct(circ, qubitss, 1)
+        circ = make_mct(circ, qubits, 1)
 
         return circ
 
