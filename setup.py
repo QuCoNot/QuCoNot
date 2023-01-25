@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
-VERSION = '0.01'
-DESCRIPTION = 'QuCoNot is a Python library for all your MCT needs.'
+VERSION = "0.01"
+DESCRIPTION = "QuCoNot is a Python library for all your MCT needs."
 
 requirements = [
     "numpy",
@@ -25,8 +25,8 @@ requirements = [
 info = {
     "name": "QuCoNot",
     "version": VERSION,
-    "author": "Adam Glos",
-    "author_email": "aglos@iitis.pl",
+    "author": "Shraddha Aangiras, Adam Glos, Ankit Khandelwal, Handy Kurniawan, Özlem Salehi",
+    "author_email": "adamglos92@gmail.com",
     "url": "https://github.com/QuCoNot/QuCoNot",
     "license": "Apache License 2.0",
     "packages": find_packages(where="."),

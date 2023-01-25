@@ -48,7 +48,7 @@ class MCTParallelDecomposition(MCTBase):
         relative_phase: true / false (D)
         clean_auxiliary: true (D) / false
         wasted_auxiliary: true / false (D)
-        separable_wasted_auxiliary: true / false (D)    # requires wasted_auxiliary set to True
+        separable_wasted_auxiliary: true / false (D), requires wasted_auxiliary set to True
 
         :return: a quantum circuit
         :rtype: QuantumCircuit
@@ -130,12 +130,4 @@ class MCTParallelDecomposition(MCTBase):
         :return: number of auxiliary qubits
         :rtype: int
         """
-        return self._n > 4 - 2
-
-
-if __name__ == "__main__":
-    MCTParallel = MCTParallelDecomposition(6)
-    circ = MCTParallel.generate_circuit()
-    # print(circ.draw(fold=-1))
-    print(circ.depth(), "depth")
-    print(dict(circ.count_ops()))
+        return self._n - 2

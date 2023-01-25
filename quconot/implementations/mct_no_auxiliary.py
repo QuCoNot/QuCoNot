@@ -35,7 +35,7 @@ class MCTNoAuxiliary(MCTBase):
         relative_phase: true / false (D)
         clean_auxiliary: true (D) / false
         wasted_auxiliary: true / false (D)
-        separable_wasted_auxiliary: true / false (D)    # requires wasted_auxiliary set to True
+        separable_wasted_auxiliary: true / false (D), requires wasted_auxiliary set to True
 
         :return: a quantum circuit
         :rtype: QuantumCircuit
@@ -67,10 +67,3 @@ class MCTNoAuxiliary(MCTBase):
         :rtype: int
         """
         return 0
-
-
-if __name__ == "__main__":
-    mct = MCTNoAuxiliary(4)
-
-    circ = mct.generate_circuit()
-    # print(circ.draw())

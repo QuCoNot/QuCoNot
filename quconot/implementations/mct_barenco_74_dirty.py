@@ -110,7 +110,7 @@ class MCTBarenco74Dirty(MCTBase):
         relative_phase: true / false (D)
         clean_auxiliary: true (D) / false
         wasted_auxiliary: true / false (D)
-        separable_wasted_auxiliary: true / false (D)    # requires wasted_auxiliary set to True
+        separable_wasted_auxiliary: true / false (D), requires wasted_auxiliary set to True
 
         :return: a quantum circuit
         :rtype: QuantumCircuit
@@ -141,11 +141,3 @@ class MCTBarenco74Dirty(MCTBase):
         :rtype: int
         """
         return 1
-
-
-if __name__ == "__main__":
-    MCTNQubit = MCTBarenco74Dirty(5)
-    circ = MCTNQubit.generate_circuit()
-    # print(circ.draw(fold=-1))
-    print(circ.depth(), "depth")
-    print(dict(circ.count_ops()))

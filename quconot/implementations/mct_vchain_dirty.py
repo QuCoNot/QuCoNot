@@ -35,7 +35,7 @@ class MCTVChainDirty(MCTBase):
         relative_phase: true / false (D)
         clean_auxiliary: true (D) / false
         wasted_auxiliary: true / false (D)
-        separable_wasted_auxiliary: true / false (D)    # requires wasted_auxiliary set to True
+        separable_wasted_auxiliary: true / false (D), requires wasted_auxiliary set to True
 
         :return: a quantum circuit
         :rtype: QuantumCircuit
@@ -71,29 +71,3 @@ class MCTVChainDirty(MCTBase):
         :rtype: int
         """
         return self._n - 2
-
-
-if __name__ == "__main__":
-    print(MCTVChainDirty.verify_mct_cases(5, 1))  # not enough auxiliary - empty list
-
-    cases = MCTVChainDirty.verify_mct_cases(5, 3)
-    assert len(cases) == 1  # here only one case
-    case = cases[0]
-
-    circ = case.generate_circuit()
-    # print(circ.draw())
-
-    # I can get quickly statistics out of it now
-    print(case.num_auxiliary_qubits())  # this is very fast as always known
-    print(case.num_gates())
-    print(case.depth())
-
-    cases = MCTVChainDirty.verify_mct_cases(5, 3)
-    assert len(cases) == 1  # here only one case
-    case = cases[0]
-
-    # if depth not previously known, generate circuit and compute (see base)
-    cases = MCTVChainDirty.verify_mct_cases(5, 3)
-    assert len(cases) == 1  # here only one case
-    case = cases[0]
-    print(case.depth())

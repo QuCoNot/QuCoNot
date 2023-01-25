@@ -140,7 +140,7 @@ class MCTNQubitDecomposition(MCTBase):
         relative_phase: true / false (D)
         clean_auxiliary: true (D) / false
         wasted_auxiliary: true / false (D)
-        separable_wasted_auxiliary: true / false (D)    # requires wasted_auxiliary set to True
+        separable_wasted_auxiliary: true / false (D), requires wasted_auxiliary set to True
 
         :return: a quantum circuit
         :rtype: QuantumCircuit
@@ -183,11 +183,3 @@ class MCTNQubitDecomposition(MCTBase):
             return 1
         else:
             return 0
-
-
-if __name__ == "__main__":
-    MCTNQubit = MCTNQubitDecomposition(6)
-    circ = MCTNQubit.generate_circuit()
-    # print(circ.draw(fold=-1))
-    print(circ.depth(), "depth")
-    print(dict(circ.count_ops()))
