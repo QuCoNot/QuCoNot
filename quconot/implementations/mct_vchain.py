@@ -15,10 +15,10 @@ from .mct_base import MCTBase
 
 class MCTVChain(MCTBase):
     def __init__(self, controls_no: int, **kwargs) -> None:
-        assert controls_no >= 2
+        if controls_no < 2:
+            raise ValueError("Number of controls must be >= 2 for this implementation")
         self._n = controls_no
         self._circuit: QuantumCircuit = None
-        pass
 
     @classmethod
     def verify_mct_cases(

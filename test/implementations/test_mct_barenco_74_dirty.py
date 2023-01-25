@@ -1,6 +1,7 @@
 from typing import Dict
 
 import numpy as np
+import pytest
 from functions_testing import (
     verify_circuit_clean_auxiliary,
     verify_circuit_clean_relative_auxiliary,
@@ -55,6 +56,17 @@ class TestMCTBarenco74Dirty:
         self._auxiliary_dict[controls_no] = mct.num_auxiliary_qubits()
 
         return self._auxiliary_dict[controls_no]
+
+    def test_init(self):
+        with pytest.raises(
+            ValueError, match="Number of controls must be >= 5 for this implementation"
+        ):
+            MCTBarenco74Dirty(2)
+
+        try:
+            MCTBarenco74Dirty(5)
+        except Exception:
+            assert False, "object MCTBarenco74Dirty(5) was not created, but it should be"
 
     def test_circuit_clean_auxiliary(self):
         for controls_no in self._controls_no_list:

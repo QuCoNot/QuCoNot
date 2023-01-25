@@ -1,6 +1,7 @@
 from typing import Dict
 
 import numpy as np
+import pytest
 from functions_testing import (
     verify_circuit_clean_auxiliary,
     verify_circuit_clean_relative_auxiliary,
@@ -55,6 +56,17 @@ class TestMCTParallelDecomposition:
         self._auxiliary_dict[controls_no] = mct.num_auxiliary_qubits()
 
         return self._auxiliary_dict[controls_no]
+
+    def test_init(self):
+        with pytest.raises(
+            ValueError, match="Number of controls must be >= 3 for this implementation"
+        ):
+            MCTParallelDecomposition(2)
+
+        try:
+            MCTParallelDecomposition(4)
+        except Exception:
+            assert False, "object MCTParallelDecomposition(4) was not created, but it should be"
 
     def test_circuit_clean_auxiliary(self):
         for controls_no in self._controls_no_list:
