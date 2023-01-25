@@ -58,10 +58,10 @@ class TestMCTVChain:
         return self._auxiliary_dict[controls_no]
 
     def test_init(self):
-        with pytest.raises(Exception) as e_info:
+        with pytest.raises(
+            ValueError, match="Number of controls must be >= 2 for this implementation"
+        ):
             MCTVChain(1)
-
-        assert e_info.value.args[0] == "Number of controls must be >= 2 for this implementation"
 
         assert MCTVChain(3)
 
