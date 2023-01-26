@@ -155,7 +155,7 @@ class MCTBarenco75Dirty(MCTBase):
 
             return ccv
 
-        circ = make_mct(circ, qubitss, 1)
+        circ = make_mct(circ, qubits, 1)
 
         return circ
 
