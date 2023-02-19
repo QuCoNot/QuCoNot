@@ -112,7 +112,7 @@ class MCTBarenco75Dirty(MCTBase):
         circ.mcx(controls, target)
         return circ
 
-    def recursive(self, qubitss: List[int]):
+    def recursive(self, qubits: List[int]):
         r"""
         Uses Lemma 7.5 from Barenco et al to implement :math: `∧_{n-1}(X)` gate
 
@@ -134,7 +134,7 @@ class MCTBarenco75Dirty(MCTBase):
 
         """
 
-        circ = QuantumCircuit(len(qubitss))
+        circ = QuantumCircuit(len(qubits))
 
         def make_mct(circ: QuantumCircuit, qubits: List[int], root: int = 1):
             if len(qubits) == 2:
@@ -155,7 +155,7 @@ class MCTBarenco75Dirty(MCTBase):
 
             return ccv
 
-        circ = make_mct(circ, qubitss, 1)
+        circ = make_mct(circ, qubits, 1)
 
         return circ
 
