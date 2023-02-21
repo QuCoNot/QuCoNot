@@ -1,8 +1,15 @@
 numpy>=1.22.3
-pytest>=7.2.0
 qiskit>=0.39.2
 qiskit_ibmq_provider>=0.19.2
 scipy>=1.8.0
 setuptools>=65.5.0
 sphinx_rtd_theme>=1.1.1
+sphinx
+sphinx_automodapi
+sphinx-copybutton
+m2r2
+sphinxcontrib-bibtex
+pytest>=7.2.0
+sphinx-togglebutton
+sphinx_book_theme
 pytest_cov>=4.0
