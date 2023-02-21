@@ -34,9 +34,12 @@ Authors
 QuCoNot is the work of following people (in alphabetical order):
 
 * Shraddha Aangiras
-* Adam Glos
 * Ankit Khandelwal
 * Handy Kurniawan
+
+Under the supervision of:
+
+* Adam Glos
 * Özlem Salehi
 
 How to cite
