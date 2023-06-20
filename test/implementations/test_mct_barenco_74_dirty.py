@@ -28,7 +28,6 @@ class TestMCTBarenco74Dirty:
     _result_dict: Dict[str, bool] = {}
 
     def _take_matrix(self, controls_no: int, reverse: bool = False):
-
         if reverse is True:
             if controls_no in self._matrix_dict:
                 return self._reverse_matrix_dict[controls_no]
@@ -77,7 +76,7 @@ class TestMCTBarenco74Dirty:
 
             self._result_dict["CNW"] = res
 
-            assert not res, msg
+            assert res, msg
 
     def test_circuit_clean_relative_auxiliary(self):
         for controls_no in self._controls_no_list:
@@ -101,7 +100,7 @@ class TestMCTBarenco74Dirty:
 
             self._result_dict["DNW"] = res
 
-            assert not res, msg
+            assert res, msg
 
     def test_circuit_dirty_relative_auxiliary(self):
         for controls_no in self._controls_no_list:
@@ -153,7 +152,7 @@ class TestMCTBarenco74Dirty:
 
             self._result_dict["CWS"] = res
 
-            assert not res, msg
+            assert res, msg
 
     def test_circuit_clean_wasted_relative_separable_auxiliary(self):
         for controls_no in self._controls_no_list:
@@ -192,7 +191,7 @@ class TestMCTBarenco74Dirty:
 
             self._result_dict["DWS"] = res
 
-            assert not res, msg
+            assert res, msg
 
     def test_circuit_dirty_wasted_relative_separable_auxiliary(self):
         for controls_no in self._controls_no_list:

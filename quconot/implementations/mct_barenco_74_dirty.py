@@ -23,13 +23,7 @@ class MCTBarenco74Dirty(MCTBase):
 
     def TofDecomp(self):
         qc = QuantumCircuit(3)
-        qc.ry(np.pi / 4, 2)
-        qc.cx(1, 2)
-        qc.ry(np.pi / 4, 2)
-        qc.cx(0, 2)
-        qc.ry(-np.pi / 4, 2)
-        qc.cx(1, 2)
-        qc.ry(-np.pi / 4, 2)
+        qc.ccx(0, 1, 2)
         return qc
 
     def k_gate(self, qc: QuantumCircuit, c: List[int], t: int, a: int, k: int):
@@ -44,7 +38,6 @@ class MCTBarenco74Dirty(MCTBase):
             auxs = (c[k1:])[: len(controls) - 2]
 
         elif k == 2:
-
             controls = c[k1:] + [a]
             target = t
             auxs = (c[:k1] + [a])[: len(controls) - 2]

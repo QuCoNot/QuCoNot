@@ -12,7 +12,6 @@ from reverse_kronecker_product import reverse_kronecker_product
 
 # 1.1 No Auxiliary
 def verify_circuit_no_auxiliary(unitary_matrix, controls_no: int, auxiliaries_no: int):
-
     # get mct inverse matrix
     inverse_matrix = load_matrix("noauxiliary", controls_no)
 
@@ -44,7 +43,6 @@ def verify_circuit_no_auxiliary(unitary_matrix, controls_no: int, auxiliaries_no
 
 # 1.2 No Auxiliary Relative
 def verify_circuit_no_auxiliary_relative(unitary_matrix, controls_no: int, auxiliaries_no: int):
-
     # get mct inverse matrix
     inverse_matrix = load_matrix("noauxiliary", controls_no)
 
@@ -375,66 +373,46 @@ def verify_circuit_clean_wasted_relative_separable_auxiliary(
     if auxiliaries_no == 0:
         return False, "No of Auxiliary qubit should bigger than 0"
 
+    unitary_list = []
+
     # get mct inverse matrix
     inverse_matrix = load_matrix("noauxiliary", controls_no)
 
     # || ( <b_C,T| @ I_A ) (U_MCT @ I) U_tilde(|b_C,T> @ |0_A>) ||_2
 
     i_a = identity_matrix(auxiliaries_no)  # I_A
-    ket_0_a = ket_0_matrix(auxiliaries_no)  # |0>_A
-
     i_ct = identity_matrix(controls_no + 1)  # I_ct
+
     u_mct_i = np.kron(i_a, inverse_matrix)  # (U_MCT @ I_A)
 
-    i_ct_0 = np.kron(ket_0_a, i_ct)  # ( I_ct @ |0>_A )
+    ket_0_a = ket_0_matrix(auxiliaries_no)  # |0>_A
+    ket_0_ct = ket_0_matrix(controls_no + 1)  # |0>_ct
+    ket_0_ct_i = np.kron(ket_0_ct, i_a)
 
-    # U_tilde (U_MCT @ I_A)
-    res_1 = np.matmul(unitary_matrix, u_mct_i)
+    res_1 = np.matmul(unitary_matrix, np.kron(ket_0_ct, ket_0_a))
+    res_2 = np.matmul(u_mct_i, ket_0_ct_i.T)
 
-    i_ct_0_t = np.kron(ket_0_a.T, i_ct.T)  # ( I_ct @ <0|_A )
+    phi_0 = np.matmul(res_1, res_2)
 
-    # ( I_ct @ <0|_A ) U_tilde (U_MCT @ I_A)
-    res_2 = np.matmul(i_ct_0_t, res_1)
+    generated_unitary = np.matmul(
+        np.matmul(np.kron(ket_0_a, i_ct), unitary_matrix), np.kron(phi_0, i_ct).T
+    )
 
-    # D_R = ( I_ct @ <0|_A ) U_tilde (U_MCT @ I_A) ( I_ct @ |0>_A )
-    d_r = np.matmul(res_2, i_ct_0.T)
+    expected_unitary = inverse_matrix
 
-    phi_0 = np.zeros(2)
+    if generated_unitary.shape != expected_unitary.shape:
+        return False, "Unitary has different shape."
 
-    for i in range(2 ** (controls_no + 1)):
-        ket_b_ct = np.zeros(2 ** (controls_no + 1))
-
-        ket_b_ct[i] = 1  # |b_C,T>
-
-        bct_0a = np.kron(ket_0_a, ket_b_ct)  # (|b_C,T> @ |0_A>)
-
-        res_1 = np.matmul(unitary_matrix, bct_0a)  # U_tilde(|b_C,T> @ |0_A>)
-
-        res_2 = np.matmul(u_mct_i, res_1)  # (U_MCT @ I) U_tilde(|b_C,T> @ |0_A>)
-
-        ket_b_ct_i = np.kron(i_a, np.conj(ket_b_ct).T)  # ( <b_C,T| @ I_A )
-
-        # ( D_R^\dagger @ I_A )
-        d_r_i = np.kron(i_a, np.linalg.inv(d_r))
-
-        res_3 = np.matmul(
-            d_r_i, res_2
-        )  # ( (D_R^\dagger @ I_A) (U_MCT @ I) U_tilde(|b_C,T> @ |0_A>) )
-
-        res_4 = np.matmul(
-            ket_b_ct_i, res_3
-        )  # ( <b_C,T| @ I_A ) ((D_R^\dagger @ I_A) (U_MCT @ I) U_tilde(|b_C,T> @ |0_A>)) )
-
-        # res_4 should be a quantum_state
-        # check if res_4 a quantum state here
-
-        # this is to get the |\phi_0>
-        if i == 0:
-            phi_0 = res_4
-
-        # check if res_3 a quantum state here
-        if np.round(np.matmul(phi_0.T, res_4)) != 1:
-            return False, "The state should be a quantum state"
+    if (
+        np.allclose(
+            generated_unitary,
+            expected_unitary,
+            atol=absolute_error_tol,
+            rtol=relative_error_tol,
+        )
+        is False
+    ):
+        return False, "Generated matrix should be the same with true MCT matrix"
 
     return True, ""
 
@@ -491,6 +469,7 @@ def verify_circuit_dirty_wasted_entangled_auxiliary(
 # 5.2 Dirty Wasted Relative-phase (entangled left-out)
 # In here, similarly as for the clean-wasted case, this class is reducible to
 # the regular MCT entangled left-out.
+
 
 # 5.3 Dirty Wasted seperable left-out
 def verify_circuit_dirty_wasted_separable_auxiliary(
