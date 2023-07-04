@@ -47,18 +47,15 @@ def mct_inverse(method, controls_no, auxiliaries_no):
 
 
 def load_matrix(mode, controls_no):
-
     container = np.load("./test/mct_matrices/mct_" + mode + ".npz")
 
     return container["arr_" + str(controls_no - 1)]
 
 
 def check_all_zero(matrix, rtol, atol):
-
     for i in matrix:
         for j in i:
             if np.absolute(j - 0) > (atol + rtol * np.absolute(0)):
-
                 # print("i :", i, ", j: ", j, ", val: ", np.absolute(j - 0))
 
                 return 0

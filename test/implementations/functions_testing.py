@@ -76,8 +76,8 @@ def verify_circuit_no_auxiliary_relative(unitary_matrix, controls_no: int, auxil
 
 # 2.1 Clean Non-wasted
 def verify_circuit_clean_auxiliary(unitary_matrix, controls_no: int, auxiliaries_no: int):
-    if auxiliaries_no == 0:
-        return False, "No of Auxiliary qubit should bigger than 0"
+    # if auxiliaries_no == 0:
+    #    return False, "No of Auxiliary qubit should bigger than 0"
 
     # slice the matrix M = U[0:2**n,0:2**n]  (n = controls qubit + target qubit)
     unitary_matrix = unitary_matrix[: 2 ** (controls_no + 1), : 2 ** (controls_no + 1)]
@@ -113,8 +113,8 @@ def verify_circuit_clean_auxiliary(unitary_matrix, controls_no: int, auxiliaries
 
 # 2.2 Clean Non-wasted Relative
 def verify_circuit_clean_relative_auxiliary(unitary_matrix, controls_no: int, auxiliaries_no: int):
-    if auxiliaries_no == 0:
-        return False, "No of Auxiliary qubit should bigger than 0"
+    # if auxiliaries_no == 0:
+    #    return False, "No of Auxiliary qubit should bigger than 0"
 
     # slice the matrix M = U[0:2**n,0:2**n]  (n = controls qubit + target qubit)
     unitary_matrix = unitary_matrix[: 2 ** (controls_no + 1), : 2 ** (controls_no + 1)]
@@ -150,8 +150,8 @@ def verify_circuit_clean_relative_auxiliary(unitary_matrix, controls_no: int, au
 
 # 3.1 Dirty Non-Wasted
 def verify_circuit_dirty_auxiliary(unitary_matrix, controls_no: int, auxiliaries_no: int):
-    if auxiliaries_no == 0:
-        return False, "No of Auxiliary qubit should bigger than 0"
+    # if auxiliaries_no == 0:
+    #     return False, "No of Auxiliary qubit should bigger than 0"
 
     # get mct inverse matrix
     inverse_matrix = load_matrix("noauxiliary", controls_no)
@@ -185,8 +185,8 @@ def verify_circuit_dirty_auxiliary(unitary_matrix, controls_no: int, auxiliaries
 
 # 3.2 Dirty Non-Wasted Relative
 def verify_circuit_dirty_relative_auxiliary(unitary_matrix, controls_no: int, auxiliaries_no: int):
-    if auxiliaries_no == 0:
-        return False, "No of Auxiliary qubit should bigger than 0"
+    # if auxiliaries_no == 0:
+    #     return False, "No of Auxiliary qubit should bigger than 0"
 
     # get mct inverse matrix
     inverse_matrix = load_matrix("noauxiliary", controls_no)
@@ -200,8 +200,15 @@ def verify_circuit_dirty_relative_auxiliary(unitary_matrix, controls_no: int, au
 
     # print(inverse_matrix_I.shape, " - ", np.kron(ket_0_a, I_ct).T.shape)
 
-    A = np.kron(ket_0_a, I_ct)  # A = ( I_C,T @ <0|_A )
-    B = np.matmul(inverse_matrix_I, np.kron(ket_0_a, I_ct).T)  # B = (U_MCT @ I_A) ( I_C,T @ |0>_A )
+    if auxiliaries_no == 0:
+        A = I_ct  # A = ( I_C,T @ <0|_A )
+        B = np.matmul(inverse_matrix_I, I_ct.T)  # B = (U_MCT @ I_A) ( I_C,T @ |0>_A )
+    else:
+        A = np.kron(ket_0_a, I_ct)  # A = ( I_C,T @ <0|_A )
+        B = np.matmul(
+            inverse_matrix_I, np.kron(ket_0_a, I_ct).T
+        )  # B = (U_MCT @ I_A) ( I_C,T @ |0>_A )
+
     dr = np.matmul(A, np.matmul(unitary_matrix, B))  # D^R = A * U * B
 
     no_of_qubits = controls_no + auxiliaries_no + 1
@@ -235,8 +242,8 @@ def verify_circuit_dirty_relative_auxiliary(unitary_matrix, controls_no: int, au
 def verify_circuit_clean_wasted_entangled_auxiliary(
     unitary_matrix, controls_no: int, auxiliaries_no: int
 ):
-    if auxiliaries_no == 0:
-        return False, "No of Auxiliary qubit should bigger than 0"
+    # if auxiliaries_no == 0:
+    #     return False, "No of Auxiliary qubit should bigger than 0"
 
     # get mct inverse matrix
     inverse_matrix = load_matrix("noauxiliary", controls_no)
@@ -253,7 +260,10 @@ def verify_circuit_clean_wasted_entangled_auxiliary(
 
         ket_b_ct[i] = 1  # |b_C,T>
 
-        bct_0a = np.kron(ket_0_a, ket_b_ct)  # (|b_C,T> @ |0_A>)
+        if auxiliaries_no == 0:
+            bct_0a = ket_b_ct  # (|b_C,T> @ |0_A>)
+        else:
+            bct_0a = np.kron(ket_0_a, ket_b_ct)  # (|b_C,T> @ |0_A>)
 
         res_1 = np.matmul(unitary_matrix, bct_0a)  # U_tilde(|b_C,T> @ |0_A>)
 
@@ -280,8 +290,8 @@ def verify_circuit_clean_wasted_entangled_auxiliary(
 def verify_circuit_clean_wasted_relative_entangled_auxiliary(
     unitary_matrix, controls_no: int, auxiliaries_no: int
 ):
-    if auxiliaries_no == 0:
-        return False, "No of Auxiliary qubit should bigger than 0"
+    # if auxiliaries_no == 0:
+    #     return False, "No of Auxiliary qubit should bigger than 0"
 
     # get mct inverse matrix
     inverse_matrix = load_matrix("noauxiliary", controls_no)
@@ -298,7 +308,10 @@ def verify_circuit_clean_wasted_relative_entangled_auxiliary(
 
         ket_b_ct[i] = 1  # |b_C,T>
 
-        bct_0a = np.kron(ket_0_a, ket_b_ct)  # (|b_C,T> @ |0_A>)
+        if auxiliaries_no == 0:
+            bct_0a = ket_b_ct  # (|b_C,T> @ |0_A>)
+        else:
+            bct_0a = np.kron(ket_0_a, ket_b_ct)  # (|b_C,T> @ |0_A>)
 
         res_1 = np.matmul(unitary_matrix, bct_0a)  # U_tilde(|b_C,T> @ |0_A>)
 
@@ -324,8 +337,8 @@ def verify_circuit_clean_wasted_relative_entangled_auxiliary(
 def verify_circuit_clean_wasted_separable_auxiliary(
     unitary_matrix, controls_no: int, auxiliaries_no: int
 ):
-    if auxiliaries_no == 0:
-        return False, "No of Auxiliary qubit should bigger than 0"
+    # if auxiliaries_no == 0:
+    #     return False, "No of Auxiliary qubit should bigger than 0"
 
     # get mct inverse matrix
     inverse_matrix = load_matrix("noauxiliary", controls_no)
@@ -345,6 +358,11 @@ def verify_circuit_clean_wasted_separable_auxiliary(
         ket_b_ct[i] = 1  # |b_C,T>
 
         bct_0a = np.kron(ket_0_a, ket_b_ct)  # (|b_C,T> @ |0_A>)
+
+        if auxiliaries_no == 0:
+            bct_0a = ket_b_ct  # (|b_C,T> @ |0_A>)
+        else:
+            bct_0a = np.kron(ket_0_a, ket_b_ct)  # (|b_C,T> @ |0_A>)
 
         res_1 = np.matmul(unitary_matrix, bct_0a)  # U_tilde(|b_C,T> @ |0_A>)
 
@@ -370,8 +388,8 @@ def verify_circuit_clean_wasted_separable_auxiliary(
 def verify_circuit_clean_wasted_relative_separable_auxiliary(
     unitary_matrix, controls_no: int, auxiliaries_no: int
 ):
-    if auxiliaries_no == 0:
-        return False, "No of Auxiliary qubit should bigger than 0"
+    # if auxiliaries_no == 0:
+    #     return False, "No of Auxiliary qubit should bigger than 0"
 
     unitary_list = []
 
@@ -389,14 +407,20 @@ def verify_circuit_clean_wasted_relative_separable_auxiliary(
     ket_0_ct = ket_0_matrix(controls_no + 1)  # |0>_ct
     ket_0_ct_i = np.kron(ket_0_ct, i_a)
 
-    res_1 = np.matmul(unitary_matrix, np.kron(ket_0_ct, ket_0_a))
-    res_2 = np.matmul(u_mct_i, ket_0_ct_i.T)
+    if auxiliaries_no == 0:
+        res_1 = np.matmul(unitary_matrix, ket_0_ct)
+        res_2 = np.matmul(u_mct_i, ket_0_ct_i.T)
+        phi_0 = np.matmul(res_1, res_2)
 
-    phi_0 = np.matmul(res_1, res_2)
+        generated_unitary = np.matmul(np.matmul(i_ct, unitary_matrix), np.kron(phi_0, i_ct).T)
+    else:
+        res_1 = np.matmul(unitary_matrix, np.kron(ket_0_ct, ket_0_a))
+        res_2 = np.matmul(u_mct_i, ket_0_ct_i.T)
+        phi_0 = np.matmul(res_1, res_2)
 
-    generated_unitary = np.matmul(
-        np.matmul(np.kron(ket_0_a, i_ct), unitary_matrix), np.kron(phi_0, i_ct).T
-    )
+        generated_unitary = np.matmul(
+            np.matmul(np.kron(ket_0_a, i_ct), unitary_matrix), np.kron(phi_0, i_ct).T
+        )
 
     expected_unitary = inverse_matrix
 
@@ -421,8 +445,8 @@ def verify_circuit_clean_wasted_relative_separable_auxiliary(
 def verify_circuit_dirty_wasted_entangled_auxiliary(
     unitary_matrix, controls_no: int, auxiliaries_no: int
 ):
-    if auxiliaries_no == 0:
-        return False, "No of Auxiliary qubit should bigger than 0"
+    # if auxiliaries_no == 0:
+    #     return False, "No of Auxiliary qubit should bigger than 0"
 
     # get mct inverse matrix
     # inverse_matrix = load_matrix("noauxiliary", controls_no)
@@ -475,8 +499,8 @@ def verify_circuit_dirty_wasted_entangled_auxiliary(
 def verify_circuit_dirty_wasted_separable_auxiliary(
     unitary_matrix, controls_no: int, auxiliaries_no: int
 ):
-    if auxiliaries_no == 0:
-        return False, "No of Auxiliary qubit should bigger than 0"
+    # if auxiliaries_no == 0:
+    #     return False, "No of Auxiliary qubit should bigger than 0"
 
     # get mct inverse matrix
     inverse_matrix = load_matrix("reverse_noauxiliary", controls_no)
@@ -534,8 +558,8 @@ def verify_circuit_dirty_wasted_separable_auxiliary(
 def verify_circuit_dirty_wasted_relative_separable_auxiliary(
     unitary_matrix, controls_no: int, auxiliaries_no: int
 ):
-    if auxiliaries_no == 0:
-        return False, "No of Auxiliary qubit should bigger than 0"
+    # if auxiliaries_no == 0:
+    #     return False, "No of Auxiliary qubit should bigger than 0"
 
     # get mct inverse matrix
     inverse_matrix = load_matrix("reverse_noauxiliary", controls_no)
