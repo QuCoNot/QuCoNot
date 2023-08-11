@@ -11,11 +11,12 @@
     },
     "workbench.editor.highlightModifiedTabs": true,
     "editor.formatOnSave": true,
-    "python.formatting.provider": "black",
+    "python.formatting.provider": "none",
     "[python]": {
         "editor.codeActionsOnSave": {
             "source.organizeImports": true
-        }
+        },
+        "editor.defaultFormatter": "ms-python.black-formatter"
     },
     "python.testing.pytestArgs": [],
     "python.testing.unittestEnabled": false,
