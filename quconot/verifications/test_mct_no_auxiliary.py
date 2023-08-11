@@ -14,7 +14,6 @@ class TestMCTNoAuxiliary:
     _controls_no_list = [5]
 
     def _take_matrix(self, controls_no: int, reverse: bool = False):
-
         if reverse is True:
             if controls_no in self._matrix_dict:
                 return self._reverse_matrix_dict[controls_no]

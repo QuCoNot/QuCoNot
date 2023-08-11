@@ -12,7 +12,6 @@ from reverse_kronecker_product import reverse_kronecker_product
 
 # 1.1 No Auxiliary
 def verify_circuit_no_auxiliary(unitary_matrix, controls_no: int, auxiliaries_no: int):
-
     # get mct inverse matrix
     inverse_matrix = load_matrix("noauxiliary", controls_no)
 
@@ -44,7 +43,6 @@ def verify_circuit_no_auxiliary(unitary_matrix, controls_no: int, auxiliaries_no
 
 # 1.2 No Auxiliary Relative
 def verify_circuit_no_auxiliary_relative(unitary_matrix, controls_no: int, auxiliaries_no: int):
-
     # get mct inverse matrix
     inverse_matrix = load_matrix("noauxiliary", controls_no)
 
@@ -491,6 +489,7 @@ def verify_circuit_dirty_wasted_entangled_auxiliary(
 # 5.2 Dirty Wasted Relative-phase (entangled left-out)
 # In here, similarly as for the clean-wasted case, this class is reducible to
 # the regular MCT entangled left-out.
+
 
 # 5.3 Dirty Wasted seperable left-out
 def verify_circuit_dirty_wasted_separable_auxiliary(

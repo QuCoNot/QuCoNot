@@ -14,7 +14,6 @@ class TestMCTBarenco75Dirty:
     _controls_no_list = [5]
 
     def _take_matrix(self, controls_no: int, reverse: bool = False):
-
         if reverse is True:
             if controls_no in self._matrix_dict:
                 return self._reverse_matrix_dict[controls_no]
@@ -35,7 +34,6 @@ class TestMCTBarenco75Dirty:
             return self._matrix_dict[controls_no]
 
     def test_init(self):
-
         with pytest.raises(
             ValueError, match="Number of controls must be >= 2 for this implementation"
         ):
