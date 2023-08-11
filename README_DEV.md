@@ -17,11 +17,11 @@ cd quconot
 Then you need to check the version of the related libraries (whether you have installed or not), it should be the same version with the `.pre-commit-config.yaml`.
 
 ```bash
-pip install isort==5.10.1
+pip install isort==5.12.0
 pip install black==22.6.0
 pip install flake8==5.0.4
 pip install mypy==0.971
-pip install pylint==2.14.5
+pip install pylint==2.17.5
 pip install pre-commit-hooks==4.3.0
 ```
 After installing the required libraries, now you need to install the `pre-commit` library itself
