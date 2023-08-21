@@ -2,10 +2,11 @@ from typing import Dict
 
 import numpy as np
 import pytest
-from functions_testing import verify_circuit_no_auxiliary, verify_circuit_no_auxiliary_relative
 from qiskit.quantum_info.operators import Operator
 
 from quconot.implementations.mct_no_auxiliary import MCTNoAuxiliary
+
+from .functions_testing import verify_circuit_no_auxiliary, verify_circuit_no_auxiliary_relative
 
 
 class TestMCTNoAuxiliary:

@@ -2,7 +2,11 @@ from typing import Dict
 
 import numpy as np
 import pytest
-from functions_testing import (
+from qiskit.quantum_info.operators import Operator
+
+from quconot.implementations.mct_vchain import MCTVChain
+
+from .functions_testing import (
     verify_circuit_clean_auxiliary,
     verify_circuit_clean_relative_auxiliary,
     verify_circuit_clean_wasted_entangled_auxiliary,
@@ -15,9 +19,6 @@ from functions_testing import (
     verify_circuit_dirty_wasted_relative_separable_auxiliary,
     verify_circuit_dirty_wasted_separable_auxiliary,
 )
-from qiskit.quantum_info.operators import Operator
-
-from quconot.implementations.mct_vchain import MCTVChain
 
 
 class TestMCTVChain:
