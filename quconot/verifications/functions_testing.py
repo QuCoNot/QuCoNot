@@ -1,5 +1,6 @@
 import numpy as np
-from functions import (
+
+from .functions import (
     absolute_error_tol,
     identity_matrix,
     ket_0_matrix,
@@ -7,7 +8,7 @@ from functions import (
     relative_error_tol,
     zero_matrix,
 )
-from reverse_kronecker_product import reverse_kronecker_product
+from .reverse_kronecker_product import reverse_kronecker_product
 
 
 # 1.1 No Auxiliary
@@ -453,14 +454,14 @@ def verify_circuit_dirty_wasted_entangled_auxiliary(
     expected_unitary = zero_matrix(auxiliaries_no)
 
     for i in range(2 ** (controls_no + 1)):
-        print("-----------")
+        # print("-----------")
         ket_b_ct = np.zeros(2 ** (controls_no + 1))
 
         ket_b_ct[i] = 1  # |b_C,T>
 
         ket_b_ct_i = np.kron(i_a, np.conj(ket_b_ct))  # ( |b_C,T> @ I_A )
 
-        print(np.round(np.linalg.det(unitary_matrix)))
+        # print(np.round(np.linalg.det(unitary_matrix)))
 
         res_1 = np.matmul(ket_b_ct_i, unitary_matrix)  # U_tilde ( |b_C,T> @ I_A )
 
