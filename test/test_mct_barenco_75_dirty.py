@@ -5,8 +5,10 @@ import pytest
 from qiskit.quantum_info.operators import Operator
 
 from quconot.implementations.mct_barenco_75_dirty import MCTBarenco75Dirty
-
-from .functions_testing import verify_circuit_no_auxiliary, verify_circuit_no_auxiliary_relative
+from quconot.verifications.functions_testing import (
+    verify_circuit_no_auxiliary,
+    verify_circuit_no_auxiliary_relative,
+)
 
 
 class TestMCTBarenco75Dirty:

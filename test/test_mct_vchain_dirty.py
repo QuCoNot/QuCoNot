@@ -4,9 +4,8 @@ import numpy as np
 import pytest
 from qiskit.quantum_info.operators import Operator
 
-from quconot.implementations.mct_barenco_74_dirty import MCTBarenco74Dirty
-
-from .functions_testing import (
+from quconot.implementations.mct_vchain_dirty import MCTVChainDirty
+from quconot.verifications.functions_testing import (
     verify_circuit_clean_auxiliary,
     verify_circuit_clean_relative_auxiliary,
     verify_circuit_clean_wasted_entangled_auxiliary,
@@ -21,7 +20,7 @@ from .functions_testing import (
 )
 
 
-class TestMCTBarenco74Dirty:
+class TestMCTVChainDirty:
     _matrix_dict: Dict[np.array, int] = {}
     _reverse_matrix_dict: Dict[np.array, int] = {}
     _auxiliary_dict: Dict[int, int] = {}
@@ -36,7 +35,7 @@ class TestMCTBarenco74Dirty:
             if controls_no in self._matrix_dict:
                 return self._matrix_dict[controls_no]
 
-        circ = MCTBarenco74Dirty(controls_no).generate_circuit()
+        circ = MCTVChainDirty(controls_no).generate_circuit()
         unitary_matrix = Operator(circ).data
         self._matrix_dict[controls_no] = unitary_matrix
 
@@ -52,21 +51,21 @@ class TestMCTBarenco74Dirty:
         if controls_no in self._auxiliary_dict:
             return self._auxiliary_dict[controls_no]
 
-        mct = MCTBarenco74Dirty(controls_no)
+        mct = MCTVChainDirty(controls_no)
         self._auxiliary_dict[controls_no] = mct.num_auxiliary_qubits()
 
         return self._auxiliary_dict[controls_no]
 
     def test_init(self):
         with pytest.raises(
-            ValueError, match="Number of controls must be >= 5 for this implementation"
+            ValueError, match="Number of controls must be >= 2 for this implementation"
         ):
-            MCTBarenco74Dirty(2)
+            MCTVChainDirty(1)
 
         try:
-            MCTBarenco74Dirty(5)
+            MCTVChainDirty(5)
         except Exception:
-            assert False, "object MCTBarenco74Dirty(5) was not created, but it should be"
+            assert False, "object MCTVChainDirty(5) was not created, but it should be"
 
     def test_circuit_clean_auxiliary(self):
         for controls_no in self._controls_no_list:
@@ -77,7 +76,7 @@ class TestMCTBarenco74Dirty:
 
             self._result_dict["CNW"] = res
 
-            assert not res, msg
+            assert res, msg
 
     def test_circuit_clean_relative_auxiliary(self):
         for controls_no in self._controls_no_list:
@@ -101,7 +100,7 @@ class TestMCTBarenco74Dirty:
 
             self._result_dict["DNW"] = res
 
-            assert not res, msg
+            assert res, msg
 
     def test_circuit_dirty_relative_auxiliary(self):
         for controls_no in self._controls_no_list:
@@ -153,7 +152,7 @@ class TestMCTBarenco74Dirty:
 
             self._result_dict["CWS"] = res
 
-            assert not res, msg
+            assert res, msg
 
     def test_circuit_clean_wasted_relative_separable_auxiliary(self):
         for controls_no in self._controls_no_list:
@@ -192,7 +191,7 @@ class TestMCTBarenco74Dirty:
 
             self._result_dict["DWS"] = res
 
-            assert not res, msg
+            assert res, msg
 
     def test_circuit_dirty_wasted_relative_separable_auxiliary(self):
         for controls_no in self._controls_no_list:

@@ -5,8 +5,7 @@ import pytest
 from qiskit.quantum_info.operators import Operator
 
 from quconot.implementations.mct_parallel_decomposition import MCTParallelDecomposition
-
-from .functions_testing import (
+from quconot.verifications.functions_testing import (
     verify_circuit_clean_auxiliary,
     verify_circuit_clean_relative_auxiliary,
     verify_circuit_clean_wasted_entangled_auxiliary,
