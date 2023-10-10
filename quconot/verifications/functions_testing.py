@@ -11,7 +11,7 @@ from .functions import (
 from .reverse_kronecker_product import reverse_kronecker_product
 
 
-# 1.1 No Auxiliary
+# No Auxiliary
 def verify_circuit_no_auxiliary(unitary_matrix, controls_no: int, auxiliaries_no: int):
     # get mct inverse matrix
     inverse_matrix = load_matrix("noauxiliary", controls_no)
@@ -42,7 +42,7 @@ def verify_circuit_no_auxiliary(unitary_matrix, controls_no: int, auxiliaries_no
     return True, ""
 
 
-# 1.2 No Auxiliary Relative
+# No Auxiliary Relative-phase
 def verify_circuit_no_auxiliary_relative(unitary_matrix, controls_no: int, auxiliaries_no: int):
     # get mct inverse matrix
     inverse_matrix = load_matrix("noauxiliary", controls_no)
@@ -75,8 +75,8 @@ def verify_circuit_no_auxiliary_relative(unitary_matrix, controls_no: int, auxil
     return True, ""
 
 
-# 2.1 Clean Non-wasted
-def verify_circuit_clean_auxiliary(unitary_matrix, controls_no: int, auxiliaries_no: int):
+# Strict Clean Non-Wasting
+def verify_circuit_strict_clean_non_wasting(unitary_matrix, controls_no: int, auxiliaries_no: int):
     if auxiliaries_no == 0:
         return False, "No of Auxiliary qubit should bigger than 0"
 
@@ -112,8 +112,10 @@ def verify_circuit_clean_auxiliary(unitary_matrix, controls_no: int, auxiliaries
     return True, ""
 
 
-# 2.2 Clean Non-wasted Relative
-def verify_circuit_clean_relative_auxiliary(unitary_matrix, controls_no: int, auxiliaries_no: int):
+# Relative Clean Non-Wasting
+def verify_circuit_relative_clean_non_wasting(
+    unitary_matrix, controls_no: int, auxiliaries_no: int
+):
     if auxiliaries_no == 0:
         return False, "No of Auxiliary qubit should bigger than 0"
 
@@ -149,8 +151,8 @@ def verify_circuit_clean_relative_auxiliary(unitary_matrix, controls_no: int, au
     return True, ""
 
 
-# 3.1 Dirty Non-Wasted
-def verify_circuit_dirty_auxiliary(unitary_matrix, controls_no: int, auxiliaries_no: int):
+# Strict Dirty Non-Wasting
+def verify_circuit_strict_dirty_non_wasting(unitary_matrix, controls_no: int, auxiliaries_no: int):
     if auxiliaries_no == 0:
         return False, "No of Auxiliary qubit should bigger than 0"
 
@@ -184,8 +186,10 @@ def verify_circuit_dirty_auxiliary(unitary_matrix, controls_no: int, auxiliaries
     return True, ""
 
 
-# 3.2 Dirty Non-Wasted Relative
-def verify_circuit_dirty_relative_auxiliary(unitary_matrix, controls_no: int, auxiliaries_no: int):
+# Relative Dirty Non-Wasting
+def verify_circuit_relative_dirty_non_wasting(
+    unitary_matrix, controls_no: int, auxiliaries_no: int
+):
     if auxiliaries_no == 0:
         return False, "No of Auxiliary qubit should bigger than 0"
 
@@ -232,8 +236,8 @@ def verify_circuit_dirty_relative_auxiliary(unitary_matrix, controls_no: int, au
     return True, ""
 
 
-# 4.1 Clean Wasted Entangled Leftout
-def verify_circuit_clean_wasted_entangled_auxiliary(
+# Strict Clean Wasting-Entangled
+def verify_circuit_strict_clean_wasting_entangled(
     unitary_matrix, controls_no: int, auxiliaries_no: int
 ):
     if auxiliaries_no == 0:
@@ -276,9 +280,8 @@ def verify_circuit_clean_wasted_entangled_auxiliary(
     return True, ""
 
 
-# 4.2 Clean Wasted Relative Entangled Leftout
-# currently it is the same with 4.1
-def verify_circuit_clean_wasted_relative_entangled_auxiliary(
+# Relative Clean Wasting-Entangled
+def verify_circuit_relative_clean_wasting_entangled(
     unitary_matrix, controls_no: int, auxiliaries_no: int
 ):
     if auxiliaries_no == 0:
@@ -321,8 +324,8 @@ def verify_circuit_clean_wasted_relative_entangled_auxiliary(
     return True, ""
 
 
-# 4.3 Clean Wasted Separable
-def verify_circuit_clean_wasted_separable_auxiliary(
+# Strict Clean Wasting-Separable
+def verify_circuit_strict_clean_wasting_separable(
     unitary_matrix, controls_no: int, auxiliaries_no: int
 ):
     if auxiliaries_no == 0:
@@ -367,8 +370,8 @@ def verify_circuit_clean_wasted_separable_auxiliary(
     return True, ""
 
 
-# 4.4 Clean Wasted Relative Separable
-def verify_circuit_clean_wasted_relative_separable_auxiliary(
+# Relative Clean Wasting-Separable
+def verify_circuit_relative_clean_wasting_separable(
     unitary_matrix, controls_no: int, auxiliaries_no: int
 ):
     if auxiliaries_no == 0:
@@ -438,8 +441,8 @@ def verify_circuit_clean_wasted_relative_separable_auxiliary(
     return True, ""
 
 
-# 5.1 Dirty Wasted entangled left-out
-def verify_circuit_dirty_wasted_entangled_auxiliary(
+# Strict Dirty Wasting-Entangled
+def verify_circuit_strict_dirty_wasting_entangled(
     unitary_matrix, controls_no: int, auxiliaries_no: int
 ):
     if auxiliaries_no == 0:
@@ -487,13 +490,8 @@ def verify_circuit_dirty_wasted_entangled_auxiliary(
     return True, ""
 
 
-# 5.2 Dirty Wasted Relative-phase (entangled left-out)
-# In here, similarly as for the clean-wasted case, this class is reducible to
-# the regular MCT entangled left-out.
-
-
-# 5.3 Dirty Wasted seperable left-out
-def verify_circuit_dirty_wasted_separable_auxiliary(
+# Strict Dirty Wasting-Separable
+def verify_circuit_strict_dirty_wasting_separable(
     unitary_matrix, controls_no: int, auxiliaries_no: int
 ):
     if auxiliaries_no == 0:
@@ -551,8 +549,8 @@ def verify_circuit_dirty_wasted_separable_auxiliary(
     return True, ""
 
 
-# 5.4 Dirty Wasted Relative-phase seperable left-out
-def verify_circuit_dirty_wasted_relative_separable_auxiliary(
+# Relative Dirty Wasting-Separable
+def verify_circuit_relative_dirty_wasting_separable(
     unitary_matrix, controls_no: int, auxiliaries_no: int
 ):
     if auxiliaries_no == 0:
@@ -611,34 +609,34 @@ def verify_circuit_dirty_wasted_relative_separable_auxiliary(
 
 
 # def verify_dependencies(rd):
-#     if rd["DNW"]:
-#         assert rd["CNW"]
-#         assert rd["DNWR"]
-#         assert rd["DWS"]
+#     if rd["SDNW"]:
+#         assert rd["SCNW"]
+#         assert rd["RDNW"]
+#         assert rd["SDWS"]
 
-#     if rd["DNWR"]:
-#         assert rd["CNWR"]
-#         assert rd["DWRS"]
+#     if rd["RDNW"]:
+#         assert rd["RCNW"]
+#         assert rd["RDWS"]
 
-#     if rd["DWS"]:
-#         assert rd["CWS"]
-#         assert rd["DWRS"]
+#     if rd["SDWS"]:
+#         assert rd["SCWS"]
+#         assert rd["RDWS"]
 
-#     if rd["DWRE"]:
-#         assert rd["CWRE"]
+#     if rd["SDWE"]:
+#         assert rd["RCWE"]
 
-#     if rd["CNW"]:
-#         assert rd["CNWR"]
-#         assert rd["CWS"]
+#     if rd["SCNW"]:
+#         assert rd["RCNW"]
+#         assert rd["SCWS"]
 
-#     if rd["CWS"]:
-#         assert rd["CWRS"]
+#     if rd["SCWS"]:
+#         assert rd["RCWS"]
 
-#     if rd["CNWR"]:
-#         assert rd["CWRS"]
+#     if rd["RCNW"]:
+#         assert rd["RCWS"]
 
-#     if rd["DWRS"]:
-#         assert rd["DWRE"]
+#     if rd["RDWS"]:
+#         assert rd["SDWE"]
 
-#     if rd["CWRS"]:
-#         assert rd["CWRE"]
+#     if rd["RCWS"]:
+#         assert rd["RCWE"]

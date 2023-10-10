@@ -6,17 +6,17 @@ from qiskit.quantum_info.operators import Operator
 
 from quconot.implementations.mct_n_qubit_decomposition import MCTNQubitDecomposition
 from quconot.verifications.functions_testing import (
-    verify_circuit_clean_auxiliary,
-    verify_circuit_clean_relative_auxiliary,
-    verify_circuit_clean_wasted_entangled_auxiliary,
-    verify_circuit_clean_wasted_relative_entangled_auxiliary,
-    verify_circuit_clean_wasted_relative_separable_auxiliary,
-    verify_circuit_clean_wasted_separable_auxiliary,
-    verify_circuit_dirty_auxiliary,
-    verify_circuit_dirty_relative_auxiliary,
-    verify_circuit_dirty_wasted_entangled_auxiliary,
-    verify_circuit_dirty_wasted_relative_separable_auxiliary,
-    verify_circuit_dirty_wasted_separable_auxiliary,
+    verify_circuit_relative_clean_non_wasting,
+    verify_circuit_relative_clean_wasting_entangled,
+    verify_circuit_relative_clean_wasting_separable,
+    verify_circuit_relative_dirty_non_wasting,
+    verify_circuit_relative_dirty_wasting_separable,
+    verify_circuit_strict_clean_non_wasting,
+    verify_circuit_strict_clean_wasting_entangled,
+    verify_circuit_strict_clean_wasting_separable,
+    verify_circuit_strict_dirty_non_wasting,
+    verify_circuit_strict_dirty_wasting_entangled,
+    verify_circuit_strict_dirty_wasting_separable,
 )
 
 
@@ -72,9 +72,11 @@ class TestMCTNQubitDecomposition:
             unitary_matrix = self._take_matrix(controls_no)
             auxiliaries_no = self._take_auxiliaries_no(controls_no)
 
-            res, msg = verify_circuit_clean_auxiliary(unitary_matrix, controls_no, auxiliaries_no)
+            res, msg = verify_circuit_strict_clean_non_wasting(
+                unitary_matrix, controls_no, auxiliaries_no
+            )
 
-            self._result_dict["CNW"] = res
+            self._result_dict["SCNW"] = res
 
             assert res, msg
 
@@ -83,11 +85,11 @@ class TestMCTNQubitDecomposition:
             unitary_matrix = self._take_matrix(controls_no)
             auxiliaries_no = self._take_auxiliaries_no(controls_no)
 
-            res, msg = verify_circuit_clean_relative_auxiliary(
+            res, msg = verify_circuit_relative_clean_non_wasting(
                 unitary_matrix, controls_no, auxiliaries_no
             )
 
-            self._result_dict["CNWR"] = res
+            self._result_dict["RCNW"] = res
 
             assert res, msg
 
@@ -96,9 +98,11 @@ class TestMCTNQubitDecomposition:
             unitary_matrix = self._take_matrix(controls_no)
             auxiliaries_no = self._take_auxiliaries_no(controls_no)
 
-            res, msg = verify_circuit_dirty_auxiliary(unitary_matrix, controls_no, auxiliaries_no)
+            res, msg = verify_circuit_strict_dirty_non_wasting(
+                unitary_matrix, controls_no, auxiliaries_no
+            )
 
-            self._result_dict["DNW"] = res
+            self._result_dict["SDNW"] = res
 
             assert res, msg
 
@@ -107,11 +111,11 @@ class TestMCTNQubitDecomposition:
             unitary_matrix = self._take_matrix(controls_no)
             auxiliaries_no = self._take_auxiliaries_no(controls_no)
 
-            res, msg = verify_circuit_dirty_relative_auxiliary(
+            res, msg = verify_circuit_relative_dirty_non_wasting(
                 unitary_matrix, controls_no, auxiliaries_no
             )
 
-            self._result_dict["DNWR"] = res
+            self._result_dict["RDNW"] = res
 
             assert res, msg
 
@@ -120,11 +124,11 @@ class TestMCTNQubitDecomposition:
             unitary_matrix = self._take_matrix(controls_no)
             auxiliaries_no = self._take_auxiliaries_no(controls_no)
 
-            res, msg = verify_circuit_clean_wasted_entangled_auxiliary(
+            res, msg = verify_circuit_strict_clean_wasting_entangled(
                 unitary_matrix, controls_no, auxiliaries_no
             )
 
-            self._result_dict["CWE"] = res
+            self._result_dict["SCWE"] = res
 
             assert res, msg
 
@@ -133,11 +137,11 @@ class TestMCTNQubitDecomposition:
             unitary_matrix = self._take_matrix(controls_no)
             auxiliaries_no = self._take_auxiliaries_no(controls_no)
 
-            res, msg = verify_circuit_clean_wasted_relative_entangled_auxiliary(
+            res, msg = verify_circuit_relative_clean_wasting_entangled(
                 unitary_matrix, controls_no, auxiliaries_no
             )
 
-            self._result_dict["CWRE"] = res
+            self._result_dict["RCWE"] = res
 
             assert res, msg
 
@@ -146,11 +150,11 @@ class TestMCTNQubitDecomposition:
             unitary_matrix = self._take_matrix(controls_no)
             auxiliaries_no = self._take_auxiliaries_no(controls_no)
 
-            res, msg = verify_circuit_clean_wasted_separable_auxiliary(
+            res, msg = verify_circuit_strict_clean_wasting_separable(
                 unitary_matrix, controls_no, auxiliaries_no
             )
 
-            self._result_dict["CWS"] = res
+            self._result_dict["SCWS"] = res
 
             assert res, msg
 
@@ -159,11 +163,11 @@ class TestMCTNQubitDecomposition:
             unitary_matrix = self._take_matrix(controls_no)
             auxiliaries_no = self._take_auxiliaries_no(controls_no)
 
-            res, msg = verify_circuit_clean_wasted_relative_separable_auxiliary(
+            res, msg = verify_circuit_relative_clean_wasting_separable(
                 unitary_matrix, controls_no, auxiliaries_no
             )
 
-            self._result_dict["CWRS"] = res
+            self._result_dict["RCWS"] = res
 
             assert res, msg
 
@@ -172,11 +176,11 @@ class TestMCTNQubitDecomposition:
             unitary_matrix = self._take_matrix(controls_no, True)
             auxiliaries_no = self._take_auxiliaries_no(controls_no)
 
-            res, msg = verify_circuit_dirty_wasted_entangled_auxiliary(
+            res, msg = verify_circuit_strict_dirty_wasting_entangled(
                 unitary_matrix, controls_no, auxiliaries_no
             )
 
-            self._result_dict["DWRE"] = res
+            self._result_dict["SDWE"] = res
 
             assert res, msg
 
@@ -185,11 +189,11 @@ class TestMCTNQubitDecomposition:
             unitary_matrix = self._take_matrix(controls_no, True)
             auxiliaries_no = self._take_auxiliaries_no(controls_no)
 
-            res, msg = verify_circuit_dirty_wasted_separable_auxiliary(
+            res, msg = verify_circuit_strict_dirty_wasting_separable(
                 unitary_matrix, controls_no, auxiliaries_no
             )
 
-            self._result_dict["DWS"] = res
+            self._result_dict["SDWS"] = res
 
             assert res, msg
 
@@ -198,45 +202,45 @@ class TestMCTNQubitDecomposition:
             unitary_matrix = self._take_matrix(controls_no, True)
             auxiliaries_no = self._take_auxiliaries_no(controls_no)
 
-            res, msg = verify_circuit_dirty_wasted_relative_separable_auxiliary(
+            res, msg = verify_circuit_relative_dirty_wasting_separable(
                 unitary_matrix, controls_no, auxiliaries_no
             )
 
-            self._result_dict["DWRS"] = res
+            self._result_dict["RDWS"] = res
 
             assert res, msg
 
     def test_dependencies(self):
         rd = self._result_dict
 
-        if rd["DNW"]:
-            assert rd["CNW"]
-            assert rd["DNWR"]
-            assert rd["DWS"]
+        if rd["SDNW"]:
+            assert rd["SCNW"]
+            assert rd["RDNW"]
+            assert rd["SDWS"]
 
-        if rd["DNWR"]:
-            assert rd["CNWR"]
-            assert rd["DWRS"]
+        if rd["RDNW"]:
+            assert rd["RCNW"]
+            assert rd["RDWS"]
 
-        if rd["DWS"]:
-            assert rd["CWS"]
-            assert rd["DWRS"]
+        if rd["SDWS"]:
+            assert rd["SCWS"]
+            assert rd["RDWS"]
 
-        if rd["DWRE"]:
-            assert rd["CWRE"]
+        if rd["SDWE"]:
+            assert rd["RCWE"]
 
-        if rd["CNW"]:
-            assert rd["CNWR"]
-            assert rd["CWS"]
+        if rd["SCNW"]:
+            assert rd["RCNW"]
+            assert rd["SCWS"]
 
-        if rd["CWS"]:
-            assert rd["CWRS"]
+        if rd["SCWS"]:
+            assert rd["RCWS"]
 
-        if rd["CNWR"]:
-            assert rd["CWRS"]
+        if rd["RCNW"]:
+            assert rd["RCWS"]
 
-        if rd["DWRS"]:
-            assert rd["DWRE"]
+        if rd["RDWS"]:
+            assert rd["SDWE"]
 
-        if rd["CWRS"]:
-            assert rd["CWRE"]
+        if rd["RCWS"]:
+            assert rd["RCWE"]
