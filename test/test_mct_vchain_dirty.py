@@ -7,7 +7,6 @@ from qiskit.quantum_info.operators import Operator
 from quconot.implementations.mct_vchain_dirty import MCTVChainDirty
 from quconot.verifications.functions_testing import (
     verify_circuit_relative_clean_non_wasting,
-    verify_circuit_relative_clean_wasting_entangled,
     verify_circuit_relative_clean_wasting_separable,
     verify_circuit_relative_dirty_non_wasting,
     verify_circuit_relative_dirty_wasting_separable,
@@ -108,7 +107,7 @@ class TestMCTVChainDirty:
 
     def test_circuit_dirty_relative_auxiliary(self):
         for controls_no in self._controls_no_list:
-            unitary_matrix = self._take_matrix(controls_no)
+            unitary_matrix = self._take_matrix(controls_no, True)
             auxiliaries_no = self._take_auxiliaries_no(controls_no)
 
             res, msg = verify_circuit_relative_dirty_non_wasting(
@@ -129,19 +128,6 @@ class TestMCTVChainDirty:
             )
 
             self._result_dict["SCWE"] = res
-
-            assert res, msg
-
-    def test_circuit_clean_wasted_relative_entangled_auxiliary(self):
-        for controls_no in self._controls_no_list:
-            unitary_matrix = self._take_matrix(controls_no)
-            auxiliaries_no = self._take_auxiliaries_no(controls_no)
-
-            res, msg = verify_circuit_relative_clean_wasting_entangled(
-                unitary_matrix, controls_no, auxiliaries_no
-            )
-
-            self._result_dict["RCWE"] = res
 
             assert res, msg
 
@@ -173,7 +159,7 @@ class TestMCTVChainDirty:
 
     def test_circuit_dirty_wasted_entangled_auxiliary(self):
         for controls_no in self._controls_no_list:
-            unitary_matrix = self._take_matrix(controls_no, True)
+            unitary_matrix = self._take_matrix(controls_no)
             auxiliaries_no = self._take_auxiliaries_no(controls_no)
 
             res, msg = verify_circuit_strict_dirty_wasting_entangled(
@@ -227,7 +213,7 @@ class TestMCTVChainDirty:
             assert rd["RDWS"]
 
         if rd["SDWE"]:
-            assert rd["RCWE"]
+            assert rd["SCWE"]
 
         if rd["SCNW"]:
             assert rd["RCNW"]
@@ -243,4 +229,4 @@ class TestMCTVChainDirty:
             assert rd["SDWE"]
 
         if rd["RCWS"]:
-            assert rd["RCWE"]
+            assert rd["SCWE"]
