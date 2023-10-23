@@ -44,7 +44,6 @@ class MCTBarenco74Dirty(MCTBase):
             auxs = (c[k1:])[: len(controls) - 2]
 
         elif k == 2:
-
             controls = c[k1:] + [a]
             target = t
             auxs = (c[:k1] + [a])[: len(controls) - 2]

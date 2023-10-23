@@ -48,10 +48,8 @@ class QuCoNot:
         wasted_auxiliary: bool = False,
         separable_wasted_auxiliary: bool = False,
     ) -> List["MCTBase"]:
-
         self._implementations = []
         for cls in self._registered_methods:
-
             self._implementations += cls.verify_mct_cases(
                 controls_no,
                 max_auxiliary,

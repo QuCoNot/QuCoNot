@@ -2,10 +2,13 @@ from typing import Dict
 
 import numpy as np
 import pytest
-from functions_testing import verify_circuit_no_auxiliary, verify_circuit_no_auxiliary_relative
 from qiskit.quantum_info.operators import Operator
 
 from quconot.implementations.mct_no_auxiliary_relative import MCTNoAuxiliaryRelative
+from quconot.verifications.functions_testing import (
+    verify_circuit_no_auxiliary,
+    verify_circuit_no_auxiliary_relative,
+)
 
 
 class TestMCTNoAuxiliaryRelative:
@@ -14,7 +17,6 @@ class TestMCTNoAuxiliaryRelative:
     _controls_no_list = [2, 3]
 
     def _take_matrix(self, controls_no: int, reverse: bool = False):
-
         if reverse is True:
             if controls_no in self._matrix_dict:
                 return self._reverse_matrix_dict[controls_no]
