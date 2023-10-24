@@ -165,7 +165,7 @@ class MCTNQubitDecomposition(MCTBase):
 
         # should be done for all implementations
         # TODO: solve issue with reordered qubits
-        self._circuit = transpile(mct, basis_gates=["cx", "s", "h", "t", "z", "sdg", "tdg"])
+        self._circuit = mct
 
         return deepcopy(self._circuit)
 
