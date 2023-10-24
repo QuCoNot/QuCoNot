@@ -3,7 +3,6 @@ from typing import Callable, List, Type
 from .implementations.mct_barenco_74_dirty import MCTBarenco74Dirty
 from .implementations.mct_barenco_75_dirty import MCTBarenco75Dirty
 from .implementations.mct_base import MCTBase
-from .implementations.mct_n_qubit_decomposition import MCTNQubitDecomposition
 from .implementations.mct_no_auxiliary import MCTNoAuxiliary
 from .implementations.mct_no_auxiliary_relative import MCTNoAuxiliaryRelative
 from .implementations.mct_parallel_decomposition import MCTParallelDecomposition
@@ -19,7 +18,6 @@ class QuCoNot:
             MCTBarenco75Dirty,
             MCTRecursion,
             MCTVChainDirty,
-            MCTNQubitDecomposition,
             MCTNoAuxiliary,
             MCTNoAuxiliaryRelative,
             MCTParallelDecomposition,
