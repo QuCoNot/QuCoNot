@@ -128,8 +128,7 @@ class MCTBarenco74Dirty(MCTBase):
 
         circ = self.L7_4(list(range(self._n)), self._n, self._n + self.num_auxiliary_qubits())
 
-        self._circuit = transpile(circ, basis_gates=["cx", "u3"])
-        # self._circuit = transpile(circ, basis_gates=["cx", "s", "h", "t", "z", "sdg", "tdg"])
+        self._circuit = circ
 
         return deepcopy(self._circuit)
 

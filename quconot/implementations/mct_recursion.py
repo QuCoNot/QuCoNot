@@ -67,7 +67,8 @@ class MCTRecursion(MCTBase):
 
         # should be done for all implementations
         # TODO: solve issue with reordered qubits
-        self._circuit = transpile(qc, basis_gates=["cx", "u3"])
+        self._circuit = qc
+
         return deepcopy(self._circuit)
 
     def num_auxiliary_qubits(self):
