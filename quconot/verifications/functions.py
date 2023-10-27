@@ -18,6 +18,12 @@ def zero_matrix(qubits_no):
     return np.zeros((2**qubits_no, 2**qubits_no), dtype=complex)
 
 
+def ket0(dim: int):
+    ket_0 = np.zeros(dim)
+    ket_0[0] = 1.0
+    return ket_0
+
+
 def ket_0_matrix(qubits_no):
     ket_0 = np.array([1, 0])
 
@@ -47,8 +53,7 @@ def mct_inverse(method, controls_no, auxiliaries_no):
 
 
 def load_matrix(mode, controls_no):
-    container = np.load("./test/mct_matrices/mct_" + mode + ".npz")
-
+    container = np.load("./tests/mct_matrices/mct_" + mode + ".npz")
     return container["arr_" + str(controls_no - 1)]
 
 

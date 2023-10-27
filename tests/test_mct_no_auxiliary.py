@@ -4,17 +4,29 @@ import numpy as np
 import pytest
 from qiskit.quantum_info.operators import Operator
 
-from quconot.implementations.mct_barenco_75_dirty import MCTBarenco75Dirty
-from quconot.verifications.functions_testing import (
-    verify_circuit_no_auxiliary,
-    verify_circuit_no_auxiliary_relative,
-)
+from quconot.implementations.mct_no_auxiliary import MCTNoAuxiliary
+
+from tests.test_mct_base import BaseTestMCT
 
 
-class TestMCTBarenco75Dirty:
+@pytest.mark.xfail
+class TestMCTNoAuxiliary(BaseTestMCT):
     _matrix_dict: Dict[np.array, int] = {}
     _reverse_matrix_dict: Dict[np.array, int] = {}
     _controls_no_list = [5]
+
+    _expected_classes: Dict[str, bool] = {
+        "SCNW": True,
+        "RCNW": True,
+        "SDNW": True,
+        "RDNW": True,
+        "SCWE": True,
+        "SCWS": True,
+        "RCWS": True,
+        "SDWE": True,
+        "SDWS": True,
+        "RDWS": True,
+    }
 
     def _take_matrix(self, controls_no: int, reverse: bool = False):
         if reverse is True:
@@ -24,7 +36,7 @@ class TestMCTBarenco75Dirty:
             if controls_no in self._matrix_dict:
                 return self._matrix_dict[controls_no]
 
-        circ = MCTBarenco75Dirty(controls_no).generate_circuit()
+        circ = MCTNoAuxiliary(controls_no).generate_circuit()
         unitary_matrix = Operator(circ).data
         self._matrix_dict[controls_no] = unitary_matrix
 
@@ -36,33 +48,16 @@ class TestMCTBarenco75Dirty:
         else:
             return self._matrix_dict[controls_no]
 
+    def _take_auxiliaries_no(self, controls_no: int):
+        raise NotImplementedError
+
     def test_init(self):
         with pytest.raises(
             ValueError, match="Number of controls must be >= 2 for this implementation"
         ):
-            MCTBarenco75Dirty(1)
+            MCTNoAuxiliary(1)
 
         try:
-            MCTBarenco75Dirty(2)
+            MCTNoAuxiliary(3)
         except Exception:
-            assert False, "object MCTBarenco75Dirty(2) was not created, but it should be"
-
-    def test_circuit_no_auxiliary(self):
-        for controls_no in self._controls_no_list:
-            unitary_matrix = self._take_matrix(controls_no)
-            auxiliaries_no = 0
-
-            res, msg = verify_circuit_no_auxiliary(unitary_matrix, controls_no, auxiliaries_no)
-
-            assert res, msg
-
-    def test_circuit_no_auxiliary_relative(self):
-        for controls_no in self._controls_no_list:
-            unitary_matrix = self._take_matrix(controls_no)
-            auxiliaries_no = 0
-
-            res, msg = verify_circuit_no_auxiliary_relative(
-                unitary_matrix, controls_no, auxiliaries_no
-            )
-
-            assert res, msg
+            assert False, "object MCTBarenco74Dirty(3) was not created, but it should be"

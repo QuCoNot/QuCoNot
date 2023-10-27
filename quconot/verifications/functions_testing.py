@@ -3,6 +3,7 @@ import numpy as np
 from .functions import (
     absolute_error_tol,
     identity_matrix,
+    ket0,
     ket_0_matrix,
     load_matrix,
     relative_error_tol,
@@ -11,98 +12,27 @@ from .functions import (
 from .reverse_kronecker_product import reverse_kronecker_product
 
 
-# No Auxiliary
-def verify_circuit_no_auxiliary(unitary_matrix, controls_no: int, auxiliaries_no: int):
-    # get mct inverse matrix
-    inverse_matrix = load_matrix("noauxiliary", controls_no)
-
-    no_of_qubits = controls_no + 1
-
-    # X_1 * X_2^dagger * np.conj((X_1 * X_2^dagger)[0,0]) - I = 0
-    M = np.matmul(unitary_matrix, inverse_matrix)
-    generated_unitary = M * np.conjugate(M[0, 0]) - identity_matrix(no_of_qubits)
-
-    # Expected unitary after calculation is 0.
-    expected_unitary = zero_matrix(no_of_qubits)
-
-    if generated_unitary.shape != expected_unitary.shape:
-        return False, "Unitary has different shape."
-
-    if (
-        np.allclose(
-            generated_unitary,
-            expected_unitary,
-            atol=absolute_error_tol,
-            rtol=relative_error_tol,
-        )
-        is False
-    ):
-        return False, "Something wrong with the implementation"
-
-    return True, ""
-
-
-# No Auxiliary Relative-phase
-def verify_circuit_no_auxiliary_relative(unitary_matrix, controls_no: int, auxiliaries_no: int):
-    # get mct inverse matrix
-    inverse_matrix = load_matrix("noauxiliary", controls_no)
-
-    no_of_qubits = controls_no + 1
-
-    unitary_matrix = np.abs(unitary_matrix)
-
-    # X_1 * X_2^dagger - I = 0
-    M = np.matmul(unitary_matrix, inverse_matrix)
-    generated_unitary = M - identity_matrix(no_of_qubits)
-
-    # Expected unitary after calculation is 0.
-    expected_unitary = zero_matrix(no_of_qubits)
-
-    if generated_unitary.shape != expected_unitary.shape:
-        return False, "Unitary has different shape."
-
-    if (
-        np.allclose(
-            generated_unitary,
-            expected_unitary,
-            atol=absolute_error_tol,
-            rtol=relative_error_tol,
-        )
-        is False
-    ):
-        return False, "Something wrong with the implementation"
-
-    return True, ""
-
-
 # Strict Clean Non-Wasting
-def verify_circuit_strict_clean_non_wasting(unitary_matrix, controls_no: int, auxiliaries_no: int):
-    if auxiliaries_no == 0:
-        return False, "No of Auxiliary qubit should bigger than 0"
+def verify_circuit_strict_clean_non_wasting(
+    unitary_matrix: np.ndarray, ref_unitary: np.ndarray
+) -> tuple:
+    controls_dim = ref_unitary.shape[0]
+    global_dim = unitary_matrix.shape[0]
+    auxiliary_dim = global_dim // controls_dim
 
-    # get mct inverse matrix
-    inverse_matrix = load_matrix("noauxiliary", controls_no)
-
-    i = identity_matrix(controls_no + 1)
-    ket_0 = ket_0_matrix(auxiliaries_no)
+    i = np.eye(controls_dim)
+    ket_0 = ket0(auxiliary_dim)
     ket_0_i = np.kron(ket_0, i)
 
     unitary_matrix = np.matmul(np.matmul(ket_0_i, unitary_matrix), ket_0_i.T)
 
-    no_of_qubits = controls_no + 1
-
-    m = np.matmul(unitary_matrix, inverse_matrix)
-    generated_unitary = m * np.conjugate(m[0, 0]) - identity_matrix(no_of_qubits)
-
-    expected_unitary = zero_matrix(no_of_qubits)
-
-    if generated_unitary.shape != expected_unitary.shape:
-        return False, "Unitary has different shape."
+    m = np.matmul(unitary_matrix, ref_unitary.conj().T)
+    generated_unitary = m * np.conjugate(m[0, 0]) - np.eye(controls_dim)
 
     if (
         np.allclose(
             generated_unitary,
-            expected_unitary,
+            0.0,
             atol=absolute_error_tol,
             rtol=relative_error_tol,
         )

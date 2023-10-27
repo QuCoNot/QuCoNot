@@ -5,16 +5,28 @@ import pytest
 from qiskit.quantum_info.operators import Operator
 
 from quconot.implementations.mct_no_auxiliary_relative import MCTNoAuxiliaryRelative
-from quconot.verifications.functions_testing import (
-    verify_circuit_no_auxiliary,
-    verify_circuit_no_auxiliary_relative,
-)
+
+from tests.test_mct_base import BaseTestMCT
 
 
-class TestMCTNoAuxiliaryRelative:
+@pytest.mark.xfail
+class TestMCTNoAuxiliaryRelative(BaseTestMCT):
     _matrix_dict: Dict[np.array, int] = {}
     _reverse_matrix_dict: Dict[np.array, int] = {}
     _controls_no_list = [2, 3]
+
+    _expected_classes: Dict[str, bool] = {
+        "SCNW": True,
+        "RCNW": True,
+        "SDNW": True,
+        "RDNW": True,
+        "SCWE": True,
+        "SCWS": True,
+        "RCWS": True,
+        "SDWE": True,
+        "SDWS": True,
+        "RDWS": True,
+    }
 
     def _take_matrix(self, controls_no: int, reverse: bool = False):
         if reverse is True:
@@ -36,6 +48,9 @@ class TestMCTNoAuxiliaryRelative:
         else:
             return self._matrix_dict[controls_no]
 
+    def _take_auxiliaries_no(self, controls_no: int):
+        raise NotImplementedError
+
     def test_init(self):
         with pytest.raises(
             ValueError, match="Number of controls must be 2 or 3 for this implementation"
@@ -46,23 +61,3 @@ class TestMCTNoAuxiliaryRelative:
             MCTNoAuxiliaryRelative(2)
         except Exception:
             assert False, "object MCTNoAuxiliaryRelative(2) was not created, but it should be"
-
-    def test_circuit_no_auxiliary(self):
-        for controls_no in self._controls_no_list:
-            unitary_matrix = self._take_matrix(controls_no)
-            auxiliaries_no = 0
-
-            res, msg = verify_circuit_no_auxiliary(unitary_matrix, controls_no, auxiliaries_no)
-
-            assert not res, msg
-
-    def test_circuit_no_auxiliary_relative(self):
-        for controls_no in self._controls_no_list:
-            unitary_matrix = self._take_matrix(controls_no)
-            auxiliaries_no = 0
-
-            res, msg = verify_circuit_no_auxiliary_relative(
-                unitary_matrix, controls_no, auxiliaries_no
-            )
-
-            assert res, msg

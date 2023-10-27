@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 from typing import Dict
 
 import numpy as np
@@ -17,67 +18,34 @@ from quconot.verifications.functions_testing import (
     verify_circuit_strict_dirty_wasting_entangled,
     verify_circuit_strict_dirty_wasting_separable,
 )
+from tests.utils import load_matrix
 
 
-class TestMCTBarenco74Dirty:
+class BaseTestMCT(ABC):
     _matrix_dict: Dict[np.array, int] = {}
     _reverse_matrix_dict: Dict[np.array, int] = {}
     _auxiliary_dict: Dict[int, int] = {}
     _controls_no_list = [5]
     _result_dict: Dict[str, bool] = {}
 
+    _expected_classes: Dict[str, bool] = {}
+
+    @abstractmethod
     def _take_matrix(self, controls_no: int, reverse: bool = False):
-        if reverse is True:
-            if controls_no in self._matrix_dict:
-                return self._reverse_matrix_dict[controls_no]
-        else:
-            if controls_no in self._matrix_dict:
-                return self._matrix_dict[controls_no]
+        raise NotImplementedError
 
-        circ = MCTBarenco74Dirty(controls_no).generate_circuit()
-        unitary_matrix = Operator(circ).data
-        self._matrix_dict[controls_no] = unitary_matrix
-
-        reverse_unitary_matrix = Operator(circ.reverse_bits()).data
-        self._reverse_matrix_dict[controls_no] = reverse_unitary_matrix
-
-        if reverse is True:
-            return self._reverse_matrix_dict[controls_no]
-        else:
-            return self._matrix_dict[controls_no]
-
+    @abstractmethod
     def _take_auxiliaries_no(self, controls_no: int):
-        if controls_no in self._auxiliary_dict:
-            return self._auxiliary_dict[controls_no]
-
-        mct = MCTBarenco74Dirty(controls_no)
-        self._auxiliary_dict[controls_no] = mct.num_auxiliary_qubits()
-
-        return self._auxiliary_dict[controls_no]
-
-    def test_init(self):
-        with pytest.raises(
-            ValueError, match="Number of controls must be >= 5 for this implementation"
-        ):
-            MCTBarenco74Dirty(2)
-
-        try:
-            MCTBarenco74Dirty(5)
-        except Exception:
-            assert False, "object MCTBarenco74Dirty(5) was not created, but it should be"
+        raise NotImplementedError
 
     def test_circuit_clean_auxiliary(self):
         for controls_no in self._controls_no_list:
+            ref_matrix = load_matrix("noauxiliary", controls_no)
             unitary_matrix = self._take_matrix(controls_no)
-            auxiliaries_no = self._take_auxiliaries_no(controls_no)
 
-            res, msg = verify_circuit_strict_clean_non_wasting(
-                unitary_matrix, controls_no, auxiliaries_no
-            )
+            res, msg = verify_circuit_strict_clean_non_wasting(unitary_matrix, ref_matrix)
 
-            self._result_dict["SCNW"] = res
-
-            assert not res, msg
+            assert res == self._expected_classes["SCNW"], msg
 
     def test_circuit_clean_relative_auxiliary(self):
         for controls_no in self._controls_no_list:
@@ -88,9 +56,7 @@ class TestMCTBarenco74Dirty:
                 unitary_matrix, controls_no, auxiliaries_no
             )
 
-            self._result_dict["RCNW"] = res
-
-            assert res, msg
+            assert res == self._expected_classes["RCNW"], msg
 
     def test_circuit_dirty_auxiliary(self):
         for controls_no in self._controls_no_list:
@@ -101,9 +67,7 @@ class TestMCTBarenco74Dirty:
                 unitary_matrix, controls_no, auxiliaries_no
             )
 
-            self._result_dict["SDNW"] = res
-
-            assert not res, msg
+            assert res == self._expected_classes["SDNW"], msg
 
     def test_circuit_dirty_relative_auxiliary(self):
         for controls_no in self._controls_no_list:
@@ -114,9 +78,7 @@ class TestMCTBarenco74Dirty:
                 unitary_matrix, controls_no, auxiliaries_no
             )
 
-            self._result_dict["RDNW"] = res
-
-            assert res, msg
+            assert res == self._expected_classes["RDNW"], msg
 
     def test_circuit_clean_wasted_entangled_auxiliary(self):
         for controls_no in self._controls_no_list:
@@ -127,9 +89,7 @@ class TestMCTBarenco74Dirty:
                 unitary_matrix, controls_no, auxiliaries_no
             )
 
-            self._result_dict["SCWE"] = res
-
-            assert res, msg
+            assert res == self._expected_classes["SCWE"], msg
 
     def test_circuit_clean_wasted_separable_auxiliary(self):
         for controls_no in self._controls_no_list:
@@ -140,9 +100,7 @@ class TestMCTBarenco74Dirty:
                 unitary_matrix, controls_no, auxiliaries_no
             )
 
-            self._result_dict["SCWS"] = res
-
-            assert not res, msg
+            assert res == self._expected_classes["SCWS"], msg
 
     def test_circuit_clean_wasted_relative_separable_auxiliary(self):
         for controls_no in self._controls_no_list:
@@ -153,9 +111,7 @@ class TestMCTBarenco74Dirty:
                 unitary_matrix, controls_no, auxiliaries_no
             )
 
-            self._result_dict["RCWS"] = res
-
-            assert res, msg
+            assert res == self._expected_classes["RCWS"], msg
 
     def test_circuit_dirty_wasted_entangled_auxiliary(self):
         for controls_no in self._controls_no_list:
@@ -166,9 +122,7 @@ class TestMCTBarenco74Dirty:
                 unitary_matrix, controls_no, auxiliaries_no
             )
 
-            self._result_dict["SDWE"] = res
-
-            assert res, msg
+            assert res == self._expected_classes["SDWE"], msg
 
     def test_circuit_dirty_wasted_separable_auxiliary(self):
         for controls_no in self._controls_no_list:
@@ -179,9 +133,7 @@ class TestMCTBarenco74Dirty:
                 unitary_matrix, controls_no, auxiliaries_no
             )
 
-            self._result_dict["SDWS"] = res
-
-            assert not res, msg
+            assert res == self._expected_classes["SDWS"], msg
 
     def test_circuit_dirty_wasted_relative_separable_auxiliary(self):
         for controls_no in self._controls_no_list:
@@ -192,12 +144,10 @@ class TestMCTBarenco74Dirty:
                 unitary_matrix, controls_no, auxiliaries_no
             )
 
-            self._result_dict["RDWS"] = res
-
-            assert res, msg
+            assert res == self._expected_classes["RDWS"], msg
 
     def test_dependencies(self):
-        rd = self._result_dict
+        rd = self._expected_classes
 
         if rd["SDNW"]:
             assert rd["SCNW"]
