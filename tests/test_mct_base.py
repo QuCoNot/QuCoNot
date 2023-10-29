@@ -87,23 +87,19 @@ class BaseTestMCT(ABC):
 
     def test_circuit_clean_wasted_separable_auxiliary(self):
         for controls_no in self._controls_no_list:
+            ref_unitary = load_matrix("noauxiliary", controls_no)
             unitary_matrix = self._take_matrix(controls_no)
-            auxiliaries_no = self._take_auxiliaries_no(controls_no)
 
-            res, msg = verify_circuit_strict_clean_wasting_separable(
-                unitary_matrix, controls_no, auxiliaries_no
-            )
+            res, msg = verify_circuit_strict_clean_wasting_separable(unitary_matrix, ref_unitary)
 
             assert res == self._expected_classes["SCWS"], msg
 
     def test_circuit_clean_wasted_relative_separable_auxiliary(self):
         for controls_no in self._controls_no_list:
+            ref_unitary = load_matrix("noauxiliary", controls_no)
             unitary_matrix = self._take_matrix(controls_no)
-            auxiliaries_no = self._take_auxiliaries_no(controls_no)
 
-            res, msg = verify_circuit_relative_clean_wasting_separable(
-                unitary_matrix, controls_no, auxiliaries_no
-            )
+            res, msg = verify_circuit_relative_clean_wasting_separable(unitary_matrix, ref_unitary)
 
             assert res == self._expected_classes["RCWS"], msg
 
