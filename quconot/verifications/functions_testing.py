@@ -45,7 +45,7 @@ def verify_circuit_strict_clean_non_wasting(
         ref_unitary (np.ndarray): true 0-1 unitary matrix
 
     Returns:
-        Tuple[bool, str]: flag denoting if the tested matrix is of given class, together with reason if 
+        Tuple[bool, str]: flag denoting if the tested matrix is of given class, together with reason if
             it is not.
     """
     _, main_dim, aux_dim = _get_dims(tested_matrix, ref_unitary)
@@ -76,7 +76,7 @@ def verify_circuit_relative_clean_non_wasting(
         ref_unitary (np.ndarray): true 0-1 unitary matrix
 
     Returns:
-        Tuple[bool, str]: flag denoting if the tested matrix is of given class, together with reason if 
+        Tuple[bool, str]: flag denoting if the tested matrix is of given class, together with reason if
             it is not.
     """
     _, main_dim, aux_dim = _get_dims(tested_matrix, ref_unitary)
@@ -103,7 +103,7 @@ def verify_circuit_strict_dirty_non_wasting(
         ref_unitary (np.ndarray): true 0-1 unitary matrix
 
     Returns:
-        Tuple[bool, str]: flag denoting if the tested matrix is of given class, together with reason if 
+        Tuple[bool, str]: flag denoting if the tested matrix is of given class, together with reason if
             it is not.
     """
     global_dim, _, aux_dim = _get_dims(tested_matrix, ref_unitary)
@@ -130,7 +130,7 @@ def verify_circuit_relative_dirty_non_wasting(
         ref_unitary (np.ndarray): true 0-1 unitary matrix
 
     Returns:
-        Tuple[bool, str]: flag denoting if the tested matrix is of given class, together with reason if 
+        Tuple[bool, str]: flag denoting if the tested matrix is of given class, together with reason if
             it is not.
     """
     if auxiliaries_no == 0:
@@ -189,7 +189,7 @@ def verify_circuit_strict_clean_wasting_entangled(
         ref_unitary (np.ndarray): true 0-1 unitary matrix
 
     Returns:
-        Tuple[bool, str]: flag denoting if the tested matrix is of given class, together with reason if 
+        Tuple[bool, str]: flag denoting if the tested matrix is of given class, together with reason if
             it is not.
     """
     _, main_dim, aux_dim = _get_dims(tested_matrix, ref_unitary)
@@ -222,7 +222,7 @@ def verify_circuit_strict_dirty_wasting_entangled(
         ref_unitary (np.ndarray): true 0-1 unitary matrix
 
     Returns:
-        Tuple[bool, str]: flag denoting if the tested matrix is of given class, together with reason if 
+        Tuple[bool, str]: flag denoting if the tested matrix is of given class, together with reason if
             it is not.
     """
 
@@ -258,7 +258,7 @@ def verify_circuit_strict_clean_wasting_separable(
         ref_unitary (np.ndarray): true 0-1 unitary matrix
 
     Returns:
-        Tuple[bool, str]: flag denoting if the tested matrix is of given class, together with reason if 
+        Tuple[bool, str]: flag denoting if the tested matrix is of given class, together with reason if
             it is not.
     """
 
@@ -296,7 +296,7 @@ def verify_circuit_relative_clean_wasting_separable(
         ref_unitary (np.ndarray): true 0-1 unitary matrix
 
     Returns:
-        Tuple[bool, str]: flag denoting if the tested matrix is of given class, together with reason if 
+        Tuple[bool, str]: flag denoting if the tested matrix is of given class, together with reason if
             it is not.
     """
 
@@ -332,7 +332,7 @@ def verify_circuit_strict_dirty_wasting_separable(
         ref_unitary (np.ndarray): true 0-1 unitary matrix
 
     Returns:
-        Tuple[bool, str]: flag denoting if the tested matrix is of given class, together with reason if 
+        Tuple[bool, str]: flag denoting if the tested matrix is of given class, together with reason if
             it is not.
     """
 
@@ -388,7 +388,7 @@ def verify_circuit_relative_dirty_wasting_separable(
         ref_unitary (np.ndarray): true 0-1 unitary matrix
 
     Returns:
-        Tuple[bool, str]: flag denoting if the tested matrix is of given class, together with reason if 
+        Tuple[bool, str]: flag denoting if the tested matrix is of given class, together with reason if
             it is not.
     """
 
