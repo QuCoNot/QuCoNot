@@ -9,9 +9,8 @@ from tests.test_mct_base import BaseTestMCT
 
 
 class TestMCTRecursion(BaseTestMCT):
-    _matrix_dict: Dict[np.array, int] = {}
+    _matrix_dict: Dict[int, np.array] = {}
     _reverse_matrix_dict: Dict[np.array, int] = {}
-    _auxiliary_dict: Dict[int, int] = {}
     _controls_no_list = [5]
     _result_dict: Dict[str, bool] = {}
 

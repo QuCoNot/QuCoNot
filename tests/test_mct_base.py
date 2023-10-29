@@ -19,16 +19,14 @@ from tests.utils import load_matrix
 
 
 class BaseTestMCT(ABC):
-    _matrix_dict: Dict[np.array, int] = {}
-    _reverse_matrix_dict: Dict[np.array, int] = {}
-    _auxiliary_dict: Dict[int, int] = {}
+    _matrix_dict: Dict[int, np.array] = {}
     _controls_no_list = [5]
     _result_dict: Dict[str, bool] = {}
 
     _expected_classes: Dict[str, bool] = {}
 
     @abstractmethod
-    def _take_matrix(self, controls_no: int, reverse: bool = False):
+    def _take_matrix(self, controls_no: int):
         raise NotImplementedError
 
     def test_circuit_clean_auxiliary(self):

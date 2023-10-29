@@ -10,7 +10,7 @@ from tests.test_mct_base import BaseTestMCT
 
 @pytest.mark.xfail
 class TestMCTBarenco75Dirty(BaseTestMCT):
-    _matrix_dict: Dict[np.array, int] = {}
+    _matrix_dict: Dict[int, np.array] = {}
     _reverse_matrix_dict: Dict[np.array, int] = {}
     _controls_no_list = [5]
 
