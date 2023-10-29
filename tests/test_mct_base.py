@@ -2,10 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Dict
 
 import numpy as np
-import pytest
-from qiskit.quantum_info.operators import Operator
 
-from quconot.implementations.mct_barenco_74_dirty import MCTBarenco74Dirty
 from quconot.verifications.functions_testing import (
     verify_circuit_relative_clean_non_wasting,
     verify_circuit_relative_clean_wasting_separable,

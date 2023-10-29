@@ -1,15 +1,9 @@
+from typing import Tuple
+
 import numpy as np
 
-from .functions import (
-    ABS_TOLERANCE,
-    identity_matrix,
-    ket0,
-    load_matrix,
-    REL_TOLERANCE,
-    zero_matrix,
-)
+from .functions import ABS_TOLERANCE, REL_TOLERANCE, ket0, load_matrix
 from .reverse_kronecker_product import reverse_kronecker_product
-from typing import Tuple
 
 
 def _get_dims(tested_matrix: np.ndarray, ref_unitary: np.ndarray) -> Tuple[int, int, int]:
@@ -28,7 +22,7 @@ def _get_dims(tested_matrix: np.ndarray, ref_unitary: np.ndarray) -> Tuple[int, 
     global_dim = tested_matrix.shape[0]
     if global_dim % main_dim != 0:
         raise ValueError(
-            f"Dimension mismatch: on cannot find auxilliary system for dimensions {main_dim} and {global_dim} cannot"
+            f"One cannot find auxilliary system for dimensions {main_dim} and {global_dim} cannot"
         )
     aux_dim = global_dim // main_dim
     return global_dim, main_dim, aux_dim
@@ -45,7 +39,7 @@ def verify_circuit_strict_clean_non_wasting(
         ref_unitary (np.ndarray): true 0-1 unitary matrix
 
     Returns:
-        Tuple[bool, str]: flag denoting if the tested matrix is of given class, together with reason if
+        Tuple[bool, str]: flag denoting if the tested matrix is of given class, and reason if
             it is not.
     """
     _, main_dim, aux_dim = _get_dims(tested_matrix, ref_unitary)
@@ -76,7 +70,7 @@ def verify_circuit_relative_clean_non_wasting(
         ref_unitary (np.ndarray): true 0-1 unitary matrix
 
     Returns:
-        Tuple[bool, str]: flag denoting if the tested matrix is of given class, together with reason if
+        Tuple[bool, str]: flag denoting if the tested matrix is of given class, and reason if
             it is not.
     """
     _, main_dim, aux_dim = _get_dims(tested_matrix, ref_unitary)
@@ -103,7 +97,7 @@ def verify_circuit_strict_dirty_non_wasting(
         ref_unitary (np.ndarray): true 0-1 unitary matrix
 
     Returns:
-        Tuple[bool, str]: flag denoting if the tested matrix is of given class, together with reason if
+        Tuple[bool, str]: flag denoting if the tested matrix is of given class, and reason if
             it is not.
     """
     global_dim, _, aux_dim = _get_dims(tested_matrix, ref_unitary)
@@ -130,7 +124,7 @@ def verify_circuit_relative_dirty_non_wasting(
         ref_unitary (np.ndarray): true 0-1 unitary matrix
 
     Returns:
-        Tuple[bool, str]: flag denoting if the tested matrix is of given class, together with reason if
+        Tuple[bool, str]: flag denoting if the tested matrix is of given class, and reason if
             it is not.
     """
     if auxiliaries_no == 0:
@@ -149,26 +143,22 @@ def verify_circuit_relative_dirty_non_wasting(
         return False, "Unitary W has different shape."
 
     # check if w is unitary
-    check_w = np.matmul(w, np.linalg.inv(w))
+    check_w = w @ w.conj().T
 
     if not np.allclose(
         check_w,
-        identity_matrix(auxiliaries_no),
+        np.eye(2**auxiliaries_no),
         atol=ABS_TOLERANCE,
         rtol=REL_TOLERANCE,
     ):
         return False, "Matrix W should be unitary"
 
     check_v = np.matmul(np.abs(v), inverse_matrix)
-    generated_unitary = check_v - identity_matrix(controls_no + 1)
-    expected_unitary = zero_matrix(controls_no + 1)
-
-    if generated_unitary.shape != expected_unitary.shape:
-        return False, "Unitary V has different shape."
+    generated_unitary = check_v - np.eye(2 ** (controls_no + 1))
 
     if not np.allclose(
         generated_unitary,
-        expected_unitary,
+        0.0,
         atol=ABS_TOLERANCE,
         rtol=REL_TOLERANCE,
     ):
@@ -189,7 +179,7 @@ def verify_circuit_strict_clean_wasting_entangled(
         ref_unitary (np.ndarray): true 0-1 unitary matrix
 
     Returns:
-        Tuple[bool, str]: flag denoting if the tested matrix is of given class, together with reason if
+        Tuple[bool, str]: flag denoting if the tested matrix is of given class, and reason if
             it is not.
     """
     _, main_dim, aux_dim = _get_dims(tested_matrix, ref_unitary)
@@ -222,7 +212,7 @@ def verify_circuit_strict_dirty_wasting_entangled(
         ref_unitary (np.ndarray): true 0-1 unitary matrix
 
     Returns:
-        Tuple[bool, str]: flag denoting if the tested matrix is of given class, together with reason if
+        Tuple[bool, str]: flag denoting if the tested matrix is of given class, and reason if
             it is not.
     """
 
@@ -258,7 +248,7 @@ def verify_circuit_strict_clean_wasting_separable(
         ref_unitary (np.ndarray): true 0-1 unitary matrix
 
     Returns:
-        Tuple[bool, str]: flag denoting if the tested matrix is of given class, together with reason if
+        Tuple[bool, str]: flag denoting if the tested matrix is of given class, and reason if
             it is not.
     """
 
@@ -296,7 +286,7 @@ def verify_circuit_relative_clean_wasting_separable(
         ref_unitary (np.ndarray): true 0-1 unitary matrix
 
     Returns:
-        Tuple[bool, str]: flag denoting if the tested matrix is of given class, together with reason if
+        Tuple[bool, str]: flag denoting if the tested matrix is of given class, and reason if
             it is not.
     """
 
@@ -332,7 +322,7 @@ def verify_circuit_strict_dirty_wasting_separable(
         ref_unitary (np.ndarray): true 0-1 unitary matrix
 
     Returns:
-        Tuple[bool, str]: flag denoting if the tested matrix is of given class, together with reason if
+        Tuple[bool, str]: flag denoting if the tested matrix is of given class, and reason if
             it is not.
     """
 
@@ -354,18 +344,18 @@ def verify_circuit_strict_dirty_wasting_separable(
         return False, "Unitary W has different shape."
 
     # check if w is unitary
-    check_w = np.matmul(w, np.linalg.inv(w))
+    check_w = np.matmul(w, w.conj().T)
 
     if not np.allclose(
-        check_w, identity_matrix(auxiliaries_no), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE
+        check_w, np.eye(2**auxiliaries_no), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE
     ):
         return False, "Something wrong with the implementation"
 
     # Expected unitary after calculation is identity.
-    expected_unitary = identity_matrix(no_of_qubits)
+    expected_unitary = np.eye(2**no_of_qubits)
 
     # X_1 * X_2^dagger * np.conj((X_1 * X_2^dagger)[0,0]) = I
-    m = np.matmul(v, inverse_matrix)
+    m = v @ inverse_matrix
     generated_unitary = m * np.conjugate(m[0, 0])
 
     if generated_unitary.shape != expected_unitary.shape:
@@ -388,7 +378,7 @@ def verify_circuit_relative_dirty_wasting_separable(
         ref_unitary (np.ndarray): true 0-1 unitary matrix
 
     Returns:
-        Tuple[bool, str]: flag denoting if the tested matrix is of given class, together with reason if
+        Tuple[bool, str]: flag denoting if the tested matrix is of given class, and reason if
             it is not.
     """
 
@@ -410,16 +400,16 @@ def verify_circuit_relative_dirty_wasting_separable(
         return False, "Unitary W has different shape."
 
     # check if w is unitary
-    check_w = np.matmul(w, np.linalg.inv(w))
+    check_w = w @ w.conj().T
 
     if not np.allclose(
-        check_w, identity_matrix(auxiliaries_no), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE
+        check_w, np.eye(2**auxiliaries_no), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE
     ):
         return False, "Resulting matrix should be identity"
 
-    expected_unitary = identity_matrix(no_of_qubits)
+    expected_unitary = np.eye(2**no_of_qubits)
 
-    m = np.matmul(v, inverse_matrix)
+    m = v @ inverse_matrix
     generated_unitary = np.abs(m)
 
     if generated_unitary.shape != expected_unitary.shape:
