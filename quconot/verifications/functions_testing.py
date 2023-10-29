@@ -146,22 +146,14 @@ def verify_circuit_relative_dirty_non_wasting(
     check_w = w @ w.conj().T
 
     if not np.allclose(
-        check_w,
-        np.eye(2**auxiliaries_no),
-        atol=ABS_TOLERANCE,
-        rtol=REL_TOLERANCE,
+        check_w, np.eye(2**auxiliaries_no), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE
     ):
         return False, "Matrix W should be unitary"
 
-    check_v = np.matmul(np.abs(v), inverse_matrix)
+    check_v = np.abs(v) @ inverse_matrix
     generated_unitary = check_v - np.eye(2 ** (controls_no + 1))
 
-    if not np.allclose(
-        generated_unitary,
-        0.0,
-        atol=ABS_TOLERANCE,
-        rtol=REL_TOLERANCE,
-    ):
+    if not np.allclose(generated_unitary, 0.0, atol=ABS_TOLERANCE, rtol=REL_TOLERANCE):
         return False, "Generated matrix V should be all 0"
 
     return True, ""
@@ -307,7 +299,6 @@ def verify_circuit_relative_clean_wasting_separable(
 
     if not np.allclose(generated_unitary, ref_unitary, atol=ABS_TOLERANCE, rtol=REL_TOLERANCE):
         return False, "Resulting matrix should be identity"
-
     return True, ""
 
 
@@ -344,7 +335,7 @@ def verify_circuit_strict_dirty_wasting_separable(
         return False, "Unitary W has different shape."
 
     # check if w is unitary
-    check_w = np.matmul(w, w.conj().T)
+    check_w = w @ w.conj().T
 
     if not np.allclose(
         check_w, np.eye(2**auxiliaries_no), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE
@@ -363,7 +354,6 @@ def verify_circuit_strict_dirty_wasting_separable(
 
     if not np.allclose(generated_unitary, expected_unitary, atol=ABS_TOLERANCE, rtol=REL_TOLERANCE):
         return False, "Resulting matrix should be an Identity"
-
     return True, ""
 
 
@@ -417,5 +407,4 @@ def verify_circuit_relative_dirty_wasting_separable(
 
     if not np.allclose(generated_unitary, expected_unitary, atol=ABS_TOLERANCE, rtol=REL_TOLERANCE):
         return False, "Resulting matrix should be identity"
-
     return True, ""
