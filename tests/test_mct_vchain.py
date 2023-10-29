@@ -11,7 +11,6 @@ from tests.test_mct_base import BaseTestMCT
 class TestMCTVChain(BaseTestMCT):
     _matrix_dict: Dict[int, np.array] = {}
     _controls_no_list = [5]
-    _result_dict: Dict[str, bool] = {}
 
     _expected_classes: Dict[str, bool] = {
         "SCNW": True,

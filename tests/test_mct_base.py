@@ -21,7 +21,6 @@ from tests.utils import load_matrix
 class BaseTestMCT(ABC):
     _matrix_dict: Dict[int, np.array] = {}
     _controls_no_list = [5]
-    _result_dict: Dict[str, bool] = {}
 
     _expected_classes: Dict[str, bool] = {}
 
