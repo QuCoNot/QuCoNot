@@ -5,7 +5,6 @@ import pytest
 from qiskit.quantum_info.operators import Operator
 
 from quconot.implementations.mct_barenco_75_dirty import MCTBarenco75Dirty
-
 from tests.test_mct_base import BaseTestMCT
 
 
@@ -47,9 +46,6 @@ class TestMCTBarenco75Dirty(BaseTestMCT):
             return self._reverse_matrix_dict[controls_no]
         else:
             return self._matrix_dict[controls_no]
-
-    def _take_auxiliaries_no(self, controls_no: int):
-        return 0
 
     def test_init(self):
         with pytest.raises(

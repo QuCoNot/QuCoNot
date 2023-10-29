@@ -5,7 +5,6 @@ import pytest
 from qiskit.quantum_info.operators import Operator
 
 from quconot.implementations.mct_vchain_dirty import MCTVChainDirty
-
 from tests.test_mct_base import BaseTestMCT
 
 
@@ -48,15 +47,6 @@ class TestMCTVChainDirty(BaseTestMCT):
             return self._reverse_matrix_dict[controls_no]
         else:
             return self._matrix_dict[controls_no]
-
-    def _take_auxiliaries_no(self, controls_no: int):
-        if controls_no in self._auxiliary_dict:
-            return self._auxiliary_dict[controls_no]
-
-        mct = MCTVChainDirty(controls_no)
-        self._auxiliary_dict[controls_no] = mct.num_auxiliary_qubits()
-
-        return self._auxiliary_dict[controls_no]
 
     def test_init(self):
         with pytest.raises(

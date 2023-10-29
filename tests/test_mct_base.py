@@ -31,104 +31,74 @@ class BaseTestMCT(ABC):
     def _take_matrix(self, controls_no: int, reverse: bool = False):
         raise NotImplementedError
 
-    @abstractmethod
-    def _take_auxiliaries_no(self, controls_no: int):
-        raise NotImplementedError
-
     def test_circuit_clean_auxiliary(self):
         for controls_no in self._controls_no_list:
             ref_matrix = load_matrix("noauxiliary", controls_no)
             unitary_matrix = self._take_matrix(controls_no)
-
             res, msg = verify_circuit_strict_clean_non_wasting(unitary_matrix, ref_matrix)
-
             assert res == self._expected_classes["SCNW"], msg
 
     def test_circuit_clean_relative_auxiliary(self):
         for controls_no in self._controls_no_list:
             ref_matrix = load_matrix("noauxiliary", controls_no)
             unitary_matrix = self._take_matrix(controls_no)
-
             res, msg = verify_circuit_relative_clean_non_wasting(unitary_matrix, ref_matrix)
-
             assert res == self._expected_classes["RCNW"], msg
 
     def test_circuit_dirty_auxiliary(self):
         for controls_no in self._controls_no_list:
             ref_matrix = load_matrix("noauxiliary", controls_no)
             unitary_matrix = self._take_matrix(controls_no)
-
             res, msg = verify_circuit_strict_dirty_non_wasting(unitary_matrix, ref_matrix)
-
             assert res == self._expected_classes["SDNW"], msg
 
     def test_circuit_dirty_relative_auxiliary(self):
         for controls_no in self._controls_no_list:
-            unitary_matrix = self._take_matrix(controls_no, True)
-            auxiliaries_no = self._take_auxiliaries_no(controls_no)
-
-            res, msg = verify_circuit_relative_dirty_non_wasting(
-                unitary_matrix, controls_no, auxiliaries_no
-            )
-
+            ref_matrix = load_matrix("noauxiliary", controls_no)
+            unitary_matrix = self._take_matrix(controls_no)
+            res, msg = verify_circuit_relative_dirty_non_wasting(unitary_matrix, ref_matrix)
             assert res == self._expected_classes["RDNW"], msg
 
     def test_circuit_clean_wasted_entangled_auxiliary(self):
         for controls_no in self._controls_no_list:
             ref_unitary = load_matrix("noauxiliary", controls_no)
             unitary_matrix = self._take_matrix(controls_no)
-
             res, msg = verify_circuit_strict_clean_wasting_entangled(unitary_matrix, ref_unitary)
-
             assert res == self._expected_classes["SCWE"], msg
 
     def test_circuit_clean_wasted_separable_auxiliary(self):
         for controls_no in self._controls_no_list:
             ref_unitary = load_matrix("noauxiliary", controls_no)
             unitary_matrix = self._take_matrix(controls_no)
-
             res, msg = verify_circuit_strict_clean_wasting_separable(unitary_matrix, ref_unitary)
-
             assert res == self._expected_classes["SCWS"], msg
 
     def test_circuit_clean_wasted_relative_separable_auxiliary(self):
         for controls_no in self._controls_no_list:
             ref_unitary = load_matrix("noauxiliary", controls_no)
             unitary_matrix = self._take_matrix(controls_no)
-
             res, msg = verify_circuit_relative_clean_wasting_separable(unitary_matrix, ref_unitary)
-
             assert res == self._expected_classes["RCWS"], msg
 
     def test_circuit_dirty_wasted_entangled_auxiliary(self):
         for controls_no in self._controls_no_list:
             ref_unitary = load_matrix("noauxiliary", controls_no)
             unitary_matrix = self._take_matrix(controls_no)
-
             res, msg = verify_circuit_strict_dirty_wasting_entangled(unitary_matrix, ref_unitary)
-
             assert res == self._expected_classes["SDWE"], msg
 
     def test_circuit_dirty_wasted_separable_auxiliary(self):
         for controls_no in self._controls_no_list:
-            unitary_matrix = self._take_matrix(controls_no, True)
-            auxiliaries_no = self._take_auxiliaries_no(controls_no)
-
-            res, msg = verify_circuit_strict_dirty_wasting_separable(
-                unitary_matrix, controls_no, auxiliaries_no
-            )
-
+            ref_unitary = load_matrix("noauxiliary", controls_no)
+            unitary_matrix = self._take_matrix(controls_no)
+            res, msg = verify_circuit_strict_dirty_wasting_separable(unitary_matrix, ref_unitary)
             assert res == self._expected_classes["SDWS"], msg
 
     def test_circuit_dirty_wasted_relative_separable_auxiliary(self):
         for controls_no in self._controls_no_list:
-            unitary_matrix = self._take_matrix(controls_no, True)
-            auxiliaries_no = self._take_auxiliaries_no(controls_no)
-
-            res, msg = verify_circuit_relative_dirty_wasting_separable(
-                unitary_matrix, controls_no, auxiliaries_no
-            )
-
+            ref_unitary = load_matrix("noauxiliary", controls_no)
+            unitary_matrix = self._take_matrix(controls_no)
+            res, msg = verify_circuit_relative_dirty_wasting_separable(unitary_matrix, ref_unitary)
             assert res == self._expected_classes["RDWS"], msg
 
     def test_dependencies(self):

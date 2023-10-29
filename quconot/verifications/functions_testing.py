@@ -2,30 +2,8 @@ from typing import Tuple
 
 import numpy as np
 
-from .functions import ABS_TOLERANCE, REL_TOLERANCE, ket0, load_matrix
+from .functions import ABS_TOLERANCE, REL_TOLERANCE, _get_dims, ket0
 from .reverse_kronecker_product import reverse_kronecker_product
-
-
-def _get_dims(tested_matrix: np.ndarray, ref_unitary: np.ndarray) -> Tuple[int, int, int]:
-    """Returns the dimensions of the global, main and auxilliary system.
-
-    Auxiliary system dimension is the dimensionality
-
-    Args:
-        tested_matrix (np.ndarray): the global system unitary
-        ref_unitary (np.ndarray): the main system unitary
-
-    Returns:
-        Tuple[int, int, int]: global, main, and aux dimensions.
-    """
-    main_dim = ref_unitary.shape[0]
-    global_dim = tested_matrix.shape[0]
-    if global_dim % main_dim != 0:
-        raise ValueError(
-            f"One cannot find auxilliary system for dimensions {main_dim} and {global_dim} cannot"
-        )
-    aux_dim = global_dim // main_dim
-    return global_dim, main_dim, aux_dim
 
 
 # Strict Clean Non-Wasting
@@ -89,7 +67,7 @@ def verify_circuit_relative_clean_non_wasting(
 # Strict Dirty Non-Wasting
 def verify_circuit_strict_dirty_non_wasting(
     tested_matrix: np.ndarray, ref_unitary: np.ndarray
-) -> tuple:
+) -> Tuple[bool, str]:
     """Verifies if tested_matrix is strict dirty non-wasting based on reference matrix.
 
     Args:
@@ -115,7 +93,7 @@ def verify_circuit_strict_dirty_non_wasting(
 
 # Relative Dirty Non-Wasting
 def verify_circuit_relative_dirty_non_wasting(
-    tested_matrix, controls_no: int, auxiliaries_no: int
+    tested_matrix: np.ndarray, ref_unitary: np.ndarray
 ) -> Tuple[bool, str]:
     """Verifies if tested_matrix is relative dirty non-wasting based on reference matrix.
 
@@ -127,31 +105,18 @@ def verify_circuit_relative_dirty_non_wasting(
         Tuple[bool, str]: flag denoting if the tested matrix is of given class, and reason if
             it is not.
     """
-    if auxiliaries_no == 0:
-        return False, "No of Auxiliary qubit should bigger than 0"
+    _, main_dim, aux_dim = _get_dims(tested_matrix, ref_unitary)
 
-    # get mct inverse matrix
-    inverse_matrix = load_matrix("reverse_noauxiliary", controls_no)
-
-    v_shape = 2 ** (controls_no + 1)
-    w_shape = 2 ** (auxiliaries_no)
-
-    v, w = reverse_kronecker_product(tested_matrix, (v_shape, v_shape))
-
-    # check shape of w
-    if w.shape != (w_shape, w_shape):
-        return False, "Unitary W has different shape."
+    w, v = reverse_kronecker_product(tested_matrix, (aux_dim, aux_dim))
 
     # check if w is unitary
     check_w = w @ w.conj().T
 
-    if not np.allclose(
-        check_w, np.eye(2**auxiliaries_no), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE
-    ):
+    if not np.allclose(check_w, np.eye(aux_dim), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE):
         return False, "Matrix W should be unitary"
 
-    check_v = np.abs(v) @ inverse_matrix
-    generated_unitary = check_v - np.eye(2 ** (controls_no + 1))
+    check_v = np.abs(v) @ ref_unitary.conj().T
+    generated_unitary = check_v - np.eye(main_dim)
 
     if not np.allclose(generated_unitary, 0.0, atol=ABS_TOLERANCE, rtol=REL_TOLERANCE):
         return False, "Generated matrix V should be all 0"
@@ -243,7 +208,6 @@ def verify_circuit_strict_clean_wasting_separable(
         Tuple[bool, str]: flag denoting if the tested matrix is of given class, and reason if
             it is not.
     """
-
     _, main_dim, aux_dim = _get_dims(tested_matrix, ref_unitary)
 
     i = np.eye(aux_dim)
@@ -281,7 +245,6 @@ def verify_circuit_relative_clean_wasting_separable(
         Tuple[bool, str]: flag denoting if the tested matrix is of given class, and reason if
             it is not.
     """
-
     global_dim, main_dim, aux_dim = _get_dims(tested_matrix, ref_unitary)
 
     i_c = np.eye(aux_dim)
@@ -304,8 +267,8 @@ def verify_circuit_relative_clean_wasting_separable(
 
 # Strict Dirty Wasting-Separable
 def verify_circuit_strict_dirty_wasting_separable(
-    tested_matrix, controls_no: int, auxiliaries_no: int
-):
+    tested_matrix: np.ndarray, ref_unitary: np.ndarray
+) -> Tuple[bool, str]:
     """Verifies if tested_matrix is strict dirty wasting separable based on reference matrix.
 
     Args:
@@ -316,51 +279,28 @@ def verify_circuit_strict_dirty_wasting_separable(
         Tuple[bool, str]: flag denoting if the tested matrix is of given class, and reason if
             it is not.
     """
+    _, main_dim, aux_dim = _get_dims(tested_matrix, ref_unitary)
 
-    if auxiliaries_no == 0:
-        return False, "No of Auxiliary qubit should bigger than 0"
-
-    # get mct inverse matrix
-    inverse_matrix = load_matrix("reverse_noauxiliary", controls_no)
-
-    v_shape = 2 ** (controls_no + 1)
-    w_shape = 2 ** (auxiliaries_no)
-
-    v, w = reverse_kronecker_product(tested_matrix, (v_shape, v_shape))
-
-    no_of_qubits = controls_no + 1
-
-    # check shape of w
-    if w.shape != (w_shape, w_shape):
-        return False, "Unitary W has different shape."
-
+    w, v = reverse_kronecker_product(tested_matrix, (aux_dim, aux_dim))
     # check if w is unitary
     check_w = w @ w.conj().T
 
-    if not np.allclose(
-        check_w, np.eye(2**auxiliaries_no), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE
-    ):
-        return False, "Something wrong with the implementation"
-
-    # Expected unitary after calculation is identity.
-    expected_unitary = np.eye(2**no_of_qubits)
+    if not np.allclose(check_w, np.eye(aux_dim), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE):
+        return False, "Not separable unitary matrix"
 
     # X_1 * X_2^dagger * np.conj((X_1 * X_2^dagger)[0,0]) = I
-    m = v @ inverse_matrix
+    m = v @ ref_unitary
     generated_unitary = m * np.conjugate(m[0, 0])
 
-    if generated_unitary.shape != expected_unitary.shape:
-        return False, "Unitary V has different shape."
-
-    if not np.allclose(generated_unitary, expected_unitary, atol=ABS_TOLERANCE, rtol=REL_TOLERANCE):
+    if not np.allclose(generated_unitary, np.eye(main_dim), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE):
         return False, "Resulting matrix should be an Identity"
     return True, ""
 
 
 # Relative Dirty Wasting-Separable
 def verify_circuit_relative_dirty_wasting_separable(
-    tested_matrix, controls_no: int, auxiliaries_no: int
-):
+    tested_matrix: np.ndarray, ref_unitary: np.ndarray
+) -> Tuple[bool, str]:
     """Verifies if tested_matrix is relative dirty wasting separable based on reference matrix.
 
     Args:
@@ -371,40 +311,17 @@ def verify_circuit_relative_dirty_wasting_separable(
         Tuple[bool, str]: flag denoting if the tested matrix is of given class, and reason if
             it is not.
     """
+    _, main_dim, aux_dim = _get_dims(tested_matrix, ref_unitary)
 
-    if auxiliaries_no == 0:
-        return False, "No of Auxiliary qubit should bigger than 0"
-
-    # get mct inverse matrix
-    inverse_matrix = load_matrix("reverse_noauxiliary", controls_no)
-
-    v_shape = 2 ** (controls_no + 1)
-    w_shape = 2 ** (auxiliaries_no)
-
-    v, w = reverse_kronecker_product(tested_matrix, (v_shape, v_shape))
-
-    no_of_qubits = controls_no + 1
-
-    # check shape of w
-    if w.shape != (w_shape, w_shape):
-        return False, "Unitary W has different shape."
-
+    w, v = reverse_kronecker_product(tested_matrix, (aux_dim, aux_dim))
     # check if w is unitary
     check_w = w @ w.conj().T
 
-    if not np.allclose(
-        check_w, np.eye(2**auxiliaries_no), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE
-    ):
+    if not np.allclose(check_w, np.eye(aux_dim), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE):
         return False, "Resulting matrix should be identity"
 
-    expected_unitary = np.eye(2**no_of_qubits)
+    generated_unitary = np.abs(v @ ref_unitary)
 
-    m = v @ inverse_matrix
-    generated_unitary = np.abs(m)
-
-    if generated_unitary.shape != expected_unitary.shape:
-        return False, "Unitary V has different shape."
-
-    if not np.allclose(generated_unitary, expected_unitary, atol=ABS_TOLERANCE, rtol=REL_TOLERANCE):
+    if not np.allclose(generated_unitary, np.eye(main_dim), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE):
         return False, "Resulting matrix should be identity"
     return True, ""
