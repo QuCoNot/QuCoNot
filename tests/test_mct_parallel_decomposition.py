@@ -68,3 +68,6 @@ class TestMCTParallelDecomposition(BaseTestMCT):
             MCTParallelDecomposition(4)
         except Exception:
             assert False, "object MCTParallelDecomposition(4) was not created, but it should be"
+
+    def test_circuit_dirty_wasted_entangled_auxiliary(self):
+        return super().test_circuit_dirty_wasted_entangled_auxiliary()

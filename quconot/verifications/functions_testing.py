@@ -1,43 +1,41 @@
 import numpy as np
 
 from .functions import (
-    absolute_error_tol,
+    ABS_TOLERANCE,
     identity_matrix,
     ket0,
     ket_0_matrix,
     load_matrix,
-    relative_error_tol,
+    REL_TOLERANCE,
     zero_matrix,
 )
 from .reverse_kronecker_product import reverse_kronecker_product
+from typing import Tuple
+
+
+def _get_dims(unitary_matrix: np.ndarray, ref_unitary: np.ndarray) -> Tuple[int, int, int]:
+    main_dim = ref_unitary.shape[0]
+    global_dim = unitary_matrix.shape[0]
+    aux_dim = global_dim // main_dim
+    return global_dim, main_dim, aux_dim
 
 
 # Strict Clean Non-Wasting
 def verify_circuit_strict_clean_non_wasting(
     unitary_matrix: np.ndarray, ref_unitary: np.ndarray
-) -> tuple:
-    controls_dim = ref_unitary.shape[0]
-    global_dim = unitary_matrix.shape[0]
-    auxiliary_dim = global_dim // controls_dim
+) -> Tuple[bool, str]:
+    _, main_dim, aux_dim = _get_dims(unitary_matrix, ref_unitary)
 
-    i = np.eye(controls_dim)
-    ket_0 = ket0(auxiliary_dim)
+    i = np.eye(main_dim)
+    ket_0 = ket0(aux_dim)
     ket_0_i = np.kron(ket_0, i)
 
-    unitary_matrix = np.matmul(np.matmul(ket_0_i, unitary_matrix), ket_0_i.T)
+    unitary_matrix = ket_0_i @ unitary_matrix @ ket_0_i.T
 
-    m = np.matmul(unitary_matrix, ref_unitary.conj().T)
-    generated_unitary = m * np.conjugate(m[0, 0]) - np.eye(controls_dim)
+    m = unitary_matrix @ ref_unitary.conj().T
+    generated_unitary = m * np.conjugate(m[0, 0]) - np.eye(main_dim)
 
-    if (
-        np.allclose(
-            generated_unitary,
-            0.0,
-            atol=absolute_error_tol,
-            rtol=relative_error_tol,
-        )
-        is False
-    ):
+    if not np.allclose(generated_unitary, 0.0, atol=ABS_TOLERANCE, rtol=REL_TOLERANCE):
         return False, "Generated matrix should be all 0"
 
     return True, ""
@@ -45,73 +43,33 @@ def verify_circuit_strict_clean_non_wasting(
 
 # Relative Clean Non-Wasting
 def verify_circuit_relative_clean_non_wasting(
-    unitary_matrix, controls_no: int, auxiliaries_no: int
-):
-    if auxiliaries_no == 0:
-        return False, "No of Auxiliary qubit should bigger than 0"
+    unitary_matrix: np.ndarray, ref_unitary: np.ndarray
+) -> Tuple[bool, str]:
+    _, main_dim, aux_dim = _get_dims(unitary_matrix, ref_unitary)
+    ket_0_i = np.kron(ket0(aux_dim), np.eye(main_dim))
 
-    # get mct inverse matrix
-    inverse_matrix = load_matrix("noauxiliary", controls_no)
-    # inverse_matrix = np.kron(identity_matrix(auxiliaries_no), inverse_matrix)
+    unitary_matrix = ket_0_i @ unitary_matrix @ ket_0_i.T
 
-    i = identity_matrix(controls_no + 1)
-    ket_0 = ket_0_matrix(auxiliaries_no)
-    ket_0_i = np.kron(ket_0, i)
+    m = unitary_matrix @ ref_unitary.conj().T
+    generated_unitary = np.absolute(m) - np.eye(main_dim)
 
-    unitary_matrix = np.matmul(np.matmul(ket_0_i, unitary_matrix), ket_0_i.T)
-
-    no_of_qubits = controls_no + 1
-
-    m = np.matmul(unitary_matrix, inverse_matrix)
-    generated_unitary = np.absolute(m) - identity_matrix(no_of_qubits)
-
-    expected_unitary = zero_matrix(no_of_qubits)
-
-    if generated_unitary.shape != expected_unitary.shape:
-        return False, "Unitary has different shape."
-
-    if (
-        np.allclose(
-            generated_unitary,
-            expected_unitary,
-            atol=absolute_error_tol,
-            rtol=relative_error_tol,
-        )
-        is False
-    ):
+    if not np.allclose(generated_unitary, 0.0, atol=ABS_TOLERANCE, rtol=REL_TOLERANCE):
         return False, "Generated matrix should be all 0"
-
     return True, ""
 
 
 # Strict Dirty Non-Wasting
-def verify_circuit_strict_dirty_non_wasting(unitary_matrix, controls_no: int, auxiliaries_no: int):
-    if auxiliaries_no == 0:
-        return False, "No of Auxiliary qubit should bigger than 0"
+def verify_circuit_strict_dirty_non_wasting(
+    unitary_matrix: np.ndarray, ref_unitary: np.ndarray
+) -> tuple:
+    global_dim, main_dim, aux_dim = _get_dims(unitary_matrix, ref_unitary)
 
-    # get mct inverse matrix
-    inverse_matrix = load_matrix("noauxiliary", controls_no)
-    inverse_matrix = np.kron(identity_matrix(auxiliaries_no), inverse_matrix)
+    inverse_matrix = np.kron(np.eye(aux_dim), ref_unitary.conj().T)
 
-    no_of_qubits = controls_no + auxiliaries_no + 1
+    m = unitary_matrix @ inverse_matrix
+    generated_unitary = np.conjugate(m[0, 0]) * m - np.eye(global_dim)
 
-    m = np.matmul(unitary_matrix, inverse_matrix)
-    generated_unitary = (m * np.conjugate(m[0, 0])) - identity_matrix(no_of_qubits)
-
-    expected_unitary = zero_matrix(no_of_qubits)
-
-    if generated_unitary.shape != expected_unitary.shape:
-        return False, "Unitary has different shape."
-
-    if (
-        np.allclose(
-            generated_unitary,
-            expected_unitary,
-            atol=absolute_error_tol,
-            rtol=relative_error_tol,
-        )
-        is False
-    ):
+    if not np.allclose(generated_unitary, 0.0, atol=ABS_TOLERANCE, rtol=REL_TOLERANCE):
         return False, "Generated matrix should be all 0"
 
     return True, ""
@@ -120,7 +78,7 @@ def verify_circuit_strict_dirty_non_wasting(unitary_matrix, controls_no: int, au
 # Relative Dirty Non-Wasting
 def verify_circuit_relative_dirty_non_wasting(
     unitary_matrix, controls_no: int, auxiliaries_no: int
-):
+) -> Tuple[bool, str]:
     if auxiliaries_no == 0:
         return False, "No of Auxiliary qubit should bigger than 0"
 
@@ -139,14 +97,11 @@ def verify_circuit_relative_dirty_non_wasting(
     # check if w is unitary
     check_w = np.matmul(w, np.linalg.inv(w))
 
-    if (
-        np.allclose(
-            check_w,
-            identity_matrix(auxiliaries_no),
-            atol=absolute_error_tol,
-            rtol=relative_error_tol,
-        )
-        is False
+    if not np.allclose(
+        check_w,
+        identity_matrix(auxiliaries_no),
+        atol=ABS_TOLERANCE,
+        rtol=REL_TOLERANCE,
     ):
         return False, "Matrix W should be unitary"
 
@@ -157,14 +112,11 @@ def verify_circuit_relative_dirty_non_wasting(
     if generated_unitary.shape != expected_unitary.shape:
         return False, "Unitary V has different shape."
 
-    if (
-        np.allclose(
-            generated_unitary,
-            expected_unitary,
-            atol=absolute_error_tol,
-            rtol=relative_error_tol,
-        )
-        is False
+    if not np.allclose(
+        generated_unitary,
+        expected_unitary,
+        atol=ABS_TOLERANCE,
+        rtol=REL_TOLERANCE,
     ):
         return False, "Generated matrix V should be all 0"
 
@@ -174,33 +126,22 @@ def verify_circuit_relative_dirty_non_wasting(
 # Strict Clean Wasting-Entangled
 # Relative Clean Wasting-Entangled
 def verify_circuit_strict_clean_wasting_entangled(
-    unitary_matrix, controls_no: int, auxiliaries_no: int
-):
-    if auxiliaries_no == 0:
-        return False, "No of Auxiliary qubit should bigger than 0"
+    unitary_matrix: np.ndarray, ref_unitary: np.ndarray
+) -> Tuple[bool, str]:
+    _, main_dim, aux_dim = _get_dims(unitary_matrix, ref_unitary)
 
-    # get mct inverse matrix
-    inverse_matrix = load_matrix("noauxiliary", controls_no)
+    i = np.eye(aux_dim)
+    ket_0 = ket0(aux_dim)
 
-    i = identity_matrix(auxiliaries_no)
-    ket_0 = ket_0_matrix(auxiliaries_no)
-
-    for idx in range(2 ** (controls_no + 1)):
-        ket_b = np.zeros(2 ** (controls_no + 1))
-
+    for idx in range(main_dim):
+        ket_b = np.zeros(main_dim)
         ket_b[idx] = 1
-
         b_0 = np.kron(ket_0, ket_b)
+        res_1 = unitary_matrix @ b_0
+        res_2 = np.kron(i, ref_unitary.conj().T @ ket_b)
+        res_3 = res_2 @ res_1
 
-        res_1 = np.matmul(unitary_matrix, b_0)
-
-        res_2 = np.kron(i, np.matmul(inverse_matrix, ket_b))
-
-        res_3 = np.matmul(res_2, res_1)
-
-        res_4 = np.linalg.norm(res_3)
-
-        if np.round(res_4) != 1:
+        if not np.isclose(np.linalg.norm(res_3), 1.0):
             return False, "The length should be 1"
 
     return True, ""
@@ -208,41 +149,33 @@ def verify_circuit_strict_clean_wasting_entangled(
 
 # Strict Dirty Wasting-Entangled
 def verify_circuit_strict_dirty_wasting_entangled(
-    unitary_matrix, controls_no: int, auxiliaries_no: int
-):
-    if auxiliaries_no == 0:
-        return False, "No of Auxiliary qubit should bigger than 0"
+    unitary_matrix: np.ndarray, ref_unitary: np.ndarray
+) -> Tuple[bool, str]:
+    _, main_dim, aux_dim = _get_dims(unitary_matrix, ref_unitary)
 
-    # get mct inverse matrix
-    inverse_matrix = load_matrix("noauxiliary", controls_no)
+    i = np.eye(aux_dim)
 
-    i = identity_matrix(auxiliaries_no)
-
-    u_i = np.kron(i, inverse_matrix)
-
-    for idx in range(2 ** (controls_no + auxiliaries_no + 1)):
-        ket_bc = np.zeros(2 ** (controls_no + auxiliaries_no + 1))
-
-        ket_bc[idx] = 1
-
-        res_1 = np.matmul(unitary_matrix, ket_bc)
-
-        res_2 = np.matmul(u_i, ket_bc)
-
-        res_3 = np.matmul(res_2, res_1)
-
-        res_4 = np.linalg.norm(res_3)
-
-        if np.round(res_4) != 1:
-            return False, "The length should be 1"
-
+    ket_b = np.zeros(main_dim)
+    for idx_b in range(main_dim):
+        ket_b[idx_b] = 1.0
+        ket_pib = np.kron(i, (ref_unitary @ ket_b).conj().T)
+        ket_c = np.zeros(aux_dim)
+        for idx_c in range(aux_dim):
+            ket_c[idx_c] = 1.0
+            ket_bc = np.kron(ket_c, ket_b)
+            res = unitary_matrix @ ket_bc
+            res = ket_pib @ res
+            if not np.isclose(np.linalg.norm(res), 1.0):
+                return False, "The length should be 1"
+            ket_c[idx_c] = 0.0
+        ket_b[idx_b] = 0.0
     return True, ""
 
 
 # Strict Clean Wasting-Separable
 def verify_circuit_strict_clean_wasting_separable(
     unitary_matrix, controls_no: int, auxiliaries_no: int
-):
+) -> Tuple[bool, str]:
     if auxiliaries_no == 0:
         return False, "No of Auxiliary qubit should bigger than 0"
 
@@ -256,23 +189,17 @@ def verify_circuit_strict_clean_wasting_separable(
 
     for idx in range(2 ** (controls_no + 1)):
         ket_b = np.zeros(2 ** (controls_no + 1))
-
         ket_b[idx] = 1
-
         b_0 = np.kron(ket_0, ket_b)
-
         res_1 = np.matmul(unitary_matrix, b_0)
-
         res_2 = np.kron(i, np.matmul(inverse_matrix, ket_b))
-
         res_3 = np.matmul(res_2, res_1)
-
         # this is to get the |\phi_0>
         if idx == 0:
             phi_0 = res_3
 
         # check if res_3 a quantum state here
-        if np.round(np.matmul(phi_0.T, res_3)) != 1:
+        if not np.isclose(np.matmul(phi_0.T, res_3), 1):
             return False, "The state should be a quantum state"
 
     return True, ""
@@ -310,15 +237,7 @@ def verify_circuit_relative_clean_wasting_separable(
     if generated_unitary.shape != expected_unitary.shape:
         return False, "generated_unitary has different shape."
 
-    if (
-        np.allclose(
-            generated_unitary,
-            expected_unitary,
-            atol=absolute_error_tol,
-            rtol=relative_error_tol,
-        )
-        is False
-    ):
+    if not np.allclose(generated_unitary, expected_unitary, atol=ABS_TOLERANCE, rtol=REL_TOLERANCE):
         return False, "Resulting matrix should be identity"
 
     return True, ""
@@ -348,14 +267,8 @@ def verify_circuit_strict_dirty_wasting_separable(
     # check if w is unitary
     check_w = np.matmul(w, np.linalg.inv(w))
 
-    if (
-        np.allclose(
-            check_w,
-            identity_matrix(auxiliaries_no),
-            atol=absolute_error_tol,
-            rtol=relative_error_tol,
-        )
-        is False
+    if not np.allclose(
+        check_w, identity_matrix(auxiliaries_no), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE
     ):
         return False, "Something wrong with the implementation"
 
@@ -369,15 +282,7 @@ def verify_circuit_strict_dirty_wasting_separable(
     if generated_unitary.shape != expected_unitary.shape:
         return False, "Unitary V has different shape."
 
-    if (
-        np.allclose(
-            generated_unitary,
-            expected_unitary,
-            atol=absolute_error_tol,
-            rtol=relative_error_tol,
-        )
-        is False
-    ):
+    if not np.allclose(generated_unitary, expected_unitary, atol=ABS_TOLERANCE, rtol=REL_TOLERANCE):
         return False, "Resulting matrix should be an Identity"
 
     return True, ""
@@ -407,14 +312,8 @@ def verify_circuit_relative_dirty_wasting_separable(
     # check if w is unitary
     check_w = np.matmul(w, np.linalg.inv(w))
 
-    if (
-        np.allclose(
-            check_w,
-            identity_matrix(auxiliaries_no),
-            atol=absolute_error_tol,
-            rtol=relative_error_tol,
-        )
-        is False
+    if not np.allclose(
+        check_w, identity_matrix(auxiliaries_no), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE
     ):
         return False, "Resulting matrix should be identity"
 
@@ -426,49 +325,7 @@ def verify_circuit_relative_dirty_wasting_separable(
     if generated_unitary.shape != expected_unitary.shape:
         return False, "Unitary V has different shape."
 
-    if (
-        np.allclose(
-            generated_unitary,
-            expected_unitary,
-            atol=absolute_error_tol,
-            rtol=relative_error_tol,
-        )
-        is False
-    ):
+    if not np.allclose(generated_unitary, expected_unitary, atol=ABS_TOLERANCE, rtol=REL_TOLERANCE):
         return False, "Resulting matrix should be identity"
 
     return True, ""
-
-
-# def verify_dependencies(rd):
-#     if rd["SDNW"]:
-#         assert rd["SCNW"]
-#         assert rd["RDNW"]
-#         assert rd["SDWS"]
-
-#     if rd["RDNW"]:
-#         assert rd["RCNW"]
-#         assert rd["RDWS"]
-
-#     if rd["SDWS"]:
-#         assert rd["SCWS"]
-#         assert rd["RDWS"]
-
-#     if rd["SDWE"]:
-#         assert rd["SCWE"]
-
-#     if rd["SCNW"]:
-#         assert rd["RCNW"]
-#         assert rd["SCWS"]
-
-#     if rd["SCWS"]:
-#         assert rd["RCWS"]
-
-#     if rd["RCNW"]:
-#         assert rd["RCWS"]
-
-#     if rd["RDWS"]:
-#         assert rd["SDWE"]
-
-#     if rd["RCWS"]:
-#         assert rd["SCWE"]

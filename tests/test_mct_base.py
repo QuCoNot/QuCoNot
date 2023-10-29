@@ -49,23 +49,19 @@ class BaseTestMCT(ABC):
 
     def test_circuit_clean_relative_auxiliary(self):
         for controls_no in self._controls_no_list:
+            ref_matrix = load_matrix("noauxiliary", controls_no)
             unitary_matrix = self._take_matrix(controls_no)
-            auxiliaries_no = self._take_auxiliaries_no(controls_no)
 
-            res, msg = verify_circuit_relative_clean_non_wasting(
-                unitary_matrix, controls_no, auxiliaries_no
-            )
+            res, msg = verify_circuit_relative_clean_non_wasting(unitary_matrix, ref_matrix)
 
             assert res == self._expected_classes["RCNW"], msg
 
     def test_circuit_dirty_auxiliary(self):
         for controls_no in self._controls_no_list:
+            ref_matrix = load_matrix("noauxiliary", controls_no)
             unitary_matrix = self._take_matrix(controls_no)
-            auxiliaries_no = self._take_auxiliaries_no(controls_no)
 
-            res, msg = verify_circuit_strict_dirty_non_wasting(
-                unitary_matrix, controls_no, auxiliaries_no
-            )
+            res, msg = verify_circuit_strict_dirty_non_wasting(unitary_matrix, ref_matrix)
 
             assert res == self._expected_classes["SDNW"], msg
 
@@ -82,12 +78,10 @@ class BaseTestMCT(ABC):
 
     def test_circuit_clean_wasted_entangled_auxiliary(self):
         for controls_no in self._controls_no_list:
+            ref_unitary = load_matrix("noauxiliary", controls_no)
             unitary_matrix = self._take_matrix(controls_no)
-            auxiliaries_no = self._take_auxiliaries_no(controls_no)
 
-            res, msg = verify_circuit_strict_clean_wasting_entangled(
-                unitary_matrix, controls_no, auxiliaries_no
-            )
+            res, msg = verify_circuit_strict_clean_wasting_entangled(unitary_matrix, ref_unitary)
 
             assert res == self._expected_classes["SCWE"], msg
 
@@ -115,12 +109,10 @@ class BaseTestMCT(ABC):
 
     def test_circuit_dirty_wasted_entangled_auxiliary(self):
         for controls_no in self._controls_no_list:
+            ref_unitary = load_matrix("noauxiliary", controls_no)
             unitary_matrix = self._take_matrix(controls_no)
-            auxiliaries_no = self._take_auxiliaries_no(controls_no)
 
-            res, msg = verify_circuit_strict_dirty_wasting_entangled(
-                unitary_matrix, controls_no, auxiliaries_no
-            )
+            res, msg = verify_circuit_strict_dirty_wasting_entangled(unitary_matrix, ref_unitary)
 
             assert res == self._expected_classes["SDWE"], msg
 

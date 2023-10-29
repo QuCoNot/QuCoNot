@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from quconot.verifications.functions import absolute_error_tol, check_all_zero, relative_error_tol
+from quconot.verifications.functions import ABS_TOLERANCE, check_all_zero, REL_TOLERANCE
 from quconot.verifications.reverse_kronecker_product import reverse_kronecker_product
 
 
@@ -32,5 +32,5 @@ def test_reverse_kronecker_product(par_B, par_C):
     ), "C Matrix should be a Unitary"
 
     assert (
-        check_all_zero(zero_matrix, absolute_error_tol, relative_error_tol) == 1
+        check_all_zero(zero_matrix, ABS_TOLERANCE, REL_TOLERANCE) == 1
     ), "Result should close to 0"

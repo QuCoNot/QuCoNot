@@ -5,8 +5,8 @@ from qiskit.quantum_info.operators import Operator
 from scipy.sparse import identity
 
 # constants
-absolute_error_tol = 1e-8
-relative_error_tol = 1e-8
+ABS_TOLERANCE = 1e-8
+REL_TOLERANCE = 1e-8
 
 
 def identity_matrix(qubits_no):

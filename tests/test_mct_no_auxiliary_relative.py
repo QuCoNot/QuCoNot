@@ -16,7 +16,7 @@ class TestMCTNoAuxiliaryRelative(BaseTestMCT):
     _controls_no_list = [2, 3]
 
     _expected_classes: Dict[str, bool] = {
-        "SCNW": True,
+        "SCNW": False,
         "RCNW": True,
         "SDNW": True,
         "RDNW": True,
@@ -49,7 +49,7 @@ class TestMCTNoAuxiliaryRelative(BaseTestMCT):
             return self._matrix_dict[controls_no]
 
     def _take_auxiliaries_no(self, controls_no: int):
-        raise NotImplementedError
+        return 0
 
     def test_init(self):
         with pytest.raises(
