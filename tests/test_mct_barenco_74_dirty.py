@@ -1,17 +1,14 @@
-from typing import Dict
+from typing import Dict, Type
 
-import numpy as np
 import pytest
-from qiskit.quantum_info.operators import Operator
 
 from quconot.implementations.mct_barenco_74_dirty import MCTBarenco74Dirty
+from quconot.implementations.mct_base import MCTBase
 from tests.test_mct_base import BaseTestMCT
 
 
 class TestMCTBarenco74Dirty(BaseTestMCT):
-    _matrix_dict: Dict[int, np.array] = {}
     _controls_no_list = [5]
-    _result_dict: Dict[str, bool] = {}
 
     _expected_classes: Dict[str, bool] = {
         "SCNW": False,
@@ -26,15 +23,9 @@ class TestMCTBarenco74Dirty(BaseTestMCT):
         "RDWS": True,
     }
 
-    def _take_matrix(self, controls_no: int):
-        if controls_no in self._matrix_dict:
-            return self._matrix_dict[controls_no]
-
-        circ = MCTBarenco74Dirty(controls_no).generate_circuit()
-        unitary_matrix = Operator(circ).data
-        self._matrix_dict[controls_no] = unitary_matrix
-
-        return self._matrix_dict[controls_no]
+    @property
+    def _get_class_name(self) -> Type[MCTBase]:
+        return MCTBarenco74Dirty
 
     def test_init(self):
         with pytest.raises(
