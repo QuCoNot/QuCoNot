@@ -8,7 +8,6 @@ from quconot.implementations.mct_base import MCTBase
 from tests.test_mct_base import BaseTestMCT
 
 
-@pytest.mark.xfail
 class TestMCTBarenco75Dirty(BaseTestMCT):
     _matrix_dict: Dict[int, np.ndarray] = {}
     _ref_matrices: Dict[int, np.ndarray] = {}

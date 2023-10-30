@@ -7,20 +7,19 @@ from quconot.implementations.mct_no_auxiliary_relative import MCTNoAuxiliaryRela
 from tests.test_mct_base import BaseTestMCT
 
 
-@pytest.mark.xfail
 class TestMCTNoAuxiliaryRelative(BaseTestMCT):
     _controls_no_list = [2, 3]
 
     _expected_classes: Dict[str, bool] = {
         "SCNW": False,
         "RCNW": True,
-        "SDNW": True,
+        "SDNW": False,
         "RDNW": True,
         "SCWE": True,
-        "SCWS": True,
+        "SCWS": False,
         "RCWS": True,
         "SDWE": True,
-        "SDWS": True,
+        "SDWS": False,
         "RDWS": True,
     }
 

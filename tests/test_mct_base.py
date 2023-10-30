@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Dict, Type
+from typing import Dict, List, Type
 
 import numpy as np
 from qiskit.quantum_info.operators import Operator
@@ -23,7 +23,7 @@ from tests.utils import load_matrix
 class BaseTest(ABC):
     _matrix_dict: Dict[int, np.ndarray] = {}
     _ref_matrices: Dict[int, np.ndarray] = {}
-    _controls_no_list: list[int] = []
+    _controls_no_list: List[int] = []
 
     _expected_classes: Dict[str, bool] = {}
 

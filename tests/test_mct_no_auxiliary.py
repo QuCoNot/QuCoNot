@@ -8,7 +8,6 @@ from quconot.implementations.mct_no_auxiliary import MCTNoAuxiliary
 from tests.test_mct_base import BaseTestMCT
 
 
-@pytest.mark.xfail
 class TestMCTNoAuxiliary(BaseTestMCT):
     _matrix_dict: Dict[int, np.ndarray] = {}
     _ref_matrices: Dict[int, np.ndarray] = {}
