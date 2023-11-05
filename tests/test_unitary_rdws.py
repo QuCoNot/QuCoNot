@@ -5,12 +5,12 @@ import numpy as np
 from tests.test_unitary_base import BaseTestUnitary
 
 
-class TestRelativeDirtyNonWasting(BaseTestUnitary):
+class TestRelativeDirtyWastingSeparable(BaseTestUnitary):
     _expected_classes: Dict[str, bool] = {
         "SCNW": False,
-        "RCNW": True,
+        "RCNW": False,
         "SDNW": False,
-        "RDNW": True,
+        "RDNW": False,
         "SCWE": True,
         "SCWS": False,
         "RCWS": True,
@@ -23,8 +23,7 @@ class TestRelativeDirtyNonWasting(BaseTestUnitary):
         U = self._ref_matrices()
 
         D = np.diag(np.exp(1.0j * np.range(3)))
-        V = [[1 / np.sqrt(2), 1 / np.sqrt(2)], [1 / np.sqrt(2), -1 * 1 / np.sqrt(2)]]
 
-        U = np.kron(U @ D, V)
+        U = np.kron(U @ D, np.eye(5))
 
         return U
