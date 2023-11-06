@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, List
 
 import numpy as np
 
@@ -6,6 +6,8 @@ from tests.test_unitary_base import BaseTestUnitary
 
 
 class TestRelativeDirtyNonWasting(BaseTestUnitary):
+    _controls_no_list: List[int] = [0]
+
     _expected_classes: Dict[str, bool] = {
         "SCNW": False,
         "RCNW": True,
@@ -19,12 +21,11 @@ class TestRelativeDirtyNonWasting(BaseTestUnitary):
         "RDWS": True,
     }
 
-    def _take_matrix(self):
-        U = self._ref_matrices()
+    def _take_matrix(self, controls_no: int) -> np.ndarray:
+        U = self._ref_matrix(controls_no)
 
-        D = np.diag(np.exp(1.0j * np.range(3)))
-        V = [[1 / np.sqrt(2), 1 / np.sqrt(2)], [1 / np.sqrt(2), -1 * 1 / np.sqrt(2)]]
+        D = np.diag(np.exp(1.0j * np.arange(3)))
 
-        U = np.kron(U @ D, V)
+        U = np.kron(np.eye(5), U @ D)
 
         return U

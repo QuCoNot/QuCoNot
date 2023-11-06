@@ -23,7 +23,7 @@ class TestStrictDirtyNonWasting(BaseTestUnitary):
 
     def _take_matrix(self, controls_no: int) -> np.ndarray:
         U = self._ref_matrix(controls_no)
-        # U = np.kron(U, np.eye(5))
+
         U = np.kron(np.eye(5), U)
         if controls_no == 0:
             return U
