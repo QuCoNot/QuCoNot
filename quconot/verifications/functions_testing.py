@@ -149,7 +149,7 @@ def verify_circuit_strict_clean_wasting_entangled(
         ket_b[idx] = 1
         b_0 = np.kron(ket_0, ket_b)
         res_1 = tested_matrix @ b_0
-        res_2 = np.kron(i, ref_unitary.conj().T @ ket_b)
+        res_2 = np.kron(i, ref_unitary @ ket_b)
         res_3 = res_2 @ res_1
 
         if not np.isclose(np.linalg.norm(res_3), 1.0):
@@ -289,7 +289,7 @@ def verify_circuit_strict_dirty_wasting_separable(
         return False, "Not separable unitary matrix"
 
     # X_1 * X_2^dagger * np.conj((X_1 * X_2^dagger)[0,0]) = I
-    m = v @ ref_unitary
+    m = v @ ref_unitary.T
     generated_unitary = m * np.conjugate(m[0, 0])
 
     if not np.allclose(generated_unitary, np.eye(main_dim), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE):
@@ -320,7 +320,7 @@ def verify_circuit_relative_dirty_wasting_separable(
     if not np.allclose(check_w, np.eye(aux_dim), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE):
         return False, "Resulting matrix should be identity"
 
-    generated_unitary = np.abs(v @ ref_unitary)
+    generated_unitary = np.abs(v @ ref_unitary.T)
 
     if not np.allclose(generated_unitary, np.eye(main_dim), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE):
         return False, "Resulting matrix should be identity"
