@@ -115,7 +115,9 @@ def verify_circuit_relative_dirty_non_wasting(
     if not np.allclose(check_w, np.eye(aux_dim), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE):
         return False, "Matrix W should be unitary"
 
-    if not np.allclose(np.abs(w), np.eye(aux_dim), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE):
+    if not np.allclose(
+        np.conjugate(w[0, 0]) * w, np.eye(aux_dim), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE
+    ):
         return False, "Matrix W should be identity"
 
     check_v = np.abs(v) @ ref_unitary.conj().T
@@ -154,6 +156,8 @@ def verify_circuit_strict_clean_wasting_entangled(
         res_1 = tested_matrix @ b_0
         res_2 = np.kron(i, ref_unitary @ ket_b)
         res_3 = res_2 @ res_1
+
+        print(idx, np.linalg.norm(res_3))
 
         if not np.isclose(np.linalg.norm(res_3), 1.0):
             return False, "The length should be 1"

@@ -23,9 +23,10 @@ class TestStrictCleanWastingSeparable(BaseTestUnitary):
 
     def _take_matrix(self, controls_no: int) -> np.ndarray:
         U = self._ref_matrix(controls_no)
-        V = np.array([[1 / np.sqrt(2), 1 / np.sqrt(2)], [1 / np.sqrt(2), -1 * 1 / np.sqrt(2)]])
+        # V = np.array([[1 / np.sqrt(2), 1 / np.sqrt(2)], [1 / np.sqrt(2), -1 * 1 / np.sqrt(2)]])
+        V = np.random.rand(3, 3)
 
-        matrix_size = 3
+        matrix_size = len(V)
         Vi = [np.eye(matrix_size)]
 
         for i in range(1, matrix_size):
@@ -38,8 +39,8 @@ class TestStrictCleanWastingSeparable(BaseTestUnitary):
 
         result_terms = []
 
-        basis_states = [np.zeros(matrix_size) for _ in range(matrix_size - 1)]
-        for i in range(matrix_size - 1):
+        basis_states = [np.zeros(matrix_size) for _ in range(matrix_size)]
+        for i in range(matrix_size):
             basis_states[i][i] = 1
 
         for i, basis_state in enumerate(basis_states):
