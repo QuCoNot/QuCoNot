@@ -115,6 +115,9 @@ def verify_circuit_relative_dirty_non_wasting(
     if not np.allclose(check_w, np.eye(aux_dim), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE):
         return False, "Matrix W should be unitary"
 
+    if not np.allclose(np.abs(w), np.eye(aux_dim), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE):
+        return False, "Matrix W should be identity"
+
     check_v = np.abs(v) @ ref_unitary.conj().T
     generated_unitary = check_v - np.eye(main_dim)
 
