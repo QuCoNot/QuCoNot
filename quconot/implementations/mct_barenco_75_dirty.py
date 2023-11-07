@@ -193,8 +193,7 @@ class MCTBarenco75Dirty(MCTBase):
         """
 
         circ = self.recursive(list(range(self._n + 1)))
-        # print(circ.draw())
-        self._circuit = transpile(circ, basis_gates=["cx", "u3"])
+        self._circuit = circ
 
         return deepcopy(self._circuit)
 

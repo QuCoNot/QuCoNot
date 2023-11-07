@@ -14,9 +14,7 @@ from .mct_base import MCTBase
 
 
 class MCTNoAuxiliaryRelative(MCTBase):
-
     r"""
-
     This is an implementation of the simplified Toffoli gates according to Qiskit. Currently,
     for this implementation, the number of controls is restricted to 2 or 3 only. They have been implemented using
     the RCCXGate and the RC3XGate in Qiskit. It implements the 2 or 3 controlled Toffoli gate up to relative phases.
@@ -63,8 +61,6 @@ class MCTNoAuxiliaryRelative(MCTBase):
                  ┌───┐┌───┐┌─┴─┐┌─────┐┌───┐┌─┴─┐┌───┐┌─┴─┐┌─────┐┌─┴─┐┌───┐┌─┴─┐┌─────┐┌───┐┌───┐┌─┴─┐┌─────┐┌───┐
             q_3: ┤ H ├┤ T ├┤ X ├┤ Tdg ├┤ H ├┤ X ├┤ T ├┤ X ├┤ Tdg ├┤ X ├┤ T ├┤ X ├┤ Tdg ├┤ H ├┤ T ├┤ X ├┤ Tdg ├┤ H ├
                  └───┘└───┘└───┘└─────┘└───┘└───┘└───┘└───┘└─────┘└───┘└───┘└───┘└─────┘└───┘└───┘└───┘└─────┘└───┘
-
-
 
     """
 
