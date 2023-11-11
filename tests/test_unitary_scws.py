@@ -1,6 +1,7 @@
 from typing import Dict, List
 
 import numpy as np
+from qiskit.quantum_info import random_unitary
 
 from tests.test_unitary_base import BaseTestUnitary
 
@@ -24,16 +25,16 @@ class TestStrictCleanWastingSeparable(BaseTestUnitary):
     def _take_matrix(self, controls_no: int) -> np.ndarray:
         U = self._ref_matrix(controls_no)
         # V = np.array([[1 / np.sqrt(2), 1 / np.sqrt(2)], [1 / np.sqrt(2), -1 * 1 / np.sqrt(2)]])
-        V = np.random.rand(3, 3)
+        V = np.array(random_unitary(3))
 
         matrix_size = len(V)
         Vi = [np.eye(matrix_size)]
 
         for i in range(1, matrix_size):
-            random_matrix = np.random.rand(matrix_size, matrix_size)
+            random_matrix = np.array(random_unitary(3))
 
             while np.allclose(random_matrix, np.eye(matrix_size)):
-                random_matrix = np.random.rand(matrix_size, matrix_size)
+                random_matrix = np.array(random_unitary(3))
 
             Vi.append(random_matrix)
 
