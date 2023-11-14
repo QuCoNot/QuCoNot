@@ -45,9 +45,9 @@ class TestStrictCleanWastingSeparable(BaseTestUnitary):
             basis_states[i][i] = 1
 
         for i, basis_state in enumerate(basis_states):
-            term = np.kron(Vi[i], np.outer(basis_state, basis_state))
+            term = np.kron(np.outer(basis_state, basis_state), Vi[i])
             result_terms.append(term)
 
         result = sum(result_terms)
-
-        return result @ np.kron(U, V)
+        print(np.kron(np.eye(3), [1, 0, 0]) @ result @ np.kron(np.eye(3), [[1], [0], [0]]))
+        return np.kron(V, U) @ result

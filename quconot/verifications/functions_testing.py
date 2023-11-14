@@ -225,7 +225,7 @@ def verify_circuit_strict_clean_wasting_separable(
     for idx in range(main_dim):
         ket_b[idx] = 1
         b_0 = np.kron(ket_0, ket_b)
-        res = np.kron(i, ref_unitary @ ket_b) @ tested_matrix @ b_0
+        res = np.kron(i, ref_unitary.conj().T @ ket_b) @ tested_matrix @ b_0
         # this is to get the |\phi_0>
         if idx == 0:
             phi_0 = res
