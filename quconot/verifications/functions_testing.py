@@ -157,8 +157,6 @@ def verify_circuit_strict_clean_wasting_entangled(
         res_2 = np.kron(i, ref_unitary @ ket_b)
         res_3 = res_2 @ res_1
 
-        print(idx, np.linalg.norm(res_3))
-
         if not np.isclose(np.linalg.norm(res_3), 1.0):
             return False, "The length should be 1"
 
@@ -225,7 +223,7 @@ def verify_circuit_strict_clean_wasting_separable(
     for idx in range(main_dim):
         ket_b[idx] = 1
         b_0 = np.kron(ket_0, ket_b)
-        res = np.kron(i, ref_unitary.conj().T @ ket_b) @ tested_matrix @ b_0
+        res = np.kron(i, ref_unitary @ ket_b) @ tested_matrix @ b_0
         # this is to get the |\phi_0>
         if idx == 0:
             phi_0 = res
@@ -262,10 +260,9 @@ def verify_circuit_relative_clean_wasting_separable(
 
     psi = np.kron(i_c, ref_unitary @ ket_0b) @ tested_matrix @ ket_0bc
 
-    res_3 = tested_matrix @ np.kron(ket_0c, i_b).conj().T
-    res_4 = np.kron(psi, i_b)
-
-    generated_unitary = np.abs(res_4 @ res_3)
+    generated_unitary = np.abs(
+        np.kron(psi.conj().T, i_b) @ tested_matrix @ np.kron(ket_0c, i_b).conj().T
+    )
 
     if not np.allclose(generated_unitary, ref_unitary, atol=ABS_TOLERANCE, rtol=REL_TOLERANCE):
         return False, "Resulting matrix should be identity"

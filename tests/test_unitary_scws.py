@@ -49,5 +49,4 @@ class TestStrictCleanWastingSeparable(BaseTestUnitary):
             result_terms.append(term)
 
         result = sum(result_terms)
-        print(np.kron(np.eye(3), [1, 0, 0]) @ result @ np.kron(np.eye(3), [[1], [0], [0]]))
         return np.kron(V, U) @ result
