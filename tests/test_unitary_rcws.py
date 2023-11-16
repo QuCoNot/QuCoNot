@@ -15,7 +15,7 @@ class TestRelativeCleanWastingSeparable(BaseTestUnitary):
         "SDNW": False,
         "RDNW": False,
         "SCWE": True,
-        "SCWS": True,
+        "SCWS": False,
         "RCWS": True,
         "SDWE": False,
         "SDWS": False,
@@ -48,4 +48,7 @@ class TestRelativeCleanWastingSeparable(BaseTestUnitary):
             result_terms.append(term)
 
         result = sum(result_terms)
-        return np.kron(V, U) @ result
+
+        D = np.diag(np.exp(1.0j * np.arange(3)))
+
+        return np.kron(V, U @ D) @ result
