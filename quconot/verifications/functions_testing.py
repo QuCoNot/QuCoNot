@@ -153,11 +153,11 @@ def verify_circuit_strict_clean_wasting_entangled(
         ket_b = np.zeros(main_dim)
         ket_b[idx] = 1
         b_0 = np.kron(ket_0, ket_b)
-        res_1 = tested_matrix @ b_0
-        res_2 = np.kron(i, ref_unitary @ ket_b)
-        res_3 = res_2 @ res_1
+        res = np.kron(i, ref_unitary @ ket_b) @ tested_matrix @ b_0
 
-        if not np.isclose(np.linalg.norm(res_3), 1.0):
+        print(np.linalg.norm(res))
+
+        if not np.isclose(np.linalg.norm(res), 1.0):
             return False, "The length should be 1"
 
     return True, ""
@@ -219,8 +219,8 @@ def verify_circuit_strict_clean_wasting_separable(
     ket_0 = ket0(aux_dim)
 
     phi_0 = np.zeros(aux_dim)
-    ket_b = np.zeros(main_dim)
     for idx in range(main_dim):
+        ket_b = np.zeros(main_dim)
         ket_b[idx] = 1
         b_0 = np.kron(ket_0, ket_b)
         res = np.kron(i, ref_unitary @ ket_b) @ tested_matrix @ b_0
@@ -228,7 +228,6 @@ def verify_circuit_strict_clean_wasting_separable(
         if idx == 0:
             phi_0 = res
 
-        # check if res_3 a quantum state here
         if not np.isclose(np.vdot(phi_0, res), 1):
             return False, "The state should be a quantum state"
         ket_b[idx] = 0
