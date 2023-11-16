@@ -154,9 +154,6 @@ def verify_circuit_strict_clean_wasting_entangled(
         ket_b[idx] = 1
         b_0 = np.kron(ket_0, ket_b)
         res = np.kron(i, ref_unitary @ ket_b) @ tested_matrix @ b_0
-
-        print(np.linalg.norm(res))
-
         if not np.isclose(np.linalg.norm(res), 1.0):
             return False, "The length should be 1"
 
@@ -183,15 +180,15 @@ def verify_circuit_strict_dirty_wasting_entangled(
     i = np.eye(aux_dim)
 
     ket_b = np.zeros(main_dim)
+    ket_c = np.zeros(aux_dim)
     for idx_b in range(main_dim):
         ket_b[idx_b] = 1.0
-        ket_pib = np.kron(i, (ref_unitary @ ket_b).conj().T)
-        ket_c = np.zeros(aux_dim)
+        ket_pib = np.kron(i, (ref_unitary @ ket_b))
+
         for idx_c in range(aux_dim):
             ket_c[idx_c] = 1.0
             ket_bc = np.kron(ket_c, ket_b)
-            res = tested_matrix @ ket_bc
-            res = ket_pib @ res
+            res = ket_pib @ tested_matrix @ ket_bc
             if not np.isclose(np.linalg.norm(res), 1.0):
                 return False, "The length should be 1"
             ket_c[idx_c] = 0.0
