@@ -6,12 +6,12 @@ from qiskit.quantum_info import random_unitary
 from tests.test_unitary_base import BaseTestUnitary
 
 
-class TestStrictCleanWastingSeparable(BaseTestUnitary):
+class TestStrictCleanNonWasting(BaseTestUnitary):
     _controls_no_list: List[int] = [0]
 
     _expected_classes: Dict[str, bool] = {
-        "SCNW": False,
-        "RCNW": False,
+        "SCNW": True,
+        "RCNW": True,
         "SDNW": False,
         "RDNW": False,
         "SCWE": True,
@@ -24,16 +24,16 @@ class TestStrictCleanWastingSeparable(BaseTestUnitary):
 
     def _take_matrix(self, controls_no: int) -> np.ndarray:
         U = self._ref_matrix(controls_no)
-        V = np.array(random_unitary(3))
+        V = np.eye(3)
 
         matrix_size = len(V)
         Vi = [np.eye(matrix_size)]
 
         for i in range(1, matrix_size):
-            random_matrix = np.array(random_unitary(3))
+            random_matrix = np.array(random_unitary(matrix_size))
 
             while np.allclose(random_matrix, np.eye(matrix_size)):
-                random_matrix = np.array(random_unitary(3))
+                random_matrix = np.array(random_unitary(matrix_size))
 
             Vi.append(random_matrix)
 
