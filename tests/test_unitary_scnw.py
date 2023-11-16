@@ -7,7 +7,7 @@ from tests.test_unitary_base import BaseTestUnitary
 
 
 class TestStrictCleanNonWasting(BaseTestUnitary):
-    _controls_no_list: List[int] = [0]
+    _controls_no_list: List[int] = [0, 1]
 
     _expected_classes: Dict[str, bool] = {
         "SCNW": True,
@@ -48,4 +48,6 @@ class TestStrictCleanNonWasting(BaseTestUnitary):
             result_terms.append(term)
 
         result = sum(result_terms)
-        return np.kron(V, U) @ result
+        if controls_no == 0:
+            return np.kron(V, U) @ result
+        return np.exp(1.0j) * np.kron(V, U) @ result
