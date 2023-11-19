@@ -58,7 +58,7 @@ class MCTRecursion(MCTBase):
             auxiliary_qubit = [self._n + 1]
 
         qc = QuantumCircuit(self._n + 1 + auxiliary_no)
-        qc.mct(
+        qc.mcx(
             list(range(self._n)),
             self._n,
             ancilla_qubits=auxiliary_qubit,

@@ -20,7 +20,7 @@ class MCTParallelDecomposition(MCTBase):
         self._circuit: QuantumCircuit = None
 
     def get_toffoli(self, qc: QuantumCircuit, c1: List[list], c2: List[list], t: int):
-        qc.toffoli(c1, c2, t)
+        qc.ccx(c1, c2, t)
 
         return qc
 
