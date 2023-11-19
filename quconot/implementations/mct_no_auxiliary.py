@@ -49,7 +49,7 @@ class MCTNoAuxiliary(MCTBase):
         :rtype: QuantumCircuit
         """
         qc = QuantumCircuit(self._n + 1)
-        qc.mct(
+        qc.mcx(
             list(range(self._n)),
             self._n,
             mode="noancilla",

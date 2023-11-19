@@ -52,7 +52,7 @@ class MCTVChainDirty(MCTBase):
         :rtype: QuantumCircuit
         """
         qc = QuantumCircuit(2 * self._n - 1)
-        qc.mct(
+        qc.mcx(
             list(range(self._n)),
             self._n,
             ancilla_qubits=list(range(self._n + 1, 2 * self._n - 1)),
