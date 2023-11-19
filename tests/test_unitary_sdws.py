@@ -24,7 +24,7 @@ class TestStrictDirtyWastingSeparable(BaseTestUnitary):
     def _take_matrix(self, controls_no: int) -> np.ndarray:
         U = self._ref_matrix(controls_no)
 
-        V = np.array([[1 / np.sqrt(2), 1 / np.sqrt(2)], [1 / np.sqrt(2), -1 * 1 / np.sqrt(2)]])
+        V = np.array([[1 / np.sqrt(2), 1 / np.sqrt(2)], [1 / np.sqrt(2), -1 / np.sqrt(2)]])
 
         U = np.kron(V, U)
         if controls_no == 0:

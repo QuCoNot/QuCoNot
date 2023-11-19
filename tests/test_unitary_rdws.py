@@ -25,7 +25,7 @@ class TestRelativeDirtyWastingSeparable(BaseTestUnitary):
         U = self._ref_matrix(controls_no)
 
         D = np.diag(np.exp(1.0j * np.arange(3)))
-        V = np.array([[1 / np.sqrt(2), 1 / np.sqrt(2)], [1 / np.sqrt(2), -1 * 1 / np.sqrt(2)]])
+        V = np.array([[1 / np.sqrt(2), 1 / np.sqrt(2)], [1 / np.sqrt(2), -1 / np.sqrt(2)]])
 
         U = np.kron(V, U @ D)
 

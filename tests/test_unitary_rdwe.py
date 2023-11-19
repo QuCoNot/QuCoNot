@@ -1,7 +1,6 @@
 from typing import Dict, List
 
 import numpy as np
-from qiskit.quantum_info import random_unitary
 
 from tests.test_unitary_base import BaseTestUnitary
 
@@ -26,30 +25,8 @@ class TestRelativeDirtyWastingEntangled(BaseTestUnitary):
         U = self._ref_matrix(controls_no)
         W = np.eye(3)
 
-        matrix_size = len(W)
-        Wi = []
-
-        for i in range(0, matrix_size):
-            random_matrix = np.array(random_unitary(matrix_size))
-
-            while np.allclose(random_matrix, np.eye(matrix_size)):
-                random_matrix = np.array(random_unitary(matrix_size))
-
-            Wi.append(random_matrix)
-
-        result_terms = []
-
-        basis_states = [np.zeros(matrix_size) for _ in range(matrix_size)]
-        for i in range(matrix_size):
-            basis_states[i][i] = 1
-
-        for i, basis_state in enumerate(basis_states):
-            term = np.kron(Wi[i], np.outer(basis_state, basis_state))
-            result_terms.append(term)
-
-        result = sum(result_terms)
         if controls_no == 0:
-            return result @ np.kron(W, U)
+            return self._random_unitary_wasted(3) @ np.kron(W, U)
 
         D = np.diag(np.exp(1.0j * np.arange(3)))
-        return result @ np.kron(W, U @ D)
+        return self._random_unitary_wasted(3) @ np.kron(W, U @ D)
