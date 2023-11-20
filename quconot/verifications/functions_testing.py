@@ -115,6 +115,11 @@ def verify_circuit_relative_dirty_non_wasting(
     if not np.allclose(check_w, np.eye(aux_dim), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE):
         return False, "Matrix W should be unitary"
 
+    if not np.allclose(
+        np.conjugate(w[0, 0]) * w, np.eye(aux_dim), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE
+    ):
+        return False, "Matrix W should be identity"
+
     check_v = np.abs(v) @ ref_unitary.conj().T
     generated_unitary = check_v - np.eye(main_dim)
 
@@ -148,11 +153,8 @@ def verify_circuit_strict_clean_wasting_entangled(
         ket_b = np.zeros(main_dim)
         ket_b[idx] = 1
         b_0 = np.kron(ket_0, ket_b)
-        res_1 = tested_matrix @ b_0
-        res_2 = np.kron(i, ref_unitary.conj().T @ ket_b)
-        res_3 = res_2 @ res_1
-
-        if not np.isclose(np.linalg.norm(res_3), 1.0):
+        res = np.kron(i, ref_unitary @ ket_b) @ tested_matrix @ b_0
+        if not np.isclose(np.linalg.norm(res), 1.0):
             return False, "The length should be 1"
 
     return True, ""
@@ -178,15 +180,15 @@ def verify_circuit_strict_dirty_wasting_entangled(
     i = np.eye(aux_dim)
 
     ket_b = np.zeros(main_dim)
+    ket_c = np.zeros(aux_dim)
     for idx_b in range(main_dim):
         ket_b[idx_b] = 1.0
-        ket_pib = np.kron(i, (ref_unitary @ ket_b).conj().T)
-        ket_c = np.zeros(aux_dim)
+        ket_pib = np.kron(i, (ref_unitary @ ket_b))
+
         for idx_c in range(aux_dim):
             ket_c[idx_c] = 1.0
             ket_bc = np.kron(ket_c, ket_b)
-            res = tested_matrix @ ket_bc
-            res = ket_pib @ res
+            res = ket_pib @ tested_matrix @ ket_bc
             if not np.isclose(np.linalg.norm(res), 1.0):
                 return False, "The length should be 1"
             ket_c[idx_c] = 0.0
@@ -214,8 +216,8 @@ def verify_circuit_strict_clean_wasting_separable(
     ket_0 = ket0(aux_dim)
 
     phi_0 = np.zeros(aux_dim)
-    ket_b = np.zeros(main_dim)
     for idx in range(main_dim):
+        ket_b = np.zeros(main_dim)
         ket_b[idx] = 1
         b_0 = np.kron(ket_0, ket_b)
         res = np.kron(i, ref_unitary @ ket_b) @ tested_matrix @ b_0
@@ -223,7 +225,6 @@ def verify_circuit_strict_clean_wasting_separable(
         if idx == 0:
             phi_0 = res
 
-        # check if res_3 a quantum state here
         if not np.isclose(np.vdot(phi_0, res), 1):
             return False, "The state should be a quantum state"
         ket_b[idx] = 0
@@ -255,10 +256,9 @@ def verify_circuit_relative_clean_wasting_separable(
 
     psi = np.kron(i_c, ref_unitary @ ket_0b) @ tested_matrix @ ket_0bc
 
-    res_3 = tested_matrix @ np.kron(ket_0c, i_b).conj().T
-    res_4 = np.kron(psi, i_b)
-
-    generated_unitary = np.abs(res_4 @ res_3)
+    generated_unitary = np.abs(
+        np.kron(psi.conj().T, i_b) @ tested_matrix @ np.kron(ket_0c, i_b).conj().T
+    )
 
     if not np.allclose(generated_unitary, ref_unitary, atol=ABS_TOLERANCE, rtol=REL_TOLERANCE):
         return False, "Resulting matrix should be identity"
@@ -289,7 +289,7 @@ def verify_circuit_strict_dirty_wasting_separable(
         return False, "Not separable unitary matrix"
 
     # X_1 * X_2^dagger * np.conj((X_1 * X_2^dagger)[0,0]) = I
-    m = v @ ref_unitary
+    m = v @ ref_unitary.T
     generated_unitary = m * np.conjugate(m[0, 0])
 
     if not np.allclose(generated_unitary, np.eye(main_dim), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE):
@@ -320,7 +320,7 @@ def verify_circuit_relative_dirty_wasting_separable(
     if not np.allclose(check_w, np.eye(aux_dim), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE):
         return False, "Resulting matrix should be identity"
 
-    generated_unitary = np.abs(v @ ref_unitary)
+    generated_unitary = np.abs(v @ ref_unitary.T)
 
     if not np.allclose(generated_unitary, np.eye(main_dim), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE):
         return False, "Resulting matrix should be identity"

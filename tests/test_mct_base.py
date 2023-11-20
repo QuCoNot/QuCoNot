@@ -35,70 +35,70 @@ class BaseTest(ABC):
     def _ref_matrix(self, controls_no: int) -> np.ndarray:
         raise NotImplementedError
 
-    def test_circuit_clean_auxiliary(self):
+    def test_circuit_strict_clean_non_wasting(self):
         for controls_no in self._controls_no_list:
             ref_matrix = self._ref_matrix(controls_no)
             unitary_matrix = self._take_matrix(controls_no)
             res, msg = verify_circuit_strict_clean_non_wasting(unitary_matrix, ref_matrix)
             assert res == self._expected_classes["SCNW"], msg
 
-    def test_circuit_clean_relative_auxiliary(self):
+    def test_circuit_relative_clean_non_wasting(self):
         for controls_no in self._controls_no_list:
             ref_matrix = self._ref_matrix(controls_no)
             unitary_matrix = self._take_matrix(controls_no)
             res, msg = verify_circuit_relative_clean_non_wasting(unitary_matrix, ref_matrix)
             assert res == self._expected_classes["RCNW"], msg
 
-    def test_circuit_dirty_auxiliary(self):
+    def test_circuit_strict_dirty_non_wasting(self):
         for controls_no in self._controls_no_list:
             ref_matrix = self._ref_matrix(controls_no)
             unitary_matrix = self._take_matrix(controls_no)
             res, msg = verify_circuit_strict_dirty_non_wasting(unitary_matrix, ref_matrix)
             assert res == self._expected_classes["SDNW"], msg
 
-    def test_circuit_dirty_relative_auxiliary(self):
+    def test_circuit_relative_dirty_non_wasting(self):
         for controls_no in self._controls_no_list:
             ref_matrix = self._ref_matrix(controls_no)
             unitary_matrix = self._take_matrix(controls_no)
             res, msg = verify_circuit_relative_dirty_non_wasting(unitary_matrix, ref_matrix)
             assert res == self._expected_classes["RDNW"], msg
 
-    def test_circuit_clean_wasted_entangled_auxiliary(self):
+    def test_circuit_strict_clean_wasting_entangled(self):
         for controls_no in self._controls_no_list:
             ref_matrix = self._ref_matrix(controls_no)
             unitary_matrix = self._take_matrix(controls_no)
             res, msg = verify_circuit_strict_clean_wasting_entangled(unitary_matrix, ref_matrix)
             assert res == self._expected_classes["SCWE"], msg
 
-    def test_circuit_clean_wasted_separable_auxiliary(self):
+    def test_circuit_strict_clean_wasting_separable(self):
         for controls_no in self._controls_no_list:
             ref_matrix = self._ref_matrix(controls_no)
             unitary_matrix = self._take_matrix(controls_no)
             res, msg = verify_circuit_strict_clean_wasting_separable(unitary_matrix, ref_matrix)
             assert res == self._expected_classes["SCWS"], msg
 
-    def test_circuit_clean_wasted_relative_separable_auxiliary(self):
+    def test_circuit_relative_clean_wasting_separable(self):
         for controls_no in self._controls_no_list:
             ref_matrix = self._ref_matrix(controls_no)
             unitary_matrix = self._take_matrix(controls_no)
             res, msg = verify_circuit_relative_clean_wasting_separable(unitary_matrix, ref_matrix)
             assert res == self._expected_classes["RCWS"], msg
 
-    def test_circuit_dirty_wasted_entangled_auxiliary(self):
+    def test_circuit_strict_dirty_wasting_entangled(self):
         for controls_no in self._controls_no_list:
             ref_matrix = self._ref_matrix(controls_no)
             unitary_matrix = self._take_matrix(controls_no)
             res, msg = verify_circuit_strict_dirty_wasting_entangled(unitary_matrix, ref_matrix)
             assert res == self._expected_classes["SDWE"], msg
 
-    def test_circuit_dirty_wasted_separable_auxiliary(self):
+    def test_circuit_strict_dirty_wasting_separable(self):
         for controls_no in self._controls_no_list:
             ref_matrix = self._ref_matrix(controls_no)
             unitary_matrix = self._take_matrix(controls_no)
             res, msg = verify_circuit_strict_dirty_wasting_separable(unitary_matrix, ref_matrix)
             assert res == self._expected_classes["SDWS"], msg
 
-    def test_circuit_dirty_wasted_relative_separable_auxiliary(self):
+    def test_circuit_relative_dirty_wasting_separable(self):
         for controls_no in self._controls_no_list:
             ref_matrix = self._ref_matrix(controls_no)
             unitary_matrix = self._take_matrix(controls_no)
