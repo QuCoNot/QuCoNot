@@ -1,4 +1,4 @@
-# Quconot/quconot/implementations/mct_vchain.py
+# Quconot/quconot/implementations/mct_vchain_dirty.py
 #
 # Authors:
 #  - Handy Kurniawan
@@ -13,7 +13,7 @@ from qiskit import QuantumCircuit
 from .mct_base import MCTBase
 
 
-class MCTVChain(MCTBase):
+class MCTVChainDirty(MCTBase):
     def __init__(self, controls_no: int, **kwargs) -> None:
         if controls_no < 2:
             raise ValueError("Number of controls must be >= 2 for this implementation")
@@ -43,7 +43,7 @@ class MCTVChain(MCTBase):
         if max_auxiliary < controls_no - 2:
             return []  # if max_auxiliary allowed is to small - no representation given
         else:
-            return [MCTVChain(controls_no)]  # only one available
+            return [MCTVChainDirty(controls_no)]  # only one available
 
     def generate_circuit(self) -> QuantumCircuit:
         """Return a QuantumCircuit implementation
@@ -52,11 +52,11 @@ class MCTVChain(MCTBase):
         :rtype: QuantumCircuit
         """
         qc = QuantumCircuit(2 * self._n - 1)
-        qc.mct(
+        qc.mcx(
             list(range(self._n)),
             self._n,
             ancilla_qubits=list(range(self._n + 1, 2 * self._n - 1)),
-            mode="v-chain",
+            mode="v-chain-dirty",
         )
 
         # should be done for all implementations

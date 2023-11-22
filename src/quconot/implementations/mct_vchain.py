@@ -1,4 +1,4 @@
-# Quconot/quconot/implementations/mct_no_auxiliary.py
+# Quconot/quconot/implementations/mct_vchain.py
 #
 # Authors:
 #  - Handy Kurniawan
@@ -13,7 +13,7 @@ from qiskit import QuantumCircuit
 from .mct_base import MCTBase
 
 
-class MCTNoAuxiliary(MCTBase):
+class MCTVChain(MCTBase):
     def __init__(self, controls_no: int, **kwargs) -> None:
         if controls_no < 2:
             raise ValueError("Number of controls must be >= 2 for this implementation")
@@ -40,7 +40,10 @@ class MCTNoAuxiliary(MCTBase):
         :return: a quantum circuit
         :rtype: QuantumCircuit
         """
-        return [MCTNoAuxiliary(controls_no)]
+        if max_auxiliary < controls_no - 2:
+            return []  # if max_auxiliary allowed is to small - no representation given
+        else:
+            return [MCTVChain(controls_no)]  # only one available
 
     def generate_circuit(self) -> QuantumCircuit:
         """Return a QuantumCircuit implementation
@@ -48,11 +51,12 @@ class MCTNoAuxiliary(MCTBase):
         :return: a quantum circuit
         :rtype: QuantumCircuit
         """
-        qc = QuantumCircuit(self._n + 1)
-        qc.mct(
+        qc = QuantumCircuit(2 * self._n - 1)
+        qc.mcx(
             list(range(self._n)),
             self._n,
-            mode="noancilla",
+            ancilla_qubits=list(range(self._n + 1, 2 * self._n - 1)),
+            mode="v-chain",
         )
 
         # should be done for all implementations
@@ -67,4 +71,4 @@ class MCTNoAuxiliary(MCTBase):
         :return: number of auxiliary qubits
         :rtype: int
         """
-        return 0
+        return self._n - 2

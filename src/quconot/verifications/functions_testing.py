@@ -112,11 +112,16 @@ def verify_circuit_relative_dirty_non_wasting(
     # check if w is unitary
     check_w = w @ w.conj().T
 
-    if not np.allclose(check_w, np.eye(aux_dim), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE):
+    if not np.allclose(
+        check_w, np.eye(aux_dim), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE
+    ):
         return False, "Matrix W should be unitary"
 
     if not np.allclose(
-        np.conjugate(w[0, 0]) * w, np.eye(aux_dim), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE
+        np.conjugate(w[0, 0]) * w,
+        np.eye(aux_dim),
+        atol=ABS_TOLERANCE,
+        rtol=REL_TOLERANCE,
     ):
         return False, "Matrix W should be identity"
 
@@ -260,7 +265,9 @@ def verify_circuit_relative_clean_wasting_separable(
         np.kron(psi.conj().T, i_b) @ tested_matrix @ np.kron(ket_0c, i_b).conj().T
     )
 
-    if not np.allclose(generated_unitary, ref_unitary, atol=ABS_TOLERANCE, rtol=REL_TOLERANCE):
+    if not np.allclose(
+        generated_unitary, ref_unitary, atol=ABS_TOLERANCE, rtol=REL_TOLERANCE
+    ):
         return False, "Resulting matrix should be identity"
     return True, ""
 
@@ -285,14 +292,18 @@ def verify_circuit_strict_dirty_wasting_separable(
     # check if w is unitary
     check_w = w @ w.conj().T
 
-    if not np.allclose(check_w, np.eye(aux_dim), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE):
+    if not np.allclose(
+        check_w, np.eye(aux_dim), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE
+    ):
         return False, "Not separable unitary matrix"
 
     # X_1 * X_2^dagger * np.conj((X_1 * X_2^dagger)[0,0]) = I
     m = v @ ref_unitary.T
     generated_unitary = m * np.conjugate(m[0, 0])
 
-    if not np.allclose(generated_unitary, np.eye(main_dim), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE):
+    if not np.allclose(
+        generated_unitary, np.eye(main_dim), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE
+    ):
         return False, "Resulting matrix should be an Identity"
     return True, ""
 
@@ -317,11 +328,15 @@ def verify_circuit_relative_dirty_wasting_separable(
     # check if w is unitary
     check_w = w @ w.conj().T
 
-    if not np.allclose(check_w, np.eye(aux_dim), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE):
+    if not np.allclose(
+        check_w, np.eye(aux_dim), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE
+    ):
         return False, "Resulting matrix should be identity"
 
     generated_unitary = np.abs(v @ ref_unitary.T)
 
-    if not np.allclose(generated_unitary, np.eye(main_dim), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE):
+    if not np.allclose(
+        generated_unitary, np.eye(main_dim), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE
+    ):
         return False, "Resulting matrix should be identity"
     return True, ""

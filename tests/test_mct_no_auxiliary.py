@@ -39,4 +39,6 @@ class TestMCTNoAuxiliary(BaseTestMCT):
         try:
             MCTNoAuxiliary(3)
         except Exception:
-            assert False, "object MCTBarenco74Dirty(3) was not created, but it should be"
+            assert (
+                False
+            ), "object MCTBarenco74Dirty(3) was not created, but it should be"

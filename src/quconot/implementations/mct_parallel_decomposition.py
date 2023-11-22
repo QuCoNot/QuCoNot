@@ -20,7 +20,7 @@ class MCTParallelDecomposition(MCTBase):
         self._circuit: QuantumCircuit = None
 
     def get_toffoli(self, qc: QuantumCircuit, c1: List[list], c2: List[list], t: int):
-        qc.toffoli(c1, c2, t)
+        qc.ccx(c1, c2, t)
 
         return qc
 
@@ -77,7 +77,9 @@ class MCTParallelDecomposition(MCTBase):
             ps.append(p)
             ls.append(left)
             left = sum(len(w) for w in uss)
-            layers.append([[ps[-1][i], aux_qubits[i + left]] for i in range(len(ps[-1]))])
+            layers.append(
+                [[ps[-1][i], aux_qubits[i + left]] for i in range(len(ps[-1]))]
+            )
             uss.append([aux_qubits[i + left] for i in range(len(ps[-1]))])
             p, left = self.get_pairs(uss[-1], ls[-1])
             if len(p) == 0 and len(left) == 2:
