@@ -8,7 +8,7 @@
 from copy import deepcopy
 from typing import List
 
-from qiskit import QuantumCircuit, transpile
+from qiskit import QuantumCircuit
 
 from .mct_base import MCTBase
 
