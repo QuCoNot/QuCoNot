@@ -43,3 +43,6 @@ requires = [
 "Url" = "https://github.com/QuCoNot/QuCoNot/"
 "Bug Reports" = "https://github.com/QuCoNot/QuCoNot/issues"
 "Source" = "https://github.com/QuCoNot/QuCoNot/"
+
+[tool.isort]
+profile = "black"
