@@ -5,10 +5,4 @@ docs/build
 # Python files
 *.pyc
 __pycache__/
-
-# Exclude non-Python files from Black formatting
-README.md
-CODE_OF_CONDUCT.md
-CONTRIBUTING.rst
-requirements.txt
-LICENSE.txt
+*.egg-info
