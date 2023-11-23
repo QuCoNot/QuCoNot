@@ -5,7 +5,7 @@ authors = [
   {name = "Adam Glos", email = "adamglos92@gmail.com"},
 ]
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.9"
 dependencies = [
   "numpy>=1.22",
   "qiskit>=0.39",
