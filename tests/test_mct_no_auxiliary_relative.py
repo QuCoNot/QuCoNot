@@ -29,11 +29,14 @@ class TestMCTNoAuxiliaryRelative(BaseTestMCT):
 
     def test_init(self):
         with pytest.raises(
-            ValueError, match="Number of controls must be 2 or 3 for this implementation"
+            ValueError,
+            match="Number of controls must be 2 or 3 for this implementation",
         ):
             MCTNoAuxiliaryRelative(1)
 
         try:
             MCTNoAuxiliaryRelative(2)
         except Exception:
-            assert False, "object MCTNoAuxiliaryRelative(2) was not created, but it should be"
+            assert (
+                False
+            ), "object MCTNoAuxiliaryRelative(2) was not created, but it should be"

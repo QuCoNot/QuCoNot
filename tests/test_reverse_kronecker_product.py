@@ -13,7 +13,9 @@ from quconot.verifications.reverse_kronecker_product import reverse_kronecker_pr
         np.array([[0, 1], [1, 0]]),
     ],
 )
-@pytest.mark.parametrize("par_C", [np.array([[1, 0], [0, -1]]), np.array([[0, 1], [1, 0]])])
+@pytest.mark.parametrize(
+    "par_C", [np.array([[1, 0], [0, -1]]), np.array([[0, 1], [1, 0]])]
+)
 def test_reverse_kronecker_product(par_B, par_C):
     A = np.kron(par_B, par_C)
 
@@ -31,4 +33,6 @@ def test_reverse_kronecker_product(par_B, par_C):
         np.eye(len(res_C)), res_C.dot(res_C.T.conj())
     ), "C Matrix should be a Unitary"
 
-    assert np.allclose(zero_matrix, 0.0, ABS_TOLERANCE, REL_TOLERANCE), "Result should close to 0"
+    assert np.allclose(
+        zero_matrix, 0.0, ABS_TOLERANCE, REL_TOLERANCE
+    ), "Result should close to 0"

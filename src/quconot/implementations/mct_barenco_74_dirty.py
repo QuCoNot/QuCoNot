@@ -48,7 +48,9 @@ class MCTBarenco74Dirty(MCTBase):
             target = t
             auxs = (c[:k1] + [a])[: len(controls) - 2]
 
-        for c1, c2, t1 in zip(controls[::-1][:-2], auxs[::-1], [target] + auxs[::-1][:-1]):
+        for c1, c2, t1 in zip(
+            controls[::-1][:-2], auxs[::-1], [target] + auxs[::-1][:-1]
+        ):
             if t1 == t:
                 qc.append(CCXGate(), (c1, c2, t1))
             else:
@@ -56,7 +58,9 @@ class MCTBarenco74Dirty(MCTBase):
 
         qc.append(tof, [controls[0], controls[1], auxs[0]])
         for c1, c2, t1 in zip(
-            controls[::-1][:-2][::-1], auxs[::-1][::-1], ([target] + auxs[::-1][:-1])[::-1]
+            controls[::-1][:-2][::-1],
+            auxs[::-1][::-1],
+            ([target] + auxs[::-1][:-1])[::-1],
         ):
             if t1 == t:
                 qc.append(CCXGate(), (c1, c2, t1))
@@ -126,7 +130,9 @@ class MCTBarenco74Dirty(MCTBase):
         :rtype: QuantumCircuit
         """
 
-        circ = self.L7_4(list(range(self._n)), self._n, self._n + self.num_auxiliary_qubits())
+        circ = self.L7_4(
+            list(range(self._n)), self._n, self._n + self.num_auxiliary_qubits()
+        )
 
         self._circuit = circ
 

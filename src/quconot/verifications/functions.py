@@ -14,7 +14,9 @@ def ket0(dim: int):
     return ket_0
 
 
-def _get_dims(tested_matrix: np.ndarray, ref_unitary: np.ndarray) -> Tuple[int, int, int]:
+def _get_dims(
+    tested_matrix: np.ndarray, ref_unitary: np.ndarray
+) -> Tuple[int, int, int]:
     """Returns the dimensions of the global, main and auxilliary system.
 
     Auxiliary system dimension is the dimensionality
