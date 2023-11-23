@@ -11,8 +11,9 @@ dependencies = [
   "qiskit>=0.39",
 ]
 version = "0.1.0"
-
+dynamic = ["dependencies"]
 classifiers = []
+
 [project.optional-dependencies]
 test = [
   "pytest>=7.2",
@@ -25,3 +26,6 @@ requires = [
   "setuptools>=64",
   "setuptools_scm>=8",
 ]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
