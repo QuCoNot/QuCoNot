@@ -13,3 +13,4 @@ pytest>=7.2.0
 sphinx-togglebutton
 sphinx_book_theme
 pytest_cov>=4.0
+qclib>=0.1.1
