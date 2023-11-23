@@ -1,14 +1,18 @@
 [project]
 name = "QuCoNot"
-description = ""
+description = "QuCoNot is a Python library for all your MCT needs."
 authors = [
-  {name = "Adam Glos", email = "adamglos92@gmail.com"},
+    { name = "Shraddha Aangiras", email = "Shraddha@gmail.com" },
+    { name = "Adam Glos", email = "adamglos92@gmail.com" },
+    { name = "Ankit Khandelwal", email = "ankit@gmail.com" },
+    { name = "Handy Kurniawan", email = "handykur@ucm.es" },
+    { name = "Özlem Salehi", email = "ozlem@gmail.com" },
 ]
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
   "numpy>=1.22",
-  "qiskit>=0.39",
+  "qiskit>=0.39.2",
 ]
 version = "0.1.0"
 classifiers = []
