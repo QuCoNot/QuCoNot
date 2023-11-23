@@ -109,14 +109,6 @@ def verify_circuit_relative_dirty_non_wasting(
 
     w, v = reverse_kronecker_product(tested_matrix, (aux_dim, aux_dim))
 
-    # check if w is unitary
-    check_w = w @ w.conj().T
-
-    if not np.allclose(
-        check_w, np.eye(aux_dim), atol=ABS_TOLERANCE, rtol=REL_TOLERANCE
-    ):
-        return False, "Matrix W should be unitary"
-
     if not np.allclose(
         np.conjugate(w[0, 0]) * w,
         np.eye(aux_dim),
