@@ -12,6 +12,7 @@ jobs:
           python-version: 3.9
       - uses: actions/checkout@v4.1.0
       - run: pip install pyenchant
+      - run: pip install -e .
       - name: Run quality checks
         uses: marian-code/python-lint-annotate@v3
         with:
