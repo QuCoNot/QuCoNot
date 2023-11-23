@@ -12,7 +12,9 @@ def reverse_kronecker_product(A, B_shape):
     Returns:
     Approximating factors (B, C)
     """
-    blocks = map(lambda blockcol: np.split(blockcol, B_shape[0], 0), np.split(A, B_shape[1], 1))
+    blocks = map(
+        lambda blockcol: np.split(blockcol, B_shape[0], 0), np.split(A, B_shape[1], 1)
+    )
 
     # rearrange matrix A to A^(m1n1 x m2n2) matrix
     R_A = np.vstack([block.ravel() for blockcol in blocks for block in blockcol])

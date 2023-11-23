@@ -39,4 +39,6 @@ class TestMCTParallelDecomposition(BaseTestMCT):
         try:
             MCTParallelDecomposition(4)
         except Exception:
-            assert False, "object MCTParallelDecomposition(4) was not created, but it should be"
+            assert (
+                False
+            ), "object MCTParallelDecomposition(4) was not created, but it should be"

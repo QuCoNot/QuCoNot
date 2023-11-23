@@ -36,4 +36,6 @@ class TestMCTBarenco74Dirty(BaseTestMCT):
         try:
             MCTBarenco74Dirty(5)
         except Exception:
-            assert False, "object MCTBarenco74Dirty(5) was not created, but it should be"
+            assert (
+                False
+            ), "object MCTBarenco74Dirty(5) was not created, but it should be"

@@ -1,72 +1,48 @@
-[tool.black]
-line-length = 100
-include = '\.pyi?$'
-exclude = '''
-/(
-    \.eggs
-  | \.git
-  | \.venv
-)/
-'''
-
-[tool.isort]
-line_length = 100
-profile = "black"
-filter_files = true
-
-[tool.mypy]
-
-[[tool.mypy.overrides]]
-module = [
-    "sympy",
-    "dimod",
-    "docplex",
-    "pandas"
-]
-ignore_missing_imports = true
-
-
-[tool.pylint.messages_control]
-spelling-dict = ['']
-disable = "all"
-enable = "C0402, C0403" 
-spelling-private-dict-file = "wordlist.txt"
-
-
-[build-system]
-requires = ["setuptools>=61.0"]
-build-backend = "setuptools.build_meta"
-
 [project]
 name = "QuCoNot"
-version = "0.01"
+description = "QuCoNot is a Python library for all your MCT needs."
 authors = [
-  { name="Adam Glos", email="aglos@iitis.pl" },
+    { name = "Shraddha Aangiras", email = "Shraddha@gmail.com" },
+    { name = "Adam Glos", email = "adamglos92@gmail.com" },
+    { name = "Ankit Khandelwal", email = "ankit@gmail.com" },
+    { name = "Handy Kurniawan", email = "handykur@ucm.es" },
+    { name = "Özlem Salehi", email = "ozlem@gmail.com" },
 ]
-description = 'QuCoNot is a Python library for all your MCT needs.'
 readme = "README.md"
-requires-python = ">=3.7"
-license = {file = "LICENSE.txt"}
-classifiers = [
-    "Development Status :: 3 - Alpha",
-    "Environment :: Console",
-    "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: Apache Software License",
-    "Natural Language :: English",
-    "Operating System :: POSIX",
-    "Operating System :: MacOS :: MacOS X",
-    "Operating System :: POSIX :: Linux",
-    "Operating System :: Microsoft :: Windows",
-    "Programming Language :: Python",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3 :: Only",
-    "Topic :: Scientific/Engineering :: Physics",
+requires-python = ">=3.9"
+dependencies = [
+  "numpy>=1.22",
+  "qiskit>=0.39.2",
+]
+version = "0.1.0"
+classifiers = []
+
+[project.optional-dependencies]
+test = [
+  "pytest>=7.2",
+  "pytest-cov>=4.0",
+]
+
+dev = [
+  "pre-commit",
+  "pyenchant",
+  "isort==5.12.0",
+  "black==23.7.0",
+  "flake8==5.0.4",
+  "mypy==v0.971"
+]
+
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = [
+  "setuptools>=64",
+  "setuptools_scm>=8",
 ]
 
 [project.urls]
+"Url" = "https://github.com/QuCoNot/QuCoNot/"
 "Bug Reports" = "https://github.com/QuCoNot/QuCoNot/issues"
 "Source" = "https://github.com/QuCoNot/QuCoNot/"
+
+[tool.isort]
+profile = "black"
