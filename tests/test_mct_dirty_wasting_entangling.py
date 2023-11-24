@@ -4,7 +4,7 @@ import numpy as np
 import pytest
 
 from quconot.implementations.mct_base import MCTBase
-from quconot.implementations.mct_dirty_wasted_entangling import (
+from quconot.implementations.mct_dirty_wasting_entangling import (
     MCTDirtyWastingEntangling,
 )
 from tests.test_mct_base import BaseTestMCT
