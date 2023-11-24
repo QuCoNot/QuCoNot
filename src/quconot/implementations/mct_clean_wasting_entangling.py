@@ -55,7 +55,7 @@ class MCTCleanWastingEntangling(MCTBase):
         ancilla_ind = self._n + 1
         qc.rccx(0, 1, ancilla_ind)
         for i in range(0, self.num_auxiliary_qubits() - 1):
-            qc.rccx(1 + i, ancilla_ind + i, ancilla_ind + i + 1)
+            qc.rccx(2 + i, ancilla_ind + i, ancilla_ind + i + 1)
         qc.rccx(self._n - 1, qc.num_qubits - 1, self._n)
         return qc
 
@@ -65,4 +65,4 @@ class MCTCleanWastingEntangling(MCTBase):
         :return: number of auxiliary qubits
         :rtype: int
         """
-        return self._n - 1
+        return self._n - 2
