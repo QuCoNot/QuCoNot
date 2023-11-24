@@ -33,6 +33,10 @@ dev = [
   "mypy==v0.971"
 ]
 
+visualization = [
+  "qiskit-aer>=0.13.1"
+]
+
 [build-system]
 build-backend = "setuptools.build_meta"
 requires = [
