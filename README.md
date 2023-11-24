@@ -18,6 +18,8 @@ pip install .
 
 ## Example
 
+### MCT Generation
+
 You just need to import it, and you can start use it
 
 ```
@@ -29,6 +31,32 @@ circ = mct.generate_circuit()
 
 With `generate_circuit`, you will get the MCT based on the implementation that you choose.
 
+### MCT Verification
+
+QuCoNot can also be used to verify MCT algorithm
+
+```
+from quconot.verifications import (
+    verify_circuit_strict_clean_non_wasting,
+    verify_circuit_relative_clean_non_wasting,
+    verify_circuit_strict_clean_wasting_entangled,
+    verify_circuit_relative_clean_wasting_separable,
+    verify_circuit_strict_clean_wasting_separable,
+    verify_circuit_strict_dirty_non_wasting,
+    verify_circuit_relative_dirty_non_wasting,
+    verify_circuit_strict_dirty_wasting_entangled,
+    verify_circuit_relative_dirty_wasting_separable,
+    verify_circuit_strict_dirty_wasting_separable
+)
+
+tested_matrix = usim.run(circ).result().get_unitary().data
+ref_unitary = get_ref_unitary(control_no)
+verify_circuit_strict_dirty_non_wasting(tested_matrix, ref_unitary)
+verify_circuit_strict_clean_non_wasting(tested_matrix, ref_unitary)
+```
+
+Note that, we need to update the circuit into unitary matrix `tested_matrix = usim.run(circ).result().get_unitary().data` .
+
 See [Jupyter Notebook file](https://github.com/QuCoNot/QuCoNot/blob/main/quconot.ipynb) for more in detail examples.
 
 ## Authors
@@ -38,7 +66,7 @@ The first version of QuCoNot was developed under the remote internship program Q
 - Ankit Khandelwal<sup>1</sup>
 - Handy Kurniawan<sup>2</sup>
 - Shraddha Aangiras<sup>3</sup>
-- ¨Ozlem Salehi<sup>4,5,6</sup>
+- Özlem Salehi<sup>4,5,6</sup>
 - Adam Glos<sup>4,6</sup>
 
 <sup>1</sup> TCS Research, Tata Consultancy Services, India  
@@ -53,7 +81,7 @@ The first version of QuCoNot was developed under the remote internship program Q
 
 
 If you are doing research using QuConot, please cite our project.
-We use a [CITATION.cff](https://citation-file-format.github.io/) file, so you can easily copy the citation information from the repository landing page.
+We use a ` put citation later here ` file, so you can easily copy the citation information from the repository landing page.
 
 ## License
 QuCoNot is **free** and **open source**, released under the Apache License, Version 2.0.
