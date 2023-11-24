@@ -55,7 +55,7 @@ verify_circuit_strict_dirty_non_wasting(tested_matrix, ref_unitary)
 verify_circuit_strict_clean_non_wasting(tested_matrix, ref_unitary)
 ```
 
-Note that, we need to update the circuit into unitary matrix `tested_matrix = usim.run(circ).result().get_unitary().data` .
+Note that verification functions requires the unitary to be in a form of numpy array, not `QuantumCircuit`:  `tested_matrix = usim.run(circ).result().get_unitary().data` .
 
 See [Jupyter Notebook file](https://github.com/QuCoNot/QuCoNot/blob/main/quconot.ipynb) for more in detail examples.
 
