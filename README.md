@@ -25,7 +25,7 @@ You just need to import it, and you can start use it
 ```
 from quconot.implementations import MCTVChainDirty
 
-mct = MCTVChain(5)
+mct = MCTVChainDirty(5)
 circ = mct.generate_circuit()
 ```
 
