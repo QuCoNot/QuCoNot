@@ -52,7 +52,6 @@ The first version of QuCoNot was developed under the remote internship program Q
 **Corresponding Author:** Adam Glos
 
 
-QuCoNot is an active project, and [other people](https://github.com/qclib/qclib/graphs/contributors) have contributed.
 
 If you are doing research using QuConot, please cite our project.
 We use a [CITATION.cff](https://citation-file-format.github.io/) file, so you can easily copy the citation information from the repository landing page.
