@@ -52,10 +52,10 @@ class MCTCleanWastingEntangling(MCTBase):
         """
         qc = QuantumCircuit(self._n + 1 + self.num_auxiliary_qubits())
 
-        ancilla_ind = self._n + 1
-        qc.rccx(0, 1, ancilla_ind)
+        auxiliary_ind = self._n + 1
+        qc.rccx(0, 1, auxiliary_ind)
         for i in range(0, self.num_auxiliary_qubits() - 1):
-            qc.rccx(2 + i, ancilla_ind + i, ancilla_ind + i + 1)
+            qc.rccx(2 + i, auxiliary_ind + i, auxiliary_ind + i + 1)
         qc.rccx(self._n - 1, qc.num_qubits - 1, self._n)
         return qc
 
