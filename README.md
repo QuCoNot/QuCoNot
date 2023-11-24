@@ -30,3 +30,32 @@ circ = mct.generate_circuit()
 With `generate_circuit`, you will get the MCT based on the implementation that you choose.
 
 See [Jupyter Notebook file](https://github.com/QuCoNot/QuCoNot/blob/main/quconot.ipynb) for more in detail examples.
+
+## Authors
+## Authors
+
+The first version of QuCoNot was developed under the remote internship program QIntern 2022. Extended from the program, we continue to create the module.
+
+- Ankit Khandelwal<sup>1</sup>
+- Handy Kurniawan<sup>2</sup>
+- Shraddha Aangiras<sup>3</sup>
+- ¨Ozlem Salehi<sup>4,5,6</sup>
+- Adam Glos<sup>4,6</sup>
+
+<sup>1</sup> TCS Research, Tata Consultancy Services, India  
+<sup>2</sup> Facultad de Inform ́atica, Universidad Complutense de Madrid, Spain  
+<sup>3</sup> Rashtreeya Vidyalaya Preuniversity College, India  
+<sup>4</sup> Institute of Theoretical and Applied Informatics, Polish Academy of Sciences, Poland  
+<sup>5</sup> QWorld Association, Tallinn, Estonia  
+<sup>6</sup> Algorithmiq Ltd, Kanavakatu 3C 00160 Helsinki, Finland  
+
+**Corresponding Author:** Adam Glos
+
+
+QuCoNot is an active project, and [other people](https://github.com/qclib/qclib/graphs/contributors) have contributed.
+
+If you are doing research using QuConot, please cite our project.
+We use a [CITATION.cff](https://citation-file-format.github.io/) file, so you can easily copy the citation information from the repository landing page.
+
+## License
+QuCoNot is **free** and **open source**, released under the Apache License, Version 2.0.
