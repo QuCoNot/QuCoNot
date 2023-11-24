@@ -32,7 +32,6 @@ With `generate_circuit`, you will get the MCT based on the implementation that y
 See [Jupyter Notebook file](https://github.com/QuCoNot/QuCoNot/blob/main/quconot.ipynb) for more in detail examples.
 
 ## Authors
-## Authors
 
 The first version of QuCoNot was developed under the remote internship program QIntern 2022. Extended from the program, we continue to create the module.
 
