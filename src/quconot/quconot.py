@@ -3,6 +3,7 @@ from typing import Callable, List, Type
 from .implementations.mct_barenco_74_dirty import MCTBarenco74Dirty
 from .implementations.mct_barenco_75_dirty import MCTBarenco75Dirty
 from .implementations.mct_base import MCTBase
+from .implementations.mct_clean_wasted_entangling import MCTCleanWastedEntangling
 from .implementations.mct_no_auxiliary import MCTNoAuxiliary
 from .implementations.mct_no_auxiliary_relative import MCTNoAuxiliaryRelative
 from .implementations.mct_parallel_decomposition import MCTParallelDecomposition
@@ -17,6 +18,7 @@ class QuCoNot:
         self._registered_methods: List[Type[MCTBase]] = [
             MCTBarenco74Dirty,
             MCTBarenco75Dirty,
+            MCTCleanWastedEntangling,
             MCTRecursion,
             MCTVChainDirty,
             MCTNoAuxiliary,
