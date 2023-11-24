@@ -6,6 +6,7 @@ from .implementations.mct_base import MCTBase
 from .implementations.mct_no_auxiliary import MCTNoAuxiliary
 from .implementations.mct_no_auxiliary_relative import MCTNoAuxiliaryRelative
 from .implementations.mct_parallel_decomposition import MCTParallelDecomposition
+from .implementations.mct_qclib_ldmcu import MCTQclibLdmcu
 from .implementations.mct_recursion import MCTRecursion
 from .implementations.mct_vchain import MCTVChain
 from .implementations.mct_vchain_dirty import MCTVChainDirty
@@ -22,6 +23,7 @@ class QuCoNot:
             MCTNoAuxiliaryRelative,
             MCTParallelDecomposition,
             MCTVChain,
+            MCTQclibLdmcu,
         ]
         self._implementations: List[MCTBase] = []
 
