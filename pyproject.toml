@@ -1,12 +1,12 @@
 [project]
 name = "QuCoNot"
-description = "QuCoNot is a Python library for all your MCT needs."
+description = "QuCoNot is a Python library for verifying implementatinos of permutations and implementations of some MCT decompositions."
 authors = [
-    { name = "Shraddha Aangiras", email = "Shraddha@gmail.com" },
+    { name = "Shraddha Aangiras"},
     { name = "Adam Glos", email = "adamglos92@gmail.com" },
-    { name = "Ankit Khandelwal", email = "ankit@gmail.com" },
+    { name = "Ankit Khandelwal", email = "ankit27.kh@gmail.com" },
     { name = "Handy Kurniawan", email = "handykur@ucm.es" },
-    { name = "Özlem Salehi", email = "ozlem@gmail.com" },
+    { name = "Özlem Salehi", email = "ozlemsalehi@gmail.com" },
 ]
 readme = "README.md"
 requires-python = ">=3.9"

@@ -41,4 +41,4 @@ class TestMCTMCTQclibLdmcu(BaseTestMCT):
         except Exception:
             assert (
                 False
-            ), "object MCTBarenco74Dirty(3) was not created, but it should be"
+            ), "object MCTQclibLdmcu(3) was not created, but it should be"
