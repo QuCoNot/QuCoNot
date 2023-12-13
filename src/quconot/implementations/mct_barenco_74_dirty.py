@@ -52,18 +52,12 @@ class MCTBarenco74Dirty(MCTBase):
         qc = QuantumCircuit(n + n - 1, name='MCT72')
 
         for c1, c2, t in zip(controls[::-1][:n - 2], auxs[::-1][:n - 2], [target] + auxs[::-1][:n - 2]):
-            if t == target:
-                qc.append(CCXGate(), [c1, c2, t])
-            else:
-                qc.append(self.RTofDecomp(), [c1, c2, t])
+            qc.append(CCXGate() if t == target else self.RTofDecomp(), [c1, c2, t])
 
         qc.append(self.RTofDecomp(), [controls[0], controls[1], auxs[0]])
 
         for c1, c2, t in zip(controls[2:], auxs, auxs[1:] + [target]):
-            if t == target:
-                qc.append(CCXGate(), [c1, c2, t])
-            else:
-                qc.append(self.RTofDecomp(), [c1, c2, t])
+            qc.append(CCXGate() if t == target else self.RTofDecomp(), [c1, c2, t])
 
         ### Second Half
 
