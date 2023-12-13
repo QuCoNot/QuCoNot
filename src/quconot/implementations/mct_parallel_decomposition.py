@@ -1,8 +1,9 @@
 # Quconot/quconot/implementations/mct_parallel_decomposition.py
 #
-# Authors:
-#  - Ankit Khandelwal
-#  - Shraddha Aangiras
+# This is based on the logarithmic depth construction from the paper 
+# 'Efficient Constructions for Simulating Multi Controlled Quantum Gates'
+# https://dx.doi.org/10.1007/978-3-031-08760-8_16
+# The Toffoli gates used here are strict. The paper uses relative Toffoli gates.
 
 from copy import deepcopy
 from typing import Any, List

@@ -1,8 +1,8 @@
 # Quconot/quconot/implementations/mct_barenco_75_dirty.py
 #
-# Authors:
-#  - Ankit Khandelwal
-#  - Shraddha Aangiras
+# This implementation is based on Lemma 7.5 of
+# Barenco et al. 'Elementary gates for quantum computation`
+# https://doi.org/10.1103/PhysRevA.52.3457
 
 from copy import deepcopy
 from typing import List
