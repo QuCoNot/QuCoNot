@@ -125,8 +125,11 @@ class MCTBarenco74Dirty(MCTBase):
         """
 
         circ = self.L7_4(self._n)
-        self._circuit = circ
-
+        qc = QuantumCircuit(self._n + 2)
+        # Change order of qubits to controls, target, aux
+        qc.append(circ, list(range(self._n)) + [self._n + 1] + [self._n])
+        self._circuit = qc
+        
         return deepcopy(self._circuit)
 
     def num_auxiliary_qubits(self):
