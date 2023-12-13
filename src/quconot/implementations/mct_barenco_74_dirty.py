@@ -1,8 +1,9 @@
 # Quconot/quconot/implementations/mct_barenco_74_dirty.py
 #
-# Authors:
-#  - Ankit Khandelwal
-#  - Shraddha Aangiras
+# This implementation is based on Lemma 7.3 / Corollary 7.4 of
+# Barenco et al. 'Elementary gates for quantum computation`
+# https://doi.org/10.1103/PhysRevA.52.3457
+# NOTE: The current version uses 4 more strict Toffoli gates than mentioned in the paper.
 
 from copy import deepcopy
 from typing import List
@@ -21,92 +22,79 @@ class MCTBarenco74Dirty(MCTBase):
         self._n = controls_no
         self._circuit: QuantumCircuit = None
 
-    def TofDecomp(self):
-        qc = QuantumCircuit(3)
-        qc.ry(np.pi / 4, 2)
+    @staticmethod
+    def RTofDecomp():
+        '''
+        Creates a relative Toffoli gate as described in Section VI B of Barenco et al.
+        The Ry gate in the paper is defined differently from the usual convention.
+        Ry (from paper) = Ry†
+        '''
+        qc = QuantumCircuit(3, name='RTOF')
+        qc.ry(-np.pi / 4, 2)
         qc.cx(1, 2)
-        qc.ry(np.pi / 4, 2)
+        qc.ry(-np.pi / 4, 2)
         qc.cx(0, 2)
-        qc.ry(-np.pi / 4, 2)
+        qc.ry(np.pi / 4, 2)
         qc.cx(1, 2)
-        qc.ry(-np.pi / 4, 2)
+        qc.ry(np.pi / 4, 2)
         return qc
 
-    def k_gate(self, qc: QuantumCircuit, c: List[int], t: int, a: int, k: int):
-        k1 = int(np.floor((len(c) + 1) / 2))
-        # k2 = len(c) - k1
+    def MCT72(self, n: int):
+        '''
+        Prepare an MCT using Lemma 7.2 of Barenco et al.
+        Replaces all Toffoli gates with Relative Toffoli gates if
+        the target of the Toffoli is not the same as the target of the MCT.
+        '''
+        controls = list(range(n))
+        target = n + n - 2
+        auxs = list(range(n, n + n - 2))
 
-        tof = self.TofDecomp()
+        qc = QuantumCircuit(n + n - 1, name='MCT72')
 
-        if k == 1:
-            controls = c[:k1]
-            target = a
-            auxs = (c[k1:])[: len(controls) - 2]
+        for c1, c2, t in zip(controls[::-1][:n - 2], auxs[::-1][:n - 2], [target] + auxs[::-1][:n - 2]):
+            qc.append(CCXGate() if t == target else self.RTofDecomp(), [c1, c2, t])
 
-        elif k == 2:
-            controls = c[k1:] + [a]
-            target = t
-            auxs = (c[:k1] + [a])[: len(controls) - 2]
+        qc.append(self.RTofDecomp(), [controls[0], controls[1], auxs[0]])
 
-        for c1, c2, t1 in zip(
-            controls[::-1][:-2], auxs[::-1], [target] + auxs[::-1][:-1]
-        ):
-            if t1 == t:
-                qc.append(CCXGate(), (c1, c2, t1))
-            else:
-                qc.append(tof, [c1, c2, t1])
+        for c1, c2, t in zip(controls[2:], auxs, auxs[1:] + [target]):
+            qc.append(CCXGate() if t == target else self.RTofDecomp(), [c1, c2, t])
 
-        qc.append(tof, [controls[0], controls[1], auxs[0]])
-        for c1, c2, t1 in zip(
-            controls[::-1][:-2][::-1],
-            auxs[::-1][::-1],
-            ([target] + auxs[::-1][:-1])[::-1],
-        ):
-            if t1 == t:
-                qc.append(CCXGate(), (c1, c2, t1))
-            else:
-                qc.append(tof, [c1, c2, t1])
+        ### Second Half
 
-        for c1, c2, t1 in zip(controls[::-1][1:-2], auxs[::-1][1:], auxs[::-1][:-1]):
-            if t1 == t:
-                qc.append(CCXGate(), (c1, c2, t1))
-            else:
-                qc.append(tof, [c1, c2, t1])
+        for c1, c2, t in zip(controls[::-1][1:n - 2], auxs[::-1][1:n - 2], auxs[::-1][:n - 2]):
+            qc.append(self.RTofDecomp(), [c1, c2, t])
 
-        qc.append(tof, [controls[0], controls[1], auxs[0]])
-        for c1, c2, t1 in zip(
-            controls[::-1][1:-2][::-1], auxs[::-1][1:][::-1], auxs[::-1][:-1][::-1]
-        ):
-            if t1 == t:
-                qc.append(CCXGate(), (c1, c2, t1))
-            else:
-                qc.append(tof, [c1, c2, t1])
+        qc.append(self.RTofDecomp(), [controls[0], controls[1], auxs[0]])
 
+        for c1, c2, t in zip(controls[2:], auxs, auxs[1:]):
+            qc.append(self.RTofDecomp(), [c1, c2, t])
         return qc
 
-    def L7_4(self, c_qubits: List[int], t_qubit: int, aux_qubit: int):
-        n = len(c_qubits) + 2
+    def L7_4(self, n: int):
+        '''
+        Combine 4 MCT72 to get an MCT with one auxiliary
+        '''
+        n = n + 2
+        c1 = int(np.floor(n / 2))
+        c2 = n - c1 - 1
         qc = QuantumCircuit(n)
 
-        qc = self.k_gate(qc, c_qubits, t_qubit, aux_qubit, 1)
-        qc.barrier()
-        qc = self.k_gate(qc, c_qubits, t_qubit, aux_qubit, 2)
-        qc.barrier()
-        qc = self.k_gate(qc, c_qubits, t_qubit, aux_qubit, 1)
-        qc.barrier()
-        qc = self.k_gate(qc, c_qubits, t_qubit, aux_qubit, 2)
+        qc.append(self.MCT72(c1), list(range(c1)) + list(range(c1, n))[:c1 - 2] + [n - 2])
+        qc.append(self.MCT72(c2), list(range(c1, c1 + c2)) + list(range(c1))[:c2 - 2] + [n - 1])
+        qc.append(self.MCT72(c1), list(range(c1)) + list(range(c1, n))[:c1 - 2] + [n - 2])
+        qc.append(self.MCT72(c2), list(range(c1, c1 + c2)) + list(range(c1))[:c2 - 2] + [n - 1])
 
         return qc
 
     @classmethod
     def verify_mct_cases(
-        self,
-        controls_no: int,
-        max_auxiliary: int,
-        relative_phase: bool = False,
-        clean_acilla: bool = True,
-        wasted_auxiliary: bool = False,
-        separable_wasted_auxiliary: bool = False,
+            self,
+            controls_no: int,
+            max_auxiliary: int,
+            relative_phase: bool = False,
+            clean_acilla: bool = True,
+            wasted_auxiliary: bool = False,
+            separable_wasted_auxiliary: bool = False,
     ) -> List["MCTBase"]:
         """Generate all possible MCT implementation satisfying the requirements
 
@@ -130,12 +118,12 @@ class MCTBarenco74Dirty(MCTBase):
         :rtype: QuantumCircuit
         """
 
-        circ = self.L7_4(
-            list(range(self._n)), self._n, self._n + self.num_auxiliary_qubits()
-        )
-
-        self._circuit = circ
-
+        circ = self.L7_4(self._n)
+        qc = QuantumCircuit(self._n + 2)
+        # Change order of qubits to controls, target, aux
+        qc.append(circ, list(range(self._n)) + [self._n + 1] + [self._n])
+        self._circuit = qc
+        
         return deepcopy(self._circuit)
 
     def num_auxiliary_qubits(self):

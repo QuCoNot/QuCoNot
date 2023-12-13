@@ -11,15 +11,15 @@ class TestMCTBarenco74Dirty(BaseTestMCT):
     _controls_no_list = [5]
 
     _expected_classes: Dict[str, bool] = {
-        "SCNW": False,
+        "SCNW": True,
         "RCNW": True,
-        "SDNW": False,
+        "SDNW": True,
         "RDNW": True,
         "SCWE": True,
-        "SCWS": False,
+        "SCWS": True,
         "RCWS": True,
         "SDWE": True,
-        "SDWS": False,
+        "SDWS": True,
         "RDWS": True,
     }
 
