@@ -70,7 +70,7 @@ The first version of QuCoNot was developed under the remote internship program Q
 - Adam Glos<sup>4,6</sup>
 
 <sup>1</sup> TCS Research, Tata Consultancy Services, India  
-<sup>2</sup> Facultad de Inform ́atica, Universidad Complutense de Madrid, Spain  
+<sup>2</sup> Facultad de Informática, Universidad Complutense de Madrid, Spain  
 <sup>3</sup> Rashtreeya Vidyalaya Preuniversity College, India  
 <sup>4</sup> Institute of Theoretical and Applied Informatics, Polish Academy of Sciences, Poland  
 <sup>5</sup> QWorld Association, Tallinn, Estonia  
