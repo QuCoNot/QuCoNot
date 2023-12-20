@@ -78,7 +78,7 @@ The first version of QuCoNot was developed under the remote internship program Q
 **Corresponding Author:** Adam Glos
 
 If you are doing research using QuConot, please cite our project.
-We use a ` put citation later here ` file, so you can easily copy the citation information from the repository landing page.
+We use a [BibTeX file](CITATION.bib) file, so you can easily copy the citation information from the repository landing page.
 
 ## License
 QuCoNot is **free** and **open source**, released under the Apache License, Version 2.0.
